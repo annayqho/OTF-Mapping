@@ -1,0 +1,76 @@
+============================================================
+Quick guide to VLASS data and scripts
+S. Myers 2016-06-13
+============================================================
+
+A list of important VLASS test datasets is at:
+http://www.aoc.nrao.edu/~smyers/vlass/vlass-testobs.txt
+I try to keep this up-to-date
+
+You can also look in the VLA archive under TSKY0001 and eventually
+TVPILOT codes.
+
+I have some of the SDM resident on disk in 
+/lustre/aoc/projects/vlass/smyers
+and you can just "cp -rf" this, but in general you can download a copy
+yourself from the archive in the usual way.
+
+As an example a recent M31 dataset is there as
+TSKY0001.sb32154065.eb32157201.57530.47058900463
+so go to the directory in which you want to work and either
+% cp -rf /lustre/aoc/projects/vlass/smyers/TSKY0001.sb32154065.eb32157201.57530.47058900463 .
+(e.g. if you are going to run the pipeline) or point the scripts below to this SDM directly.
+
+Note, the other M31 SDM of interest is the very first one from last year, its the one to
+also run and compare to!
+TSKY0001.sb30647879.eb30653507.57149.82925858797
+
+---
+
+An example calibration script is at:
+http://www.aoc.nrao.edu/~smyers/vlass/scripts/run_TSKY0001_M31_1_sb32154065_57530_calib.py
+This calibrates a particular M31 VLASS test block. You would change
+stuff in the header to make it work on another dataset.
+
+Example imaging scripts are at:
+http://www.aoc.nrao.edu/~smyers/vlass/scripts/run_TSKY0001_M31_1_L3600_allsubtiles.py
+which runs the generic script
+http://www.aoc.nrao.edu/~smyers/vlass/scripts/run_QuickLook_SubtilePreset_submosaic_tclean_mfs2048MHz_Pipe.py
+This assumes you run it after running the above calibration script. It
+also needs the script for getfieldcone.py
+http://www.aoc.nrao.edu/~smyers/vlass/scripts/getfieldcone.py
+
+There is another version modified for CASA Pipeline MS
+http://www.aoc.nrao.edu/~smyers/vlass/scripts/run_TSKY0001_M31_1_L3600_allsubtiles_pipe.py
+
+Note to run your stuff you would just modify the first of the imaging
+scripts to point to your files, directories, etc.
+
+You also specify the center of the "tile" and its dimensions in RA and
+Dec. If your "tile" has a strange shape you would have to modify the
+two imagign scripts to handle that. Maybe I'll think of a better way
+to define this in just one script.
+
+---
+
+Note: to (re)run the CASA calibration pipeline on data using the
+special "vlass" pipeline mode here at the AOC, here are the
+instructions.
+
+0. You need to have the SDM in the directory you are running this,
+   below I assume its name is <sdmname>
+
+1. Start casa-pipe
+   % casa-pipe -r 4.6.0-vlass
+   Note: to see what versions available do
+   % casa-pipe -ls
+
+2. Inside this casa import the pipeline recipe, this one with no plotting
+   > import pipeline.recipes.hifv_vlass_noplots as hifv_vlass_noplots
+
+3. To run this recipe, 
+   > hifv_vlass_noplots.hifv(['<sdmname>'])
+
+4. wait for it to finish, about 15 hours for each 1 hour of data on a
+   cluster node :(
+

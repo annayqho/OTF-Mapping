@@ -1,0 +1,255 @@
+TSKY0001
+
+--------------------------------------------
+2015 B-config to 2016 C-config
+(schedules are under TSKY0001 PB TSKY0001)
+--------------------------------------------
+1. Standard VLASS Mosaic 
+   Setup: 0.45s=25MB/s, nstep=4, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: testing of proposed VLASS scanning
+   Config:B 
+   Dur:1h 
+   Status:M31_SOTF1 observed 2015-05-07
+   TSKY0001.sb30647879.eb30653507.57149.82925858797
+
+2. Fast VLASS Mosaic 
+   Setup: 0.45s=25MB/s, 6.668'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: testing double scan rate VLASS scanning at 25MB/s
+   Note: try to repeat at different HA to test improved imaging
+   Config:B->BnA 
+   Dur:1h (2x repeat)
+   Status: M31_SOTF2 observed 2015-May-14, 2015-May-15
+   TSKY0001.sb30653314.eb30702083.57156.77785763889
+   TSKY0001.sb30698512.eb30708537.57157.52464347222
+
+3. Fast VLASS Mosaic 
+   Setup: 0.25s=45MB/s, 6.668'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: testing double scan rate VLASS scanning at 45MB/s, 0.5s phase centers
+   Config:B->BnA 
+   Dur:1h5m (2x repeat)
+   Status: M31_SOTF3, observed 2015-May-14, 2015-May-15
+   TSKY0001.sb30699662.eb30702323.57156.82058353009 (missing BDF)
+   TSKY0001.sb30699662.eb30708768.57157.56852731481 (missing BDF)
+
+   Setup: 0.25s=45MB/s, 6.668'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: testing double scan rate VLASS scanning at 45MB/s, 1.0s phase centers
+   Config:B->BnA 
+   Dur:1h5m (2x repeat)
+   Status: M31_SOTF4 submitted TSKY0001.30711238
+   observed 2015-May-16
+   TSKY0001.sb30711238.eb30712507.57158.55525006945
+   TSKY0001.sb30711238.eb30712914.57158.762408449074
+
+4. Standard VLASS LowLat: 
+   Setup: 0.45s=25MB/s, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:Taurus (4h31m+18d13') 
+   Goal: low latitude region near Sun (about 10-15deg away)
+   Config:B->BnA 
+   Dur:1h
+   Status: TAU_SOTF observed 2015-May-14 
+   TSKY0001.sb30674046.eb30703446.57156.865451817124
+
+5. Southern Fast Mosaic: 
+   Setup: 0.25s=45MB/s, 3.68'/s, 7.25' rows, 2deg x 10deg x 2
+   Target: Random South Area (5h10m -34d30')
+   Goal: test sensitivity and imaging at low dec
+   Config:BnA->A
+   Dur:2h
+   Status: STST2_SOTF observed 2015-Jun-05
+   TSKY0001.sb30861103.eb30887199.57178.75988009259
+
+6. Satellite Belt Test   Setup: 0.45s=25MB/s, 2.56'/s, 7.25' rows, 2deg x 8deg
+   Target: Orion (5h35m -5d23') [instead of XMM-LSS (2h22m -4d48')]
+   Goal: test observations in Clarke belt
+   Config:BnA 
+   Dur:1h (x3 repeats)
+   Status: Ori-SOTF1 observed 2015-06-27
+   TSKY0001.sb30974207.eb30976867.57200.77477878472
+   TSKY0001.sb30974207.eb30976868.57200.81634796296
+   TSKY0001.sb30974207.eb30976869.57200.85791685185
+
+7. RFI Sweeps (horizon to horizon)
+   Setup: 0.5sec=22.5MB/s, 
+   Target: Dec = -30d, -20d, -10d, -5d, 0d, +5d, +15d, +45d
+   Config:B->BnA
+   Status: RFItest-all observed 2015-07-11
+   TSKY0001.sb30889013.eb30992856.57214.70375685186
+
+8. Big Block x1 Scan Rate: 
+   Setup: 0.45s=25MB/s, nstep=2, 3.287'/s, 4 x 13.75deg x 21 rows (7.25'), 140sq.deg.
+   Target: Stripe-82
+   Goal: test running of long block
+   Config:A
+   Dur:7h
+   Status: S82x1 observed 2015-09-17
+   TSKY0001.sb31118642.eb31139661.57282.01777341435 (667.2GB)
+
+9. Big Block x2 Scan Rate: 
+   Setup: 0.25s=50MB/s, nstep=3, 2x3.287'/s, 2 x 27.5deg x 21 rows (7.25'), 140sq.deg.
+          2 passes in HA
+   Target: Stripe-82
+   Goal: test running of long block with 2x speed and 2xHA, .75sec phase centers
+   Config:A
+   Dur:7h
+   Status: S82x2 observed 2015-09-18 (problems in MCAF and BDF writing)
+   TSKY0001.sb31123832.eb31140163.57283.01526814815 (1.18TB)
+
+10. Big Block x2 Scan Rate repeat: 
+   Setup: 0.25s=50MB/s, nstep=4, 2x3.287'/s, 2 x 27.5deg x 21 rows (7.25'), 140sq.deg.
+          2 passes in HA
+   Target: Stripe-82
+   Goal: test running of long block with 2x speed and 2xHA, 1sec phase centers
+   Config:A->D
+   Dur:7h
+   Status: S82x2v2 observed 2015-10-06
+   TSKY0001.sb31143394.eb31258407.57301.963756296296 (1.11TB)
+
+11. Big Block x2 Scan Rate re-repeat:
+   Setup: 0.25s=50MB/s, nstep=3, 2x3.287'/s, 2 x 27.5deg x 21 rows (7.25'), 140sq.deg.
+          2 passes in HA
+   Target: Stripe-82
+   Goal: test running of long block with 2x speed and 2xHA, .75sec phase centers
+   Config:D
+   Dur:7h
+   Status: S82x2_Dconfig observed 2015-10-29/30
+   TSKY0001.sb31381563.eb31386337.57324.92183637731 (940GB)
+
+12. Standard VLASS Mosaic repeat w/subscans
+   Setup: 0.45s=25MB/s, nstep=4, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: testing of new use of sub-scans within stripes
+   Config:DnC
+   Dur:1h 
+   Status:M31_SOTF1 copy observed 2016-01-05
+   TSKY0001.sb31556885.eb31557853.57392.11798547454
+
+--------------------------------------------
+2016A B-config to ???
+(schedules are under TSKY0001 PB TSKY0001)
+--------------------------------------------
+13. Standard VLASS Mosaic 
+   Setup: 0.45s=25MB/s, nstep=4, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: testing of proposed VLASS scanning, repeat 1 yr. later
+   Config:B 
+   Dur:1h 
+   Status: M31_SOTF1_Pilot1 (copy of M31_SOTF1) observed 2016-05-22
+   TSKY0001.sb32154065.eb32157201.57530.47058900463
+
+14. Standard VLASS Mosaic repeat w/subscans
+   Setup: 0.45s=25MB/s, nstep=4, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: includes pointing table filled
+   Config:B
+   Dur:1h 
+   Status:M31_SOTF1_PointingTest observed 2016-06-02
+   TSKY0001.sb32219211.eb32237447.57541.4649037037
+
+15. Standard VLASS Mosaic repeat w/subscans
+   Setup: 0.45s=25MB/s, nstep=2, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: VLASS frequency & observing setup, includes pointing table (bad)
+   Warning: might be some errors near start of data
+   Config:B
+   Dur:1h 
+   Status:M31_SOTF1_VLASSsetup observed 2016-06-04
+   TSKY0001.sb32241210.eb32243465.57543.47913797454
+
+16. Standard VLASS Mosaic repeat w/subscans
+   Setup: 0.45s=25MB/s, nstep=2, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:M31 (00h42m+41d16') 
+   Goal: VLASS frequency & observing setup, includes pointing table (bad)
+   Config:B
+   Dur:1h 
+   Status: M31_SOTF1_VLASSsetup observed 2016-06-08
+   TSKY0001.sb32265154.eb32278380.57547.43932002315
+
+17. Cygnus-A region test
+   Setup: 0.45s=25MB/s, nstep=2, 3.31'/s, 7.2' rows, 6deg x 6deg
+   Target: Region NW of Cyg-A
+   Goal: VLASS frequency & observing setup
+   Config:B
+   Dur:2h (177GB)
+   Status: CygA observed 2016-05-26
+   TSKY0001.sb32167619.eb32188732.57534.345986319444
+
+------------------------------------------------
+TVPILOT-test blocks
+(schedules are under TSKY0001 PB TVPILOT-tests )
+------------------------------------------------
+
+TVPtest.1 Stripe-82 block A 
+      Target: Stripe-82 block 1 RA=300deg-330deg, Dec=+/-1.23deg
+      Setup: 0.45s=25MB/s, nstep=2, 3.31'/s, 7.2' rows, 10deg x 8deg
+      Goal: VLASS setup
+      Config:B
+      Dur:4h (~375GB)
+      Status: schedule Stripe82A observed 2016-06-10
+      TSKY0001.sb32295801.eb32296475.57549.31722762731
+
+TVPtest.2 Stripe-82 block B
+      Target: Stripe-82 block 2 RA=330deg-0deg, Dec=+/-1.23deg
+      Setup: 0.45s=25MB/s, nstep=2, 3.31'/s, 7.2' rows, 10deg x 8deg
+      Goal: VLASS setup
+      Config:B
+      Dur:4h (~375GB)
+      Status: schedule Stripe82B observed 2016-06-11
+      TSKY0001.sb32299700.eb32302997.57550.469925937505
+
+TVPtest.3 Stripe-82 block C
+      Target: Stripe-82 block 2 RA=0deg-30deg, Dec=+/-1.23deg
+      Setup: 0.45s=25MB/s, nstep=2, 3.31'/s, 7.2' rows, 10deg x 8deg
+      Goal: VLASS setup
+      Config:B
+      Dur:4h (~375GB)
+      Status: schedule Stripe82C observed 2016-06-11
+      TSKY0001.sb32297857 
+
+TVPtest.4 Stripe-82 block D
+      Target: Stripe-82 block 2 RA=30deg-60deg, Dec=+/-1.23deg
+      Setup: 0.45s=25MB/s, nstep=2, 3.31'/s, 7.2' rows, 10deg x 8deg
+      Goal: VLASS setup
+      Config:B
+      Dur:4h (~375GB)
+      Status: schedule Stripe82D observed 2016-06-11
+      TSKY0001.sb32298423 
+
+--------------------------------------------
+TBS
+--------------------------------------------
+x. Southern Std Mosaic: 
+   Setup: 0.45s=25MB/s, 2.56'/s, 7.25' rows, 2deg x 8deg
+   Target: ECDFS (3h32m -27d48')
+   Goal: test sensitivity and imaging at low dec
+   Config:BnA
+   Dur:1.5h
+   Status: 
+
+x. Standard VLASS S Galactic: 
+   Setup: 0.45s=25MB/s, 2.56'/s, 7.25' rows, 2deg x 8deg
+   Target: SgrA* (17h45m -29d0') 
+   Goal: galactic plane (this was used to test Lorant's OTFM for high freq)
+   Config:BnA 
+   Dur:1h
+   Status: 
+
+x. Fast VLASS S Galactic: 
+   Setup: 0.25s=45MB/s, 5.13'/s, 7.25' rows, 2deg x 8deg
+   Target: SgrA* (17h45m -29d0') 
+   Goal: galactic center/bulge
+   Config:BnA 
+   Dur:1.5h x 2 passes at different HA
+   Status: 
+
+x. Standard VLASS N Galactic: 
+   Setup: 0.45s=25MB/s, 3.334'/s, 7.25' rows, 2deg x 8deg
+   Target:W51S (19h22m+14d21') 
+   Goal: galactic plane (this was used to test Lorant's OTFM for high freq)
+   Config:B->BnA or BnA or BnA->A
+   Dur:1h
+   Status: 
+

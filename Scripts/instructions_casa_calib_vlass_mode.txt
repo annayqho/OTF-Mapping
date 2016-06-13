@@ -1,0 +1,20 @@
+Note: to (re)run the CASA calibration pipeline on data using the
+special "vlass" pipeline mode here at the AOC, here are the
+instructions.
+
+0. You need to have the SDM in the directory you are running this,
+   below I assume its name is <sdmname>
+
+1. Start casa-pipe
+   % casa-pipe -r 4.6.0-vlass
+   Note: to see what versions available do
+   % casa-pipe -ls
+
+2. Inside this casa import the pipeline recipe, this one with no plotting
+   > import pipeline.recipes.hifv_vlass_noplots as hifv_vlass_noplots
+
+3. To run this recipe,
+   > hifv_vlass_noplots.hifv(['<sdmname>'])
+
+4. wait for it to finish, about 15 hours for each 1 hour of data on a
+   cluster node :(
