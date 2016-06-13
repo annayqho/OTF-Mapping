@@ -1,6 +1,8 @@
 """ Another version of the script from Steve Myers,
 this time modified for CASA Pipeline MS """
 
+# set up for rectangular sky survey blocks
+
 # STM 2016-05-31 CASA 4.6.0 run imaging for all subtiles
 # Versions:
 # STM 2016-06-01 full version, updated scheme with timing
@@ -32,6 +34,7 @@ data_dir = '/lustre/aoc/projects/vlass/smyers/Run_'+mydataset+'/Calibrate_Pipeli
 # Name of calibrated MS and which datacolumn the calibrated data is in
 # calibrated_ms = data_dir + mydataset + '_calibrated_target.ms' # e.g. from script
 calibrated_ms = data_dir + mydataset + '.ms' # e.g. from CIPL
+# this is the name that comes out of the pipeline
 
 # calibrated_ms_datacolumn = 'all'
 # Now there is 'auto' option to detect whether there is CORRECTED_DATA and split only this
@@ -43,15 +46,19 @@ use_target_intent = '*TARGET*' # picks out scans with this intent only
 
 # Use matching with regex in getfieldcone.py v20160607 or later if this is set
 use_target_fields = ['^0','^1','^2'] # picks out only OTFM fields which start with 0,1,2
+# this is set up for OTF: by convention, all the target data fields
+# start with those
 
 # Location and Name of imaging script(s) to use
 # use_script_dir = './'
 # here we set to SMyers testing script area
 use_script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
+# would point this to mine
 scriptname = 'run_QuickLook_SubtilePreset_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
 
 # Either set these or use preset values 
+# these are for the M31
 tile_center_epo = 'J2000'
 tile_center_ra = '00:42:44.30'
 tile_center_dec = '41.16.09.0'
@@ -61,8 +68,12 @@ tile_center_dec = '41.16.09.0'
 #
 L_subtile_arcsec = 3600.0 # this is size of subtile to image
 subtile_delta_arcsec = 3600.0 # this is distance between subtile centers
+# in principle you might make these overlapping
+
+# for M31 was 8 deg by 2 deg
 Num_subtile_ra = 8
 Num_subtile_dec = 2
+
 # L_subtile_arcsec = 2320.0 # this is size of subtile to image
 # subtile_delta_arcsec = 2320.0 # this is distance between subtile centers
 # Num_subtile_ra = 13
@@ -76,19 +87,28 @@ Num_subtile_dec = 2
 # Num_subtile_ra = 25
 # Num_subtile_dec = 5
 
+# for a 10" beam, you'd probably want to use 2-3"
 subtile_pixelsize = 1.0 # arcsec
+# should be 2000"
+# tells you how much bigger the actual image is than the subtile size
 subtile_padding = 2000 # in pixels, added to L_subtile_arcsec for the submosaic imaging
 
 subtile_dirname = 'Imaging_TSKY0001_sb32154065_57530'
 subtile_prefix = 'QuickLook_L3600'
 
 # Selection string list for spws for imaging
+# assumes all are good or will be used
 use_spws = ['']
 
 # Use the POINTING table in SDM->MS?
+# we aren't yet making a pointing table, so leave False
 use_pointing = False
 
 # Enable autoboxing (or not)
+# Claire Chandler's autoboxing...could play with this, but
+# makes it take much longer
+# but this image does clearly need clean boxes
+# tclean now has its own autoboxing, but haven't played with it
 use_ccbox = False
 
 #

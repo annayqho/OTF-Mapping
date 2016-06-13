@@ -1,5 +1,8 @@
 """ A script from Steve Myers """
 
+# functions to pull out the fields from an MS that are within
+# some distance, and match target field names
+
 def getfieldict(msfile=None):
     #
     try:

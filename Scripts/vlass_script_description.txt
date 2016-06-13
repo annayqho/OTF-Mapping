@@ -27,6 +27,9 @@ TSKY0001.sb30647879.eb30653507.57149.82925858797
 
 ---
 
+Scripts are here:
+http://www.aoc.nrao.edu/~smyers/vlass/scripts/
+
 An example calibration script is at:
 http://www.aoc.nrao.edu/~smyers/vlass/scripts/run_TSKY0001_M31_1_sb32154065_57530_calib.py
 This calibrates a particular M31 VLASS test block. You would change

@@ -66,6 +66,7 @@ print logstring
 dataname = mydataset
 # dataname = 'TSKY0001_M31_1_sb32154065_57530'
 
+# if certain variables don't exist, will create its own
 if 'calibrated_ms' in locals() or 'calibrated_ms' in globals():
     # already defined
     splitfile = calibrated_ms
@@ -570,6 +571,8 @@ if doimaging:
     else:
         myintentstr = ''
     #
+
+    # creates its own MS -- speeds up clean a lot
     mstransform(splitfile,visname,field=fldstrs,intent=myintentstr,datacolumn=mydatacolumn)
     listobs(visname,listfile=visname+'.listobs')
     #

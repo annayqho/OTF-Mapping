@@ -25,6 +25,7 @@ from os import F_OK
 
 # Set up some parameters for processing
 sdmdir = '/lustre/aoc/projects/vlass/smyers/'
+# sdmdir = '../Data/' # it's too big to go on my computer
 sdmname = mydataset
 sdmfile = sdmdir + sdmname
 rawmsdir = '/lustre/aoc/projects/vlass/smyers/Run_TSKY0001.sb32154065.eb32157201.57530/'
