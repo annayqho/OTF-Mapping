@@ -1,3 +1,5 @@
+# Revised by AYQH for VLA-GW151226 data
+
 # STM 2016-05-31 CASA 4.6.0 run imaging for all subtiles
 # Versions:
 # STM 2016-06-01 full version, updated scheme with timing
@@ -26,22 +28,24 @@ prevRunTime = startRunTime
 # Generates locations of subtiles subtile_center_dir
 
 # Name of the dataset (for MS naming)
-mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
+# mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
+mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
 
 # 
 # The following points to my directories for CIPL calibration:
 # data_dir = '/lustre/aoc/projects/vlass/smyers/Run_TSKY0001.sb32154065.eb32157201.57530/Calibrate_Pipeline4.6.0/'
 # The following points to my directories for script calibration:
-data_dir = '/lustre/aoc/projects/vlass/smyers/Run_'+mydataset+'/CalScript/'
+# data_dir = '/lustre/aoc/projects/vlass/smyers/Run_'+mydataset+'/CalScript/'
 # The following points to my directories for cal-only script (use restore):
 # data_dir = '/lustre/aoc/projects/vlass/smyers/Run_'+mydataset+'/CalOnly/'
 # Or set directly to your calibrated MS:
-# data_dir = '<put full path to your filename here>'
+data_dir = '/lustre/aoc/observers/aho/'
+
 
 # Name of calibrated MS and which datacolumn the calibrated data is in
 # calibrated_ms = data_dir + mydataset + '_calibrated_target.ms' # e.g. from CalScript
-calibrated_ms = data_dir + mydataset + '_working.ms' # e.g. from CalOnly w/import
-# calibrated_ms = data_dir + mydataset + '.ms' # e.g. from CIPL
+# calibrated_ms = data_dir + mydataset + '_working.ms' # e.g. from CalOnly w/import
+calibrated_ms = data_dir + mydataset + '.ms' # e.g. from CIPL
 
 # calibrated_ms_datacolumn = 'all'
 # Now there is 'auto' option to detect whether there is CORRECTED_DATA and split only this
@@ -49,7 +53,7 @@ calibrated_ms = data_dir + mydataset + '_working.ms' # e.g. from CalOnly w/impor
 calibrated_ms_datacolumn = 'auto'
 
 # Check intents and field names, only in script v20160607 or later
-use_target_intent = '*TARGET*' # picks out scans with this intent only
+# use_target_intent = '*TARGET*' # picks out scans with this intent only
 
 # Use matching with regex in getfieldcone.py v20160607 or later if this is set
 use_target_fields = ['^0','^1','^2'] # picks out only OTFM fields which start with 0,1,2
@@ -57,7 +61,8 @@ use_target_fields = ['^0','^1','^2'] # picks out only OTFM fields which start wi
 # Location and Name of imaging script(s) to use
 # use_script_dir = './'
 # here we set to SMyers testing script area
-use_script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
+# use_script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
+use_script_dir = '/users/aho/VLA_GW_Followup/Scripts/'
 # The name of the imaging script. This uses the new one:
 scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
