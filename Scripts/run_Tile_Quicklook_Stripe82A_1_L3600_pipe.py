@@ -76,7 +76,7 @@ scriptfile = use_script_dir + scriptname
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) = (53.70525568 deg, 39. deg)
-tile_center_ra = '07:09:38.52' # in hh:mm:ss I assume?
+tile_center_ra = '03:34:49.26' # in hh:mm:ss I assume?
 tile_center_dec = '39.00.00.0' # in dd:mm:ss I assume?
 
 #tile_center_ra = '21:00:00.00'
