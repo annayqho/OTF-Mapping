@@ -126,18 +126,22 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
 # Stripe82 A upper 3 windows bad but not flagged, reverse baseband order
-use_spws = ['0~4,8~15']
+# use_spws = ['0~4,8~15']
+# We're commenting this out for the GW follow up, for now.
+# Looks like although spw 0 is bad, it's getting a lower weight.
 
 # Use the POINTING table in SDM->MS?
 use_pointing = False
+# There's no useful pointing table yet
 
 # Enable autoboxing (or not)
 use_ccbox = False
 use_maxboxcycles = 20
 
 # Imaging parameters (depend on your observation)
-use_threshold = '0.000180Jy' # VLASS depth x1.5
-use_restore = '2.5arcsec'    # circular restoring beam size if desired
+use_threshold = '0.000180Jy' # VLASS depth x1.5, same as GW follow up
+# use_restore = '2.5arcsec'    # circular restoring beam size if desired
+use_restore = '8.0arcsec' # for the LIGO follow up
 
 # These you tune for quality of imaging
 use_fld_niter = 5000         # max number of clean iter
