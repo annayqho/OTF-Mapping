@@ -42,7 +42,7 @@ def get_tiles(ra, dec):
 
 
 def plot_tiles(ra, dec, ra_grid, dec_grid, reg):
-    plt.scatter(ra[reg], dec[reg], c='k', s=2, alpha=0.5)
+    fig = plt.scatter(ra[reg], dec[reg], c='k', s=2, alpha=0.5)
     for ra_line in ra_grid:
         plt.axvline(ra_line, c='r', lw=2, linestyle='--', alpha=0.5)
     for dec_line in dec_grid:
@@ -53,8 +53,7 @@ def plot_tiles(ra, dec, ra_grid, dec_grid, reg):
     plt.xlabel("RA (deg)", fontsize=16)
     plt.ylabel("Dec (deg)", fontsize=16)
     plt.title("Tiling", fontsize=20)
-    #plt.savefig("tiling_sample.png")
-    plt.show()
+    return fig
 
 ra, dec = get_field_positions()
 
@@ -66,7 +65,12 @@ reg2 = np.logical_and(reg2_dec, ra < 75)
 
 # generate tiles
 centers, ra_grid, dec_grid, nfields = get_tiles(ra[reg1], dec[reg1])
-plot_tiles(ra, dec, ra_grid, dec_grid, reg1)
+fig = plot_tiles(ra, dec, ra_grid, dec_grid, reg1)
+plt.savefig("tiling_sample_reg1.png")
+plt.close()
+print(centers)
 
 centers, ra_grid, dec_grid, nfields = get_tiles(ra[reg2], dec[reg2])
-plot_tiles(ra, dec, ra_grid, dec_grid, reg2)
+fig = plot_tiles(ra, dec, ra_grid, dec_grid, reg2)
+plt.savefig("tiling_sample_reg2.png")
+print(centers)
