@@ -128,6 +128,7 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
 # Stripe82 A upper 3 windows bad but not flagged, reverse baseband order
 # use_spws = ['0~4,8~15']
+use_spws = ['1~14']
 # We're commenting this out for the GW follow up, for now.
 # Looks like although spw 0 is bad, it's getting a lower weight.
 
