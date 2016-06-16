@@ -191,4 +191,4 @@ print('Subtile imaging complete')
 # 
 endRunTime=time.time()
 TotalRunTime = (endRunTime - startRunTime)
-print 'Total run time was: %10.3f seconds ' % (TotalRunTime)
+print('Total run time was: %10.3f seconds ' % (TotalRunTime))
