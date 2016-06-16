@@ -75,9 +75,10 @@ scriptfile = use_script_dir + scriptname
 # Center of Stripe82 tile A at (315.0deg,0deg)
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
-# (RA, dec) = (53.70525568 deg, 39. deg)
-tile_center_ra = '03:34:18.0' # in hh:mm:ss I assume?
-tile_center_dec = '39.21.26.5' # in dd:mm:ss I assume?
+# (RA, dec) = (54.70525568 deg, 37. deg)
+tile_center_ra = '03:38:49.26' # in hh:mm:ss I assume?
+tile_center_dec = '37.00.00.0' # in dd:mm:ss I assume?
+
 
 #tile_center_ra = '21:00:00.00'
 #tile_center_dec = '00.00.00.0'
