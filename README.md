@@ -1,1 +1,1 @@
-Scripts for reducing LIGO follow-up data from the VLA.
+Scripts for reducing VLA follow-up data in the LIGO field
