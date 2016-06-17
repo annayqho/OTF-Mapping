@@ -176,13 +176,14 @@ if 'use_script_dir' in locals() or 'use_script_dir' in globals():
     script_dir = use_script_dir
 else:
     # Current Lustre AOC VLASS smyers area
-    script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
+    # script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
+    script_dir = 'users/aho/VLA_GW_Followup/Scripts/'
 #script_dir = './' # if you want to use local files
-print("THE SCRIPT DIR IS %s" %script_dir)
 execfile(script_dir+'getfieldcone.py')
 
 # Set up some parameters for processing
-sdmdir = '/lustre/aoc/projects/vlass/smyers/'
+# sdmdir = '/lustre/aoc/projects/vlass/smyers/'
+sdmdir = '/lustre/aoc/observers/aho/'
 sdmname = mydataset
 sdmfile = sdmdir + sdmname
 
