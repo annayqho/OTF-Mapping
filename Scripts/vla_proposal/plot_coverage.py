@@ -8,5 +8,6 @@ from plotpilot import get_vlass_fields
 ra_ligo, dec_ligo = get_field_positions()
 fig = get_vlass_fields()
 
-fig.scatter(ra_ligo, dec_ligo, s=2, c='k')
+plt.scatter(ra_ligo, dec_ligo, s=2, c='k')
+plt.title("VLASS Pilot Tiles and Search Field for GW151226")
 plt.show()
