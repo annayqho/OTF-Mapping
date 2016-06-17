@@ -35,6 +35,7 @@ logbuffer.append(logstring)
 logstring = myscriptvers
 print logstring
 logbuffer.append(logstring)
+print ("AYQH: Running this script")
 
 #================================================================================
 # Setup information for the submosaic to be imaged
@@ -177,6 +178,7 @@ else:
     # Current Lustre AOC VLASS smyers area
     script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
 #script_dir = './' # if you want to use local files
+print("THE SCRIPT DIR IS %s" %script_dir)
 execfile(script_dir+'getfieldcone.py')
 
 # Set up some parameters for processing
@@ -1096,7 +1098,7 @@ if doimaging:
                                 makeimages='choose',
                                 calcres=False,
                                 calcpsf=False,
-                                overwrite=True,
+                                # overwrite=True,
                                 savemodel=dosavemodel)
                 itercycle+=1
                 os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
