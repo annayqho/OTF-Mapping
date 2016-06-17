@@ -35,7 +35,7 @@ logbuffer.append(logstring)
 logstring = myscriptvers
 print logstring
 logbuffer.append(logstring)
-print ("AYQH: Running this script")
+print ("no overwrite in tclean: Running this script")
 
 #================================================================================
 # Setup information for the submosaic to be imaged
