@@ -32,7 +32,7 @@ prevRunTime = startRunTime
 # 11 Feb:
 # mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
 # 14 Feb:
-mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889.ms'
+mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
 
 # 
 # The following points to my directories for CIPL calibration:
