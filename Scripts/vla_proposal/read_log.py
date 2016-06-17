@@ -31,7 +31,8 @@ def decl_to_deg(decl):
     return deg
 
 def get_field_positions():
-    inputf = open("casapy-20160615-210844.log", "r")
+    direc = "/Users/annaho/Dropbox/Research/VLA-GW"
+    inputf = open("%s/casapy-20160615-210844.log" %direc, "r")
     log = inputf.readlines()
     inputf.close()
 
