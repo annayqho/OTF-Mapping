@@ -65,12 +65,13 @@ reg2 = np.logical_and(reg2_dec, ra < 75)
 
 # generate tiles
 centers, ra_grid, dec_grid, nfields = get_tiles(ra[reg1], dec[reg1])
+print(centers)
 fig = plot_tiles(ra, dec, ra_grid, dec_grid, reg1)
 plt.savefig("tiling_sample_reg1.png")
 plt.close()
 print(centers)
 
-centers, ra_grid, dec_grid, nfields = get_tiles(ra[reg2], dec[reg2])
-fig = plot_tiles(ra, dec, ra_grid, dec_grid, reg2)
-plt.savefig("tiling_sample_reg2.png")
+#centers, ra_grid, dec_grid, nfields = get_tiles(ra[reg2], dec[reg2])
+#fig = plot_tiles(ra, dec, ra_grid, dec_grid, reg2)
+#plt.savefig("tiling_sample_reg2.png")
 print(centers)

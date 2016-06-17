@@ -76,9 +76,8 @@ scriptfile = use_script_dir + scriptname
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) = (54.70525568 deg, 37. deg)
-tile_center_ra = '03:38:49.26' # in hh:mm:ss I assume?
-tile_center_dec = '37.00.00.0' # in dd:mm:ss I assume?
-
+tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
+tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 
 #tile_center_ra = '21:00:00.00'
 #tile_center_dec = '00.00.00.0'
@@ -137,8 +136,8 @@ use_pointing = False
 # There's no useful pointing table yet
 
 # Enable autoboxing (or not)
-# use_ccbox = False
-use_ccbox = True
+use_ccbox = False
+# use_ccbox = True
 use_maxboxcycles = 20
 
 # Imaging parameters (depend on your observation)

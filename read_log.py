@@ -2,6 +2,18 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from math import floor
+
+
+def deg_to_ra(deg):
+    """ Convert deg to RA in hh:mm:ss.ss """
+    hours = deg * 24 / 360
+    hh = floor(hours)
+    minutes = (hours-hh)*60
+    mm = floor(minutes)
+    seconds = (minutes-mm)*60
+    return "%s:%s:%s" %(hh,mm,seconds)
+
 
 def ra_to_deg(ra):
     """ Convert RA to degrees.
@@ -54,4 +66,7 @@ def plot(ra_deg, dec_deg):
     plt.title("11 Feb: Region 2, Epoch 1", fontsize=16)
     #plt.show()
     plt.savefig("11feb_field_map.png")
+
+if __name__=="__main__":
+    get_field_positions()
 
