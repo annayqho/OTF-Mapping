@@ -1,0 +1,64 @@
+""" Script from Kunal """
+
+####################################################################################
+Stuff to do in CASA, if you do not have single-field measurement sets already
+####################################################################################
+
+working directory: /lustre/kmooley/projects/JAGWAR/GW151226/anna
+
+####### Load scripts
+execfile('/lustre/kmooley/pipeline/CASA/helper_functions.py')
+execfile('/lustre/kmooley/pipeline/CASA/scripts/casa_functions.py')
+execfile('/lustre/kmooley/pipeline/CASA/scripts/otf_tools.py')
+
+####### Inputs
+coord = cooTran('04 16 00.000 +44 15 00.00')  # 64.000000 +44.250000
+msname = '/lustre/kmooley/projects/JAGWAR/GW151226/epoch1/14Feb2016/16A-237.sb31782757.eb31851884.57432.83502763889.ms'
+size = 1 # degrees
+
+####### Split fields
+field_id = nearest_fields_otf_ms(msname, coord, size, size, mode='rect')
+print len(field_id)
+for item in field_id: split(vis=msname, outputvis=str(item)+'.ms', datacolumn='corrected', field=str(item))
+
+####################################################################################
+
+
+
+####################################################################################
+Stuff to be done in bash
+####################################################################################
+
+####### Imaging round 1
+
+# Reserve nodes
+qsub -I -l walltime=01:00:00,nodes=2:ppn=12,mem=60G -q batch
+
+# Do the imaging
+/lustre/kmooley/pipeline/CASA/scripts/cleanfld.py --niter 500 --imsize 1024 --pixsize 2 --clipmax 0 --cyclefactor 4.5 --beam 8.0 --parallel /lustre/kmooley/projects/JAGWAR/GW151226/anna
+
+# Exit from the nodes
+exit
+
+####### Selfcal
+for msname in *.ms; do casa --nologger -c /lustre/kmooley/pipeline/CASA/scripts/selfcal_fields.py $msname 20 -9 0 0 100 spw=\'0,3~15\'; done
+
+####### Source finding
+
+for myfile in *.fits; do /lustre/kmooley/pipeline/AIPS/SAD.py $myfile --outname ${myfile}.SAD --minsnr 7; done
+
+####### Convert source catalog to masks
+python -c "from glob import glob; execfile('/lustre/kmooley/pipeline/CASA/scripts/casa_functions.py'); [SADCatToMask(myfile,myfile+'.SAD',myfile.replace('.fits','_mask.txt')) for myfile in glob('*.fits')"
+
+####### Imaging round 2
+rm -f *.fits
+
+qsub -I -l walltime=01:00:00,nodes=2:ppn=12,mem=60G -q batch
+
+/lustre/kmooley/pipeline/CASA/scripts/cleanfld.py --niter 500 --imsize 1024 --pixsize 2 --clipmax 0 --cyclefactor 4.5 --beam 8.0 --parallel /lustre/kmooley/projects/JAGWAR/GW151226/anna
+
+exit
+
+####### Linear Mosaicing
+/lustre/kmooley/pipeline/AIPS/flatn.py --imsize 2000,2000 --coord 64.00,44.25
+
