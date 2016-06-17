@@ -139,8 +139,8 @@ use_pointing = False
 # There's no useful pointing table yet
 
 # Enable autoboxing (or not)
-use_ccbox = False
-# use_ccbox = True
+# use_ccbox = False
+use_ccbox = True
 use_maxboxcycles = 20
 
 # Imaging parameters (depend on your observation)
