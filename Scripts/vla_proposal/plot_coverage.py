@@ -10,4 +10,5 @@ fig = get_vlass_fields()
 
 plt.scatter(ra_ligo, dec_ligo, s=2, c='k')
 plt.title("VLASS Pilot Tiles and Search Field for GW151226")
+plt.legend(loc='upper center', ncol=4, mode="expand")
 plt.show()

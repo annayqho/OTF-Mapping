@@ -63,11 +63,5 @@ def get_vlass_fields():
 
     plt.xlabel('RA (deg)')
     plt.ylabel('Dec (deg)')
-    #mytitle = 'VLASS Pilot Tile Location'
-    #plt.title(mytitle)
-    # plt.legend(loc='upper left')
-    # plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-    #        ncol=2, mode="expand", borderaxespad=0.)
-    plt.legend(loc='upper center', ncol=4, mode="expand")
 
     return fig
