@@ -29,7 +29,10 @@ prevRunTime = startRunTime
 
 # Name of the dataset (for MS naming)
 # mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
-mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
+# 11 Feb:
+# mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
+# 14 Feb:
+mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889.ms'
 
 # 
 # The following points to my directories for CIPL calibration:
