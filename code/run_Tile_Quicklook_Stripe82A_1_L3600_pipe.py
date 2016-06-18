@@ -141,7 +141,7 @@ use_pointing = False
 # Enable autoboxing (or not)
 # use_ccbox = False
 use_ccbox = True
-use_maxboxcycles = 20
+use_maxboxcycles = 3
 
 # Imaging parameters (depend on your observation)
 use_threshold = '0.000180Jy' # VLASS depth x1.5, same as GW follow up
