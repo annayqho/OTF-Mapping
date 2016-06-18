@@ -237,7 +237,8 @@ else:
 if 'use_maxboxcycles' in locals() or 'use_maxboxcycles' in globals():
     maxboxcycles = use_maxboxcycles
 else:
-    maxboxcycles = 3
+    maxboxcycles = 20
+print("max box cycles:" + maxboxcycles)
 
 if 'use_uvtaper' in locals() or 'use_uvtaper' in globals():
     myuvtaper = [use_uvtaper]
