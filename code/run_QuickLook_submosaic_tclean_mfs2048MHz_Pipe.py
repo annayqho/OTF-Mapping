@@ -30,12 +30,12 @@ mytext = 'VLASS QuickLook submosaic TClean MFS TT0-only JointMosaic'
 myscriptvers = '2016-06-14 STM (4.6.0)'
 
 logstring = mytext
-print logstring
+print(logstring)
 logbuffer.append(logstring)
 logstring = myscriptvers
-print logstring
+print(logstring)
 logbuffer.append(logstring)
-print ("no overwrite in tclean: Running this script")
+print(("no overwrite in tclean: Running this script")
 
 #================================================================================
 # Setup information for the submosaic to be imaged
@@ -65,7 +65,7 @@ elif 'subtile_center_dir' in locals() or 'subtile_center_dir' in globals():
     mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
 
 logstring = 'SubMosaic center = '+mycenter
-print logstring
+print(logstring)
 logbuffer.append(logstring)
 
 #================================================================================
@@ -84,32 +84,32 @@ if 'calibrated_ms' in locals() or 'calibrated_ms' in globals():
     splitfile = calibrated_ms
     if os.access(splitfile,F_OK):
         logstring = 'Found calibrated ms '+splitfile
-        print logstring
+        print(logstring)
         logbuffer.append(logstring)
     else:
         logstring = 'ERROR: could not find '+splitfile
-        print logstring
+        print(logstring)
         logbuffer.append(logstring)
 else:
     # try some defaults
     splitfile = data_dir + dataname + '_calibrated_target.ms'
     if os.access(splitfile,F_OK):
         logstring = 'Found calibrated ms '+splitfile
-        print logstring
+        print(logstring)
         logbuffer.append(logstring)
     else:
         logstring = 'WARNING: could not find '+splitfile
-        print logstring
+        print(logstring)
         logbuffer.append(logstring)
         #
         splitfile = data_dir + dataname + '.ms'
         if os.access(splitfile,F_OK):
             logstring = 'Found calibrated ms '+splitfile
-            print logstring
+            print(logstring)
             logbuffer.append(logstring)
         else:
             logstring = 'ERROR: could not find '+splitfile
-            print logstring
+            print(logstring)
             logbuffer.append(logstring)
 
 if 'calibrated_ms_datacolumn' in locals() or 'calibrated_ms_datacolumn' in globals():
@@ -118,7 +118,7 @@ if 'calibrated_ms_datacolumn' in locals() or 'calibrated_ms_datacolumn' in globa
 else:
     splitdatacolumn = 'all' # if targets not split separately into data use 'corrected'
 logstring = 'Will use datacolumn '+splitdatacolumn
-print logstring
+print(logstring)
 logbuffer.append(logstring)
 
 # NOTE: this splitfile is assumed to contain only the target fields that you
@@ -139,12 +139,12 @@ else:
     clear_pointing = True # by default clear the POINTING table
 if clear_pointing:
     logstring = 'Will clear MS POINTING table(s)'
-    print logstring
+    print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)
 else:
     logstring = 'MS POINTING table(s) will be used if they contain data'
-    print logstring
+    print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)
 
@@ -343,7 +343,7 @@ else:
 #
 fld_size = L_subtile_pixels + padding
 logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
-print logstring
+print(logstring)
 logbuffer.append(logstring)
 
 dosubim = True
@@ -360,7 +360,7 @@ ilow = fld_size/2 - (fld_subim_size/2)
 iup = fld_size/2 + (fld_subim_size/2) - 1
 fld_subim = str(ilow)+','+str(ilow)+','+str(iup)+','+str(iup)
 logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
-print logstring
+print(logstring)
 logbuffer.append(logstring)
 
 # Use common restoring beam?
@@ -396,7 +396,7 @@ myrmode='norm'
 #myrobust=0.5
 myrobust=1.0
 
-print ''
+print('')
 logbuffer.append(' ')
 
 #====================================================================
@@ -414,10 +414,11 @@ docone=True
 # mydistance='2000arcsec'
 mydistance_arcsec = 0.5*L_subtile_arcsec + beamsearchradius_arcsec
 mydistance=str(mydistance_arcsec)+'arcsec'
+print(mydistance)
 # 
 if docone:
     logstring = 'Selecting fields within cone radius of '+mydistance
-    print logstring
+    print(logstring)
     logbuffer.append(logstring)
 
 #====================================================================
@@ -508,7 +509,7 @@ startProc=time.clock()
 prevTime = startTime
 
 logstring = 'Starting imaging of '+splitfile+' using script '+myscriptvers
-print logstring
+print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
 
@@ -518,15 +519,15 @@ fstr = f.readline()
 f.close()
 datasize_ms = float( fstr.split("\t")[0] )
 logstring = 'MS is '+str(datasize_ms)+' MB'
-print logstring
+print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
 
 #
 if os.path.exists(imaging_dir):
-    print 'Using existing image output directory '+imaging_dir
+    print('Using existing image output directory '+imaging_dir)
 else:
-    print 'Creating directory '+imaging_dir
+    print('Creating directory '+imaging_dir)
     os.makedirs(imaging_dir)
 
 if docone:
@@ -546,17 +547,17 @@ if docone:
     else:
         # use regex match, needs getfieldcone.py v20160607 or later
         logstring = 'Matching field names using regex string(s) : '+str(mymatchregex)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
         fldnos = getfieldirbox(splitfile,distance=mydistance,center_dir=mycenter_dir,matchregex=mymatchregex)
 logstring = 'Will image a total of '+str(len(fldnos))+' fields'+' using specmode='+fld_specmode
-print logstring
+print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
 logstring = 'Will image fields = '+str(fldnos)
-print logstring
+print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
 #
@@ -571,7 +572,7 @@ for field in fldnos:
 if doimaging:
     #
     # Make a working copy of ms
-    print 'Splitting '+splitfile+' to '+visname
+    print('Splitting '+splitfile+' to '+visname)
     os.system('rm -rf '+visname+'*')
     #os.system('cp -rf '+splitfile+' '+visname)
     if splitdatacolumn=='auto':
@@ -617,7 +618,7 @@ if doimaging:
         tb.close()
         #
         logstring = 'Cleared MS POINTING table(s) for '+visname
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         
@@ -632,7 +633,7 @@ if doimaging:
     chanwidtharr=tb.getcol("CHAN_WIDTH")
     tb.close()
     nspw = len(nchanarr)
-    print 'Found '+str(nspw)+' spw in SPECTRAL_WINDOW table'
+    print('Found '+str(nspw)+' spw in SPECTRAL_WINDOW table')
     spwlookup = {}
     for isp in range(nspw):
         spwlookup[isp] = {}
@@ -650,7 +651,7 @@ if doimaging:
         cfq_str = '%.3fMHz' % (cfq/1.e6)
         spwlookup[isp]['centerfreq_str'] = cfq_str
         spwlookup[isp]['bandwidth_str'] = bw_str
-    print 'Extracted information for '+str(nspw)+' SpectralWindows'
+    print('Extracted information for '+str(nspw)+' SpectralWindows')
     #
     currTime=time.time()
     stagedur = currTime-prevTime
@@ -663,7 +664,7 @@ if doimaging:
     stagestr = stepname
     stagetime.append(stagedur)
     stagename.append(stagestr)
-    print stagestr+' took '+str(stagedur)+' sec'
+    print(stagestr+' took '+str(stagedur)+' sec')
     prevTime = currTime
 
 # Make standard (untapered) image set
@@ -727,6 +728,7 @@ if doimaging:
         # make a dirty image to begin with
         #
         try:
+            # this is where we create the primary beam .pb image
             tclean(visname,
                    imagename=clnim,
                    field=fieldstr,
@@ -769,7 +771,7 @@ if doimaging:
                    savemodel=dosavemodel)
         except:
             logstring = 'WARNING: Failed creating dirty submosaic'
-            print logstring
+            print(logstring)
             casalog.post(logstring)
             logbuffer.append(logstring)
         #
@@ -787,7 +789,7 @@ if doimaging:
         stagestr = stepname+' dirty cycle '+str(itercycle)
         stagetime.append(stagedur)
         stagename.append(stagestr)
-        print stagestr+' took '+str(stagedur)+' sec'
+        print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
         #
         # ===== Construct the mask for CCBox
@@ -811,7 +813,7 @@ if doimaging:
         psfmin=max(abs(psfimstat2['min'][0]),psfimstat2['max'][0])
         #
         logstring = 'Using PSF sidelobe level for masking = '+str(psfmin)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -819,13 +821,13 @@ if doimaging:
         immax=imageimstat['max'][0]
         imRMS=imageimstat['rms'][0]
         logstring = "Dirty image RMS = "+str(imRMS)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
         pksnr=immax/imRMS
         logstring = 'Dirty image Peak/rms = '+str(pksnr)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -839,7 +841,7 @@ if doimaging:
         #
         thresh1=immax*threshfraction
         logstring = 'Cycle '+str(itercycle)+' initial threshold = '+str(thresh1)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -852,7 +854,7 @@ if doimaging:
         fwhm1=cellsize*sqrt((psfimstat1['maxpos'][0]-psfimstat1['minpos'][0])**2+(psfimstat1['maxpos'][1]-psfimstat1['minpos'][1])**2)
         fwhm1str=str(fwhm1)+'arcsec'
         logstring = 'Smoothing mask with FWHM='+fwhm1str
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -867,13 +869,13 @@ if doimaging:
                   expr='iif(IM0>'+str(maskpk/2.0)+',1.0,0.0)',
                   outfile=threshmask,stokes='I')
         logstring = 'Created smoothed thresholded mask image '+threshmask
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
         maskstat=imstat(threshmask)
         logstring = 'Mask image contains '+str(int(maskstat['sum'][0]))+' active pixels'
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -888,7 +890,7 @@ if doimaging:
         stagestr = stepname+' initial'
         stagetime.append(stagedur)
         stagename.append(stagestr)
-        print stagestr+' took '+str(stagedur)+' sec'
+        print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
         #
         # =============================
@@ -898,7 +900,7 @@ if doimaging:
         if box_threshold<fld_thresholdJy:
             box_threshold = fld_thresholdJy
         logstring = 'Cleaning submosaic  with mask image '+threshmask+' to '+str(box_threshold)+'Jy'
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         # call tclean with interactive=0 to return iterations
@@ -949,7 +951,7 @@ if doimaging:
         else:
             iterdone+=1
             logstring = "Imaging for cycle "+str(itercycle)+" completed"
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -958,19 +960,19 @@ if doimaging:
         immax=imageimstat['max'][0]
         imRMS=imageimstat['rms'][0]
         logstring = "Residual RMS = "+str(imRMS)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
         RMSratio=((oldRMS-imRMS)/(oldRMS))
         logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
-        print logstring
+        print(logstring
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
         pksnr=immax/imRMS
         logstring = 'Peak/rms = '+str(pksnr)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -985,7 +987,7 @@ if doimaging:
         stagestr = stepname+' boxed cycle '+str(itercycle)
         stagetime.append(stagedur)
         stagename.append(stagestr)
-        print stagestr+' took '+str(stagedur)+' sec'
+        print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
         #
         if pksnr>peaksnrlimit and iterdone>0:
@@ -999,14 +1001,14 @@ if doimaging:
         while doboxed:
             if pksnr>peaksnrlimit and iterdone>0 and imRMS>fld_thresholdJy:
                 logstring = "RMS ratio too high: more cleaning required ..."
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 maskname=clnim+'.cycle'+str(itercycle)
                 os.system('cp -rf '+clnim+'.mask '+maskname+'_oldmask')
                 thresh2=immax*threshfraction
                 logstring = ' Cycle '+str(itercycle)+' new initial threshold = '+str(thresh2)
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 immath(imagename=clnresidual[0],mode='evalexpr',
@@ -1026,13 +1028,13 @@ if doimaging:
                        stokes='I')
                 #
                 logstring = 'Created smoothed thresholded summed mask image '+threshmask
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 #
                 maskstat=imstat(threshmask)
                 logstring = 'Mask image contains '+str(int(maskstat['sum'][0]))+' active pixels'
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 #
@@ -1047,14 +1049,14 @@ if doimaging:
                 stagestr = stepname+' iter '+str(iterdone)
                 stagetime.append(stagedur)
                 stagename.append(stagestr)
-                print stagestr+' took '+str(stagedur)+' sec'
+                print(stagestr+' took '+str(stagedur)+' sec')
                 prevTime = currTime
                 #
                 box_threshold=3.0*imRMS
                 if box_threshold<fld_thresholdJy:
                        box_threshold = fld_thresholdJy
                 logstring = 'Cleaning submosaic with mask image '+threshmask+' to '+str(box_threshold)+'Jy'
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 # for 4.5.1 have to copy this mask to .mask
@@ -1109,7 +1111,7 @@ if doimaging:
                 else:
                     iterdone+=1
                     logstring = 'Imaging for cycle '+str(itercycle)+' completed'
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 #
@@ -1118,19 +1120,19 @@ if doimaging:
                 immax=imageimstat['max'][0]
                 imRMS=imageimstat['rms'][0]
                 logstring = "Residual RMS = "+str(imRMS)
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 #
                 RMSratio=((oldRMS-imRMS)/(oldRMS))
                 logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 #
                 pksnr=immax/imRMS
                 logstring = 'Peak/rms = '+str(pksnr)
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 #
@@ -1145,19 +1147,19 @@ if doimaging:
                 stagestr = stepname+' boxed cycle '+str(itercycle)
                 stagetime.append(stagedur)
                 stagename.append(stagestr)
-                print stagestr+' took '+str(stagedur)+' sec'
+                print(stagestr+' took '+str(stagedur)+' sec')
                 prevTime = currTime
                 #
                 # Possibly terminate boxed cleaning
                 if itercycle>=maxboxcycles:
                     doboxed=False
                     logstring = "Reached max number of boxed cycles, terminating boxing"
-                    print logstring
+                    print(logstring)
                     casalog.post(logstring)
                     logbuffer.append(logstring)
             else:
                 logstring = "No more boxed cleaning needed, finishing up"
-                print logstring
+                print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 doboxed=False
@@ -1166,7 +1168,7 @@ if doimaging:
         os.system('cp -r '+clnim+'.mask '+clnim+'_lastmask_mask')
     else:
         logstring = 'Will NOT do any autoboxing'
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
     # ==========================================
@@ -1178,7 +1180,7 @@ if doimaging:
     # ================================
     #
     logstring = 'Final Cleaning submosaic without mask '
-    print logstring
+    print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)
     os.system('rm -rf '+clnim+'.mask ')
@@ -1233,12 +1235,12 @@ if doimaging:
         else:
             iterdone+=1
             logstring = 'Final imaging for cycle '+str(itercycle)+' completed'
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
     except:
         logstring = 'WARNING: Failed final cleaning submosaic without mask '
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
     #
@@ -1253,7 +1255,7 @@ if doimaging:
     stagestr = stepname+' final unboxed cycle '+str(itercycle)
     stagetime.append(stagedur)
     stagename.append(stagestr)
-    print stagestr+' took '+str(stagedur)+' sec'
+    print(stagestr+' took '+str(stagedur)+' sec'))
     prevTime = currTime
 
 #
@@ -1285,7 +1287,7 @@ if doimaging or dostats or dosubim:
         mysize_ra = int(trc_i)-int(blc_i)+1
         mysize_dec = int(trc_j)-int(blc_j)+1
         logstring = 'Creating subimages of size '+str(mysize_ra)+' x '+str(mysize_dec)
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         if os.access(clnimage,F_OK):
@@ -1294,7 +1296,7 @@ if doimaging or dostats or dosubim:
             imsubimage(clnimage,clnsubim,box=fld_subim)
         else:
             logstring = 'WARNING: could not find '+clnimage
-            print logstring
+            print(logstring)
             casalog.post(logstring)
             logbuffer.append(logstring)
         if os.access(clnres,F_OK):
@@ -1302,7 +1304,7 @@ if doimaging or dostats or dosubim:
             imsubimage(clnres,residsubim,box=fld_subim)
         else:
             logstring = 'WARNING: could not find '+clnres
-            print logstring
+            print(logstring)
             casalog.post(logstring)
             logbuffer.append(logstring)
         if os.access(clnpb,F_OK):
@@ -1310,7 +1312,7 @@ if doimaging or dostats or dosubim:
             imsubimage(clnpb,pbsubim,box=fld_subim)
         else:
             logstring = 'WARNING: could not find '+clnpb
-            print logstring
+            print(logstring)
             casalog.post(logstring)
             logbuffer.append(logstring)
     else:
@@ -1321,7 +1323,7 @@ if doimaging or dostats or dosubim:
         num_good += 1
     else:
         logstring = 'WARNING: could not find clean mosaic '
-        print logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
     #
@@ -1330,7 +1332,7 @@ if doimaging or dostats or dosubim:
     clndict[spwstr]['reslist'] = [ressubim]
     #
     logstring = 'Found '+str(num_good)+' cleaned field planes out of a total '+str(num_images)+' expected'
-    print logstring
+    print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)
     #
@@ -1345,7 +1347,7 @@ if doimaging or dostats or dosubim:
     stagestr = stepname
     stagetime.append(stagedur)
     stagename.append(stagestr)
-    print stagestr+' took '+str(stagedur)+' sec'
+    print(stagestr+' took '+str(stagedur)+' sec')
     prevTime = currTime
 
 # Get stats
@@ -1361,7 +1363,7 @@ if dostats and num_good>0:
     statdict['Channels'][spwstr]={}
     nimg = len(clndict[spwstr]['clnlist'])
     rmslist=[]
-    print 'Stats for '+spwstr+' :'
+    print('Stats for '+spwstr+' :')
     # clean image stats
     ifld=0
     imname = clndict[spwstr]['clnlist'][ifld]
@@ -1372,7 +1374,7 @@ if dostats and num_good>0:
     cln_min = mystat['min'][0]
     #
     statstring = 'Restored max = '+str(cln_max)+' min = '+str(cln_min)
-    print statstring
+    print(statstring)
     statbuffer.append(statstring)
     #
     imname = clndict[spwstr]['reslist'][ifld]
@@ -1384,7 +1386,7 @@ if dostats and num_good>0:
     rmslist_all.append(res_sigma)
     #
     statstring = 'Residual sigma = '+str(res_sigma)+' max = '+str(res_max)
-    print statstring
+    print(statstring)
     statbuffer.append(statstring)
     #
     # PB stats
@@ -1393,7 +1395,7 @@ if dostats and num_good>0:
     statdict['Channels'][spwstr]['PB']=mystat
     pb_min = mystat['min'][0]
     pb_max = mystat['max'][0]
-    print 'PB max = '+str(pb_max)+' min = '+str(pb_min)
+    print('PB max = '+str(pb_max)+' min = '+str(pb_min))
     statstring = 'Spw '+spwstr+': PB max = '+str(pb_max)+' min = '+str(pb_min)
     statbuffer.append(statstring)
     #
@@ -1426,9 +1428,9 @@ if dostats and num_good>0:
     #
     #
     # Median rms per channel over all spw
-    print ' '
+    print(' ')
     statbuffer.append(' ')
-    print 'Statistics for all fields: '
+    print('Statistics for all fields: ')
     statbuffer.append('Statistics for all fields: ')
     rmsarr_all = pl.array(rmslist_all)
     median_sigma_all = pl.median(rmsarr_all)
@@ -1442,10 +1444,10 @@ if dostats and num_good>0:
     statdict['All']['Median']['Residual']['min']=min_sigma_all
     statdict['All']['Median']['Residual']['number']=num_sigma_all
     statstring = 'Residual Mosiac All channels: Median sigma num = '+str(num_sigma_all)+' median = '+str(median_sigma_all)
-    print statstring
+    print(statstring)
     statbuffer.append(statstring)
     statstring = 'Residual Mosiac All channels: Median sigma max = '+str(max_sigma_all)+' min = '+str(min_sigma_all)
-    print statstring
+    print(statstring)
     statbuffer.append(statstring)
     #
     rmsarr_region_all = pl.array(rmslist_region_all)
@@ -1460,10 +1462,10 @@ if dostats and num_good>0:
     statdict['All']['Median']['Regions']['Residual']['max']=max_sigma_region_all
     statdict['All']['Median']['Regions']['Residual']['min']=min_sigma_region_all
     statstring = 'Residual Mosaic All Channels: subregions num = '+str(num_sigma_region_all)+' median sigma = '+str(median_sigma_region_all)
-    print statstring
+    print(statstring)
     statbuffer.append(statstring)
     statstring = 'Residual Mosaic All Channels: subregions max = '+str(max_sigma_region_all)+' min sigma = '+str(min_sigma_region_all)
-    print statstring
+    print(statstring)
     statbuffer.append(statstring)
     #
     currTime=time.time()
@@ -1477,7 +1479,7 @@ if dostats and num_good>0:
     stagestr = stepname
     stagetime.append(stagedur)
     stagename.append(stagestr)
-    print stagestr+' took '+str(stagedur)+' sec'
+    print(stagestr+' took '+str(stagedur)+' sec')
     prevTime = currTime
     
 clnmosfile = clnrestored[0]
@@ -1524,8 +1526,8 @@ def lprint(msg, lfile):
     """
     Prints msg to both stdout and lfile.
     """
-    print msg
-    print >>mylogfile, msg
+    print(msg)
+    print(>>mylogfile, msg)
     
 lprint(mytext, mylogfile)
 lprint('Running '+myvers+' on host '+myhost, mylogfile)
@@ -1567,17 +1569,17 @@ new_regression['timing'] = timing
 if len(logbuffer)>0:
     lprint('', mylogfile)
     lprint('* Logging:                                      *', mylogfile)
-    print >>mylogfile,''
+    print(>>mylogfile,'')
     for logstring in logbuffer:
-        print >>mylogfile,logstring
+        print(>>mylogfile,logstring)
 
 # Final stats and timing
 if dostats:
     lprint('', mylogfile)
     lprint('* Results:                                      *', mylogfile)
-    print >>mylogfile,''
+    print(>>mylogfile,'')
     for statstring in statbuffer:
-        print >>mylogfile,statstring
+        print(>>mylogfile,statstring)
 
 lprint('', mylogfile)
 lprint('********* Benchmarking *************************', mylogfile)
@@ -1607,7 +1609,7 @@ lprint("", mylogfile)
 lprint("Final Joint Mosaic image is " + clnmosfile, mylogfile)
 
 mylogfile.close()
-print "Results are in "+outfile
+print("Results are in "+outfile)
 
 #====================================================================
 # Done
