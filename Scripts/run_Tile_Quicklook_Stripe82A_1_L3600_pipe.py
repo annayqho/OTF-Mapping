@@ -149,8 +149,10 @@ use_threshold = '0.000180Jy' # VLASS depth x1.5, same as GW follow up
 use_restore = '8.0arcsec' # for the LIGO follow up
 
 # These you tune for quality of imaging
-use_fld_niter = 5000         # max number of clean iter
-use_fld_cycleniter = 1000    # max number of iter per major cycle
+use_fld_cycleniter = 7000
+# use_fld_niter = 5000         # max number of clean iter
+use_fld_cycleniter = 750
+#use_fld_cycleniter = 1000    # max number of iter per major cycle
 
 #------------------------------------------------------------------------------------
 # Done setting stuff manually, now run the thing.
