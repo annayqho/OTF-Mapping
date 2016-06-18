@@ -65,7 +65,7 @@ use_target_fields = ['^0','^1','^2'] # picks out only OTFM fields which start wi
 # use_script_dir = './'
 # here we set to SMyers testing script area
 # use_script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
-use_script_dir = '/users/aho/VLA_GW_Followup/Scripts/'
+use_script_dir = '/users/aho/VLA_GW_Followup/code/'
 # The name of the imaging script. This uses the new one:
 scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
