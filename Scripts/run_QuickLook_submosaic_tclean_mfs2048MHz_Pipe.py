@@ -237,7 +237,7 @@ else:
 if 'use_maxboxcycles' in locals() or 'use_maxboxcycles' in globals():
     maxboxcycles = use_maxboxcycles
 else:
-    maxboxcycles = 20
+    maxboxcycles = 3
 
 if 'use_uvtaper' in locals() or 'use_uvtaper' in globals():
     myuvtaper = [use_uvtaper]
