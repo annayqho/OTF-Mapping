@@ -269,6 +269,7 @@ def getfieldirbox(msfile=None,distance='0deg',center_dir=None,matchregex=''):
         sep_ra = abs(dd_ra - center_ra)
         if sep_ra>(pl.pi):
             sep_ra = 2.0*pl.pi - sep_ra
+        sep_ra_sky = sep_ra*pl.cos(center_dec)
 
         sep_dec = abs(dd_dec - center_dec)
 
