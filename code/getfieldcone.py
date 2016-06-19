@@ -266,10 +266,11 @@ def getfieldirbox(msfile=None,distance='0deg',center_dir=None,matchregex=''):
         dd = ddirs[i]['dir']
         dd_ra = dd['m0']['value']
         dd_dec = dd['m1']['value']
-        sep_ra = abs(dd_ra - center_ra)
-        if sep_ra>(pl.pi):
-            sep_ra = 2.0*pl.pi - sep_ra
-        sep_ra_sky = sep_ra*pl.cos(center_dec)
+        sep_ra_temp = abs(dd_ra - center_ra)
+        if sep_ra_temp>(pl.pi):
+            sep_ra_temp = 2.0*pl.pi - sep_ra_temp
+        sep_ra = sep_ra_temp*pl.cos(center_dec)
+        print("NEW SEP RA")
 
         sep_dec = abs(dd_dec - center_dec)
 

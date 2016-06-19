@@ -35,7 +35,7 @@ logbuffer.append(logstring)
 logstring = myscriptvers
 print(logstring)
 logbuffer.append(logstring)
-print(("no overwrite in tclean: Running this script")
+print("no overwrite in tclean: Running this script")
 
 #================================================================================
 # Setup information for the submosaic to be imaged
@@ -967,7 +967,7 @@ if doimaging:
         #
         RMSratio=((oldRMS-imRMS)/(oldRMS))
         logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
-        print(logstring
+        print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         #
@@ -1256,7 +1256,7 @@ if doimaging:
     stagestr = stepname+' final unboxed cycle '+str(itercycle)
     stagetime.append(stagedur)
     stagename.append(stagestr)
-    print(stagestr+' took '+str(stagedur)+' sec'))
+    print(stagestr+' took '+str(stagedur)+' sec')
     prevTime = currTime
 
 #
@@ -1528,7 +1528,7 @@ def lprint(msg, lfile):
     Prints msg to both stdout and lfile.
     """
     print(msg)
-    print(>>mylogfile, msg)
+    print >>mylogfile, msg
     
 lprint(mytext, mylogfile)
 lprint('Running '+myvers+' on host '+myhost, mylogfile)
@@ -1570,17 +1570,17 @@ new_regression['timing'] = timing
 if len(logbuffer)>0:
     lprint('', mylogfile)
     lprint('* Logging:                                      *', mylogfile)
-    print(>>mylogfile,'')
+    print >>mylogfile,''
     for logstring in logbuffer:
-        print(>>mylogfile,logstring)
+        print >>mylogfile,logstring
 
 # Final stats and timing
 if dostats:
     lprint('', mylogfile)
     lprint('* Results:                                      *', mylogfile)
-    print(>>mylogfile,'')
+    print >>mylogfile,'' 
     for statstring in statbuffer:
-        print(>>mylogfile,statstring)
+        print >>mylogfile,statstring
 
 lprint('', mylogfile)
 lprint('********* Benchmarking *************************', mylogfile)

@@ -1,7 +1,92 @@
 """ Script from Kunal """
 
+def cooTran(inp,sep=' '):
+    # Necessary input modules
+    from numpy.core.defchararray import partition as numpypartition
+    from numpy.core.defchararray import find as numpyfind
+    from numpy.core.defchararray import lstrip as numpylstrip
+    from numpy.core.defchararray import replace as numpyreplace
+    
+    # Is input a string (single coordinate) or an array of cordinates?
+    if 'str' in str(type(inp)):
+        typeInp = 'str'
+        inp = array([inp])
+    else:
+        typeInp = 'arr'
+    
+    inp = numpylstrip(inp)
+    inp = numpyreplace(inp,'  ',' ')
+    
+    # Cleaning of the strings necessary?
+    if 'h' in inp[0] or 'm' in inp[0] or 's' in inp[0] or 'd' in inp[0] or "'" in inp[0] or '"' in inp[0] or ':' in inp[0] or ',' in inp[0] or ';' in inp[0] or '[' in inp[0] or ']' in inp[0]:
+        inp = coordClean(inp)
+    
+    # Declination is positive or negative?
+    decSignNeg = find(numpyfind( inp, ' -' )>0)
+    decSign = array(['+']*len(inp))
+    decSign[decSignNeg] = '-'
+    
+    # convert hexagisimal to decimal
+    if len(inp[0].split())==6:
+        # Hexagesimal coordinates
+        hh,_,tt   = numpypartition(inp,sep=' ').T
+        mm,_,tt   = numpypartition(tt,sep=' ').T
+        ss,_,tt   = numpypartition(tt,sep=' ').T
+        deg,_,tt  = numpypartition(tt,sep=' ').T
+        amin,_,tt = numpypartition(tt,sep=' ').T
+        asec,_,tt = numpypartition(tt,sep=' ').T
+        
+        hh, mm, ss, deg, amin, asec = array(hh,dtype=float), array(mm,dtype=float), array(ss,dtype=float), array(deg,dtype=float), array(amin,dtype=float), array(asec,dtype=float)
+        
+        # apply the proper sign
+        amin[decSignNeg] = -amin[decSignNeg]
+        asec[decSignNeg] = -asec[decSignNeg]
+        
+        # calculate ra and dec
+        ra = (hh/1. + mm/60. + ss/3600.)*15
+        dec = deg/1. + amin/60. + asec/3600.
+        
+        # output array: decimal coordinates
+        outp = array([ ( '%9.6f %s%-9.6f'%(ra[i],decSign[i],abs(dec[i])) ).strip() for i in range(len(inp)) ])
+    
+    # convert decimal to hexagisimal
+    elif len(inp[0].split())==2:
+        ra, dec = array( numpypartition(inp,sep=' ')[:,::2], dtype=float ).T
+        dec = absolute(dec)
+        ra[ra<0] = ra[ra<0]+360
+
+        hh = array(ra/15,dtype=int)
+        mm = array( (ra/15. - hh) * 60, dtype=int)
+        ss = (ra/15. - hh - mm/60.) * 60 * 60
+        deg  = array(dec,dtype=int)
+        amin = array( (dec - deg) * 60, dtype=int)
+        asec = (dec - deg - amin/60.) * 60 * 60
+        
+        # following is required for rounding error
+        tmp = find(absolute(ss-60)<1e-10)  ; ss[tmp] = 0; mm[tmp] = mm[tmp] + 1
+        tmp = find(mm == 60)               ; mm[tmp] = 0; hh[tmp] = hh[tmp] + 1
+        tmp = find(hh == 24)               ; hh[tmp] = 0
+        tmp = find(absolute(asec-60)<1e-10); asec[tmp] = 0; amin[tmp] = amin[tmp] + 1
+        tmp = find(amin == 60)             ; amin[tmp] = 0; deg[tmp] = deg[tmp] + 1
+        
+        sep1,sep2,sep3,sep4,sep5,sep6 = sep.split(',') if ',' in sep else [sep]*2+['']+[sep]*2+['']
+        outp = array([ '%02d%s%02d%s%06.3f%s %s%02d%s%02d%s%05.2f%s'%(hh[i],sep1,mm[i],sep2,ss[i],sep3,decSign[i],deg[i],sep4,amin[i],sep5,asec[i],sep6) for i in range(len(inp)) ])
+    
+    return outp if typeInp is 'arr' else outp[0]
+
+
 ####################################################################################
 Stuff to do in CASA, if you do not have single-field measurement sets already
+
+AYQH: splitting of the scans in the region of interest
+specify certain coordinates, and nearest_fields_otf_ms
+given size of box, selects all the scans relevant to that
+region of the sky. For testing purposes don't worry about
+this at all.
+That's the command that brought the measurement sets
+XXXX.ms in here. 
+The Scan_#.ms
+Should be about 81 scans.
 ####################################################################################
 
 working directory: /lustre/kmooley/projects/JAGWAR/GW151226/anna
@@ -27,15 +112,28 @@ for item in field_id: split(vis=msname, outputvis=str(item)+'.ms', datacolumn='c
 
 ####################################################################################
 Stuff to be done in bash
+
+AYQH: Multithreading: use as many CPUs as possible
+Whenever you want to run independent processes on a computer,
+the best way is to multithread it.
+Each CPU core will deal with one scan.
 ####################################################################################
 
 ####### Imaging round 1
 
 # Reserve nodes
+# AYQH: assign all the tasks to all the cores
+# reserves 2 nodes, each gives you 12 processors
+# we're requesting 60 GB
+# we're requesting it for one hour
+# AYQH: assign all the tasks to all the cores
 qsub -I -l walltime=01:00:00,nodes=2:ppn=12,mem=60G -q batch
 
 # Do the imaging
-/lustre/kmooley/pipeline/CASA/scripts/cleanfld.py --niter 500 --imsize 1024 --pixsize 2 --clipmax 0 --cyclefactor 4.5 --beam 8.0 --parallel /lustre/kmooley/projects/JAGWAR/GW151226/anna
+# AYQH: cleanfld.py written by Kunal, calls CASA clean through the bash terminal, 
+don't need to go into CASA. --parallel 
+# AYQH: --clipmax: a lot of the time, there's still RFI remaining. clipmax does some intelligent clipping of the data. It finds a clean spectral window and defines an amplitude in Janskies where it needs to do the clipping. 
+/lustre/kmooley/pipeline/CASA/scripts/cleanfld.py --niter 500 --imsize 1500 --pixsize 2 --clipmax 0 --cyclefactor 4.5 --beam 8.0 --parallel /lustre/kmooley/projects/JAGWAR/GW151226/anna
 
 # Exit from the nodes
 exit
@@ -60,5 +158,5 @@ qsub -I -l walltime=01:00:00,nodes=2:ppn=12,mem=60G -q batch
 exit
 
 ####### Linear Mosaicing
-/lustre/kmooley/pipeline/AIPS/flatn.py --imsize 2000,2000 --coord 64.00,44.25
-
+# AYQH: image size of the mosaic once you've done linear mosaicing
+/lustre/kmooley/pipeline/AIPS/flatn.py --imsize 2000,2000 --coord 62.00,43.00
