@@ -159,25 +159,19 @@ logbuffer.append(' ')
 
 #====================================================================
 # list of fields to be cleaned
-#mynumfields = 1280
-#fldnos = range(mynumfields)
-#fldnos = [758]
 fldnos = []
-#
-#docone=False
+
 # Use field (box/cone)
 beamsearchradius_arcsec = 1000.0
-docone=True
-# If box Actual dist is linmos_subim_size + 1000"
-# mydistance='2000arcsec'
+# I don't understand what this^ is
 mydistance_arcsec = 0.5*L_subtile_arcsec + beamsearchradius_arcsec
 mydistance=str(mydistance_arcsec)+'arcsec'
 print(mydistance)
-# 
-if docone:
-    logstring = 'Selecting fields within cone radius of '+mydistance
-    print(logstring)
-    logbuffer.append(logstring)
+ 
+# since dobox = True...
+logstring = 'Selecting fields within the box of length '+L_subtile_arcsec
+print(logstring)
+logbuffer.append(logstring)
 
 #====================================================================
 # Save the parameters used 
@@ -197,8 +191,7 @@ params['user']['padding_arcsec'] = padding_arcsec
 if doimaging:
     params['user']['imaging_spwstr'] = imaging_spwstr
     params['user']['imaging_dir'] = imaging_dir
-    if docone:
-        params['user']['mydistance'] = mydistance
+    params['user']['mydistance'] = mydistance # only for docone?
     params['user']['fldnos'] = fldnos
     params['user']['fld_size'] = fld_size
     params['user']['fld_cell'] = fld_cell
@@ -249,7 +242,6 @@ if doimaging:
         params['user']['maxboxcycles'] = maxboxcycles
         params['user']['fld_threshold'] = fld_threshold
       
-
 stagename = []
 stagetime = []
 steplist = []
@@ -281,18 +273,13 @@ print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
 
-#
 if os.path.exists(imaging_dir):
     print('Using existing image output directory '+imaging_dir)
 else:
     print('Creating directory '+imaging_dir)
     os.makedirs(imaging_dir)
 
-if docone:
-   
-    # fldnos = getfieldcone(splitfile,distance=mydistance,center=mycenter)
-    # Use direction measure to subtile center
-    # fldnos = getfieldircone(splitfile,distance=mydistance,center_dir=subtile_center_dir)
+if dobox:
     # Use bounding box distance rather than cone
     # Check if there are regex to match with
     if 'use_target_fields' in locals() or 'use_target_fields' in globals():

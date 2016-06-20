@@ -93,6 +93,9 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 # By eye, looked to be RFI in spw 0 and 15
 imaging_spwstr = ['1~14']
 
+# For selecting fields in the subtile
+dobox = True
+
 # There's no useful pointing table in SDM yet 
 clear_pointing = True
 
