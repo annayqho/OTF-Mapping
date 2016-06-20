@@ -8,11 +8,12 @@ prevRunTime = startRunTime
 
 #================================================================================
 # Setup information for the tile and subtiles to be imaged
-# Takes a rectangular tile and breaks it into rectangular subtiles
 #================================================================================
+
 # Dataset inputs: mydataset, data_dir
-#
-# Version for rectangular tiles with boundaries along lines of RA, Dec
+
+# Takes a rectangular tile and breaks it into rectangular subtiles
+# Tiles have boundaries along lines of RA & Dec
 # Tile inputs: 
 ### tile_center_ra,tile_center_dec,
 ### Num_subtile_ra,Num_subtile_dec,
@@ -20,34 +21,22 @@ prevRunTime = startRunTime
 # Generates locations of subtiles subtile_center_dir
 
 # Name of the dataset (for MS naming)
-# mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
-# 11 Feb:
+# 11 Feb dataset:
 # mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
-# 14 Feb:
+# 14 Feb dataset:
 mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
 
-# 
-# The following points to my directories for CIPL calibration:
-# data_dir = '/lustre/aoc/projects/vlass/smyers/Run_TSKY0001.sb32154065.eb32157201.57530/Calibrate_Pipeline4.6.0/'
-# The following points to my directories for script calibration:
-# data_dir = '/lustre/aoc/projects/vlass/smyers/Run_'+mydataset+'/CalScript/'
-# The following points to my directories for cal-only script (use restore):
-# data_dir = '/lustre/aoc/projects/vlass/smyers/Run_'+mydataset+'/CalOnly/'
-# Or set directly to your calibrated MS:
+# Location of the calibrated MS file 
 data_dir = '/lustre/aoc/observers/aho/'
 
-
 # Name of calibrated MS and which datacolumn the calibrated data is in
-# calibrated_ms = data_dir + mydataset + '_calibrated_target.ms' # e.g. from CalScript
-# calibrated_ms = data_dir + mydataset + '_working.ms' # e.g. from CalOnly w/import
-calibrated_ms = data_dir + mydataset + '.ms' # e.g. from CIPL
+calibrated_ms = data_dir + mydataset + '.ms' 
 
-# calibrated_ms_datacolumn = 'all'
-# Now there is 'auto' option to detect whether there is CORRECTED_DATA and split only this
-# this needs 2016-06-06 version of imaging script to support this
+# 'auto' option: detect whether there is CORRECTED_DATA and split only this
 calibrated_ms_datacolumn = 'auto'
 
-# Check intents and field names, only in script v20160607 or later
+# Check intents and field names
+# none for us
 # use_target_intent = '*TARGET*' # picks out scans with this intent only
 
 # Use matching with regex in getfieldcone.py v20160607 or later if this is set
