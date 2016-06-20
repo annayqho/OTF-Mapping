@@ -569,13 +569,11 @@ if doimaging:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
         imsmooth(imagename=maskname+'_mask',kernel='gauss',major=fwhm1str,minor=fwhm1str,
                  pa='0deg',outfile=maskname+'_sm_mask')
-        #
+
         tmpimstat=imstat(imagename=maskname+'_sm_mask')
         maskpk=tmpimstat['max'][0]
-        #
         threshmask = maskname+'_sm_thresh_mask'
         immath(imagename=maskname+'_sm_mask',mode='evalexpr',
                   expr='iif(IM0>'+str(maskpk/2.0)+',1.0,0.0)',
@@ -584,13 +582,14 @@ if doimaging:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         maskstat=imstat(threshmask)
-        logstring = 'Mask image contains '+str(int(maskstat['sum'][0]))+' active pixels'
+        npix = int(maskstat['sum'][0])
+        logstring = 'Mask image contains '+str(npix))+' active pixels'
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         currTime=time.time()
         stagedur = currTime-prevTime
         stepname = 'masking'
@@ -604,10 +603,10 @@ if doimaging:
         stagename.append(stagestr)
         print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
-        #
+        
         # =============================
         # Do first real clean iteration
-        #
+        # =============================
         box_threshold = 3.0*imRMS
         if box_threshold<fld_thresholdJy:
             box_threshold = fld_thresholdJy
