@@ -109,19 +109,20 @@ use_fld_cycleniter = 10000 # max number of clean iter
 use_fld_cycleniter = 1000    # max number of iter per major cycle
 
 #------------------------------------------------------------------------------------
-# Done setting stuff manually, now run the thing.
+# Derive tile and subtile locations, and run imaging script
 #------------------------------------------------------------------------------------
-# Derived tile and subtile info
+
+# Derive tile and subtile info
 tile_center_dir = me.direction(tile_center_epo,tile_center_ra,tile_center_dec)
 tile_center_ra_rad = tile_center_dir['m0']['value']
 tile_center_dec_rad = tile_center_dir['m1']['value']
 subtile_delta_rad = subtile_delta_arcsec/206264.806
 subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
 
-# Loop over subtiles, here we do all of them (serially)
+# Loop over subtiles
 for j_subtile in range(Num_subtile_dec):
     for i_subtile in range(Num_subtile_ra):
-        # Figure out where subtiles are:
+        # Figure out where subtile is:
         d_subtile_ra_rad = (i_subtile - 0.5*(Num_subtile_ra-1.0))*subtile_delta_ra_rad
         d_subtile_dec_rad = (j_subtile - 0.5*(Num_subtile_dec-1.0))*subtile_delta_rad
         
