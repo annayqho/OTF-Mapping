@@ -511,6 +511,8 @@ if doimaging:
         immath(imagename=clnpsf[0],mode='evalexpr',expr='1.0*IM0',outfile=psfresid)
         ia.open(psfresid)
         psfimstat1=ia.statistics()
+        # maxpos and minpos are the coordinates of the
+        # max and min pixel values respectively
         blcx=psfimstat1['maxpos'][0]-20
         trcx=psfimstat1['maxpos'][0]+20
         blcy=psfimstat1['maxpos'][1]-20
@@ -553,14 +555,15 @@ if doimaging:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
-        #
+        
         maskname=clnim+'.cycle'+str(itercycle)
         immath(imagename=dirtyresidual[0],mode='evalexpr',
                expr='iif(IM0>'+str(thresh1)+',1.0,0.0)',
                outfile=maskname+'_mask',stokes='I')
-        #
-        fwhm1=cellsize*sqrt((psfimstat1['maxpos'][0]-psfimstat1['minpos'][0])**2+(psfimstat1['maxpos'][1]-psfimstat1['minpos'][1])**2)
+       
+        dist1 = psfimstat1['maxpos'][0]-psfimstat1['minpos'][0]
+        dist2 = psfimstat1['maxpos'][1]-psfimstat1['minpos'][1]
+        fwhm1 = cellsize * sqrt(dist1**2+dist2**2)
         fwhm1str=str(fwhm1)+'arcsec'
         logstring = 'Smoothing mask with FWHM='+fwhm1str
         print(logstring)
