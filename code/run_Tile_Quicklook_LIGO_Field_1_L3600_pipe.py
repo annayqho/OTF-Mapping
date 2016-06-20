@@ -59,25 +59,9 @@ if L_subtile_arcsec < subtile_delta_arcsec:
     print("Error: L_subtile_arcsec should be equal to \
             or a bit bigger than subtile_delta_arcsec")
 
-# For all 30deg x 1.23deg of tile
-# Num_subtile_ra = 29 
-# Num_subtile_dec = 2
 # For single central subtile
 Num_subtile_ra = 1 
 Num_subtile_dec = 1
-# Other subtiles:
-# L_subtile_arcsec = 2320.0 
-# subtile_delta_arcsec = 2320.0 
-# Num_subtile_ra = 13
-# Num_subtile_dec = 3
-# L_subtile_arcsec = 2000.0
-# subtile_delta_arcsec = 1800.0
-# Num_subtile_ra = 17
-# Num_subtile_dec = 3
-# L_subtile_arcsec = 1200.0
-# subtile_delta_arcsec = 1200.0
-# Num_subtile_ra = 25
-# Num_subtile_dec = 5
 
 # Choose the pixel size in arcsec. Set this to be at maximum 1/2.5 of the PSF width (FWHM), 
 # ideally 1/4 or 1/5 even. For QuickLook PSF~2.5" so 1" here is pushing it.
