@@ -610,7 +610,8 @@ if doimaging:
         box_threshold = 3.0*imRMS
         if box_threshold<fld_thresholdJy:
             box_threshold = fld_thresholdJy
-        logstring = 'Cleaning submosaic  with mask image '+threshmask+' to '+str(box_threshold)+'Jy'
+        logstring = 'Cleaning submosaic with mask image %s to %s Jy' \
+                %(threshmask, str(box_threshold))
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
@@ -626,19 +627,10 @@ if doimaging:
                         startmodel='',
                         specmode=fld_specmode,
                         reffreq=fld_reffreq,
-                        # nchan=fld_nchan,
-                        # start=spw_center,
-                        # width=spw_width,
-                        # interpolation=fld_interp,
-                        # restfreq=[fld_reffreq],
                         gridder=fld_gridder,
                         pblimit=fld_pblimit,
                         normtype=fld_normtype,
-                        # wbawp=fld_wbawp,
-                        # wprojplanes=fld_wprojplanes,
-                        # facets=fld_facets,
                         deconvolver=fld_deconvolver,
-                        # scales=fld_multiscale,
                         restoringbeam=myrestore,
                         niter=box_niter,
                         threshold=box_threshold,
