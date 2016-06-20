@@ -30,10 +30,11 @@ def subtile_padding(band):
 
     if band == "S":
         PB = 21 # arcminutes
+        padding = 2 * 0.8 * 21 * 60 # convert to arcsec
+        # this gives 2016, need to round for efficient imagesize
+        return 2000.0
     else:
         print("you sure you don't want S-band?")
-    padding = 2 * 0.8 * 21 * 60 # convert to arcsec
-    return padding
 
 
 #================================================================================

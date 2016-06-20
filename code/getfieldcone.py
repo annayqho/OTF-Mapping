@@ -270,7 +270,6 @@ def getfieldirbox(msfile=None,distance='0deg',center_dir=None,matchregex=''):
         if sep_ra_temp>(pl.pi):
             sep_ra_temp = 2.0*pl.pi - sep_ra_temp
         sep_ra = sep_ra_temp*pl.cos(center_dec)
-        print("NEW SEP RA")
 
         sep_dec = abs(dd_dec - center_dec)
 
@@ -294,7 +293,6 @@ def getfieldirbox(msfile=None,distance='0deg',center_dir=None,matchregex=''):
                     else:
                         nreject+=1
                         
-                
     print 'Found '+str(len(fieldlist))+' fields within '+distance
     if not skipmatch:
         print 'Rejected '+str(nreject)+' distance matches for regex'

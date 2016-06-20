@@ -297,7 +297,7 @@ if dobox:
                 splitfile,distance=mydistance,center_dir=mycenter_dir,
                 matchregex=mymatchregex)
 logstring = 'Will image a total of %s fields using specmode %s' \
-        %(str(len(fldnos), fld_specmode))
+        %(str(len(fldnos)), str(fld_specmode))
 print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
