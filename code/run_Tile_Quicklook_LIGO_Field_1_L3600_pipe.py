@@ -94,7 +94,7 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 use_spws = ['1~14']
 
 # There's no useful pointing table in SDM yet 
-use_pointing = False
+clear_pointing = True
 
 # Enable autoboxing (or not)
 use_ccbox = True

@@ -21,18 +21,15 @@ logbuffer.append(logstring)
 # Set submosaic center
 #================================================================================
 
+# subtile_center_dir #
 # was created in the run_Tile script
-if 'subtile_center_dir' in locals():
-    mycenter_dir = copy.deepcopy(subtile_center_dir)
-    epo = mycenter_dir['refer']
-    rapos = mycenter_dir['m0']
-    decpos = mycenter_dir['m1']
-    ral = qa.angle(rapos,form=["tim"],prec=9)
-    decl = qa.angle(decpos,prec=10)
-    mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
-else:
-    print("Error: forgot to set subtile_center_dir")
-
+mycenter_dir = copy.deepcopy(subtile_center_dir)
+epo = mycenter_dir['refer']
+rapos = mycenter_dir['m0']
+decpos = mycenter_dir['m1']
+ral = qa.angle(rapos,form=["tim"],prec=9)
+decl = qa.angle(decpos,prec=10)
+mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
 logstring = 'SubMosaic center = '+mycenter
 print(logstring)
 logbuffer.append(logstring)
@@ -42,24 +39,21 @@ logbuffer.append(logstring)
 #================================================================================
 dataname = mydataset
 
-if 'calibrated_ms' in globals():
-    splitfile = calibrated_ms
-    if os.access(splitfile,F_OK):
-        logstring = 'Found calibrated ms '+splitfile
-    else:
-        logstring = 'ERROR: could not find '+splitfile
-    print(logstring)
-    logbuffer.append(logstring)
+# calibrated_ms was created in run_Tile
+splitfile = calibrated_ms
+if os.access(splitfile,F_OK):
+    logstring = 'Found calibrated ms '+splitfile
 else:
-    print("ERROR: calibrated_ms not set")
+    logstring = 'ERROR: could not find '+splitfile
+print(logstring)
+logbuffer.append(logstring)
 
-if 'calibrated_ms_datacolumn' in globals():
-    splitdatacolumn = calibrated_ms_datacolumn
-    logstring = 'Will use datacolumn '+splitdatacolumn
-    print(logstring)
-    logbuffer.append(logstring)
-else:
-    print("ERROR: must decided on calibrated_ms_datacolumn")
+# calibrated_ms_datacolumn was created in run_Tile
+splitdatacolumn = calibrated_ms_datacolumn
+logstring = 'Will use datacolumn '+splitdatacolumn
+print(logstring)
+logbuffer.append(logstring)
+
 
 # NOTE: this splitfile is assumed to contain only the target fields that you
 # want to image from, though in principle the getfieldirbox will pull them from
@@ -72,6 +66,8 @@ else:
 # mstransform(vis=msfile,outputvis=splitfile,datacolumn='corrected',field=targetfields,intent=targetintent,correlation='RR,LL') # not doing polarization yet
 
 # Option to clear POINTING table before imaging
+if use_pointing:
+
 if 'use_pointing' in locals() or 'use_pointing' in globals():
     # already defined
     clear_pointing = not use_pointing
