@@ -5,6 +5,11 @@ import time
 import os
 from os import F_OK
 
+def lprint(msg, lfile):
+    """ Prints msg to both stdout and lfile. """
+    print(msg)
+    print >>mylogfile, msg
+
 #================================================================================
 logbuffer = []
 mytext = 'VLASS QuickLook submosaic TClean MFS TT0-only JointMosaic'
@@ -923,7 +928,8 @@ if doimaging:
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
             iterdone=imresult['iterdone']
-            logstring = 'Final imaging for cycle '+str(itercycle)+' completed with '+str(iterdone)+' iterations'
+            logstring = 'Final imaging for cycle %s completed with %s iterations' \
+                    %(str(itercycle), str(iterdone))
         else:
             iterdone+=1
             logstring = 'Final imaging for cycle '+str(itercycle)+' completed'
@@ -935,7 +941,7 @@ if doimaging:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-    #
+    
     currTime=time.time()
     stagedur = currTime-prevTime
     stepname = 'tclean'
@@ -950,7 +956,6 @@ if doimaging:
     print(stagestr+' took '+str(stagedur)+' sec')
     prevTime = currTime
 
-#
 # Make list of all clean images to mosaic together
 # subim if needed
 if doimaging or dostats or dosubim:
@@ -1018,16 +1023,17 @@ if doimaging or dostats or dosubim:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-    #
+    
     clndict[spwstr]['clnlist'] = [clnsubim]
     clndict[spwstr]['pblist'] = [pbsubim]
     clndict[spwstr]['reslist'] = [ressubim]
-    #
-    logstring = 'Found '+str(num_good)+' cleaned field planes out of a total '+str(num_images)+' expected'
+    
+    logstring = 'Found %s cleaned field planes out of a total %s expected' \
+            %(str(num_good), str(num_images))
     print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)
-    #
+    
     currTime=time.time()
     stagedur = currTime-prevTime
     stepname = 'image verification and subim'
@@ -1064,11 +1070,11 @@ if dostats and num_good>0:
     statdict['Channels'][spwstr]['Restored']['Stats']=mystat
     cln_max = mystat['max'][0]
     cln_min = mystat['min'][0]
-    #
+    
     statstring = 'Restored max = '+str(cln_max)+' min = '+str(cln_min)
     print(statstring)
     statbuffer.append(statstring)
-    #
+    
     imname = clndict[spwstr]['reslist'][ifld]
     mystat = imstat(imname,chans='')
     statdict['Channels'][spwstr]['Residual']={}
@@ -1076,11 +1082,11 @@ if dostats and num_good>0:
     res_sigma = mystat['sigma'][0]
     res_max = mystat['max'][0]
     rmslist_all.append(res_sigma)
-    #
+    
     statstring = 'Residual sigma = '+str(res_sigma)+' max = '+str(res_max)
     print(statstring)
     statbuffer.append(statstring)
-    #
+    
     # PB stats
     imname = clndict[spwstr]['pblist'][ifld]
     mystat = imstat(imname,chans='')
@@ -1090,7 +1096,7 @@ if dostats and num_good>0:
     print('PB max = '+str(pb_max)+' min = '+str(pb_min))
     statstring = 'Spw '+spwstr+': PB max = '+str(pb_max)+' min = '+str(pb_min)
     statbuffer.append(statstring)
-    #
+    
     # rms statistics in sub-areas of mosaic
     rmslist_region = []
     statdict['Channels'][spwstr]['Residual']['Regions'] = {}
@@ -1103,7 +1109,7 @@ if dostats and num_good>0:
     else:
         mysize_ra = fld_size
         mysize_dec = fld_size
-    #
+    
     for j in range(10):
         jlow = int(mysize_dec*float(j)/10.0)
         jup = int(mysize_dec*float(j+1)/10.0) - 1
@@ -1117,8 +1123,7 @@ if dostats and num_good>0:
             statdict['Channels'][spwstr]['Residual']['Regions']['Stats'][nreg] = mystat
             resid_sigma = mystat['sigma'][0]
             rmslist_region_all.append(resid_sigma)
-    #
-    #
+    
     # Median rms per channel over all spw
     print(' ')
     statbuffer.append(' ')
@@ -1135,13 +1140,16 @@ if dostats and num_good>0:
     statdict['All']['Median']['Residual']['max']=max_sigma_all
     statdict['All']['Median']['Residual']['min']=min_sigma_all
     statdict['All']['Median']['Residual']['number']=num_sigma_all
-    statstring = 'Residual Mosiac All channels: Median sigma num = '+str(num_sigma_all)+' median = '+str(median_sigma_all)
+    statstring = 'Residual Mosiac All channels: \
+            Median sigma num = '+str(num_sigma_all)+\
+            ' median = '+str(median_sigma_all)
     print(statstring)
     statbuffer.append(statstring)
-    statstring = 'Residual Mosiac All channels: Median sigma max = '+str(max_sigma_all)+' min = '+str(min_sigma_all)
+    statstring = 'Residual Mosiac All channels: Median sigma max = '+str(max_sigma_all)+\
+            ' min = '+str(min_sigma_all)
     print(statstring)
     statbuffer.append(statstring)
-    #
+    
     rmsarr_region_all = pl.array(rmslist_region_all)
     median_sigma_region_all = pl.median(rmsarr_region_all)
     max_sigma_region_all = rmsarr_region_all.max()
@@ -1153,13 +1161,17 @@ if dostats and num_good>0:
     statdict['All']['Median']['Regions']['Residual']['sigma'] = median_sigma_region_all
     statdict['All']['Median']['Regions']['Residual']['max']=max_sigma_region_all
     statdict['All']['Median']['Regions']['Residual']['min']=min_sigma_region_all
-    statstring = 'Residual Mosaic All Channels: subregions num = '+str(num_sigma_region_all)+' median sigma = '+str(median_sigma_region_all)
+    statstring = 'Residual Mosaic All Channels: subregions num = '\
+            +str(num_sigma_region_all)+\
+            ' median sigma = '+str(median_sigma_region_all)
     print(statstring)
     statbuffer.append(statstring)
-    statstring = 'Residual Mosaic All Channels: subregions max = '+str(max_sigma_region_all)+' min sigma = '+str(min_sigma_region_all)
+    statstring = 'Residual Mosaic All Channels: subregions max = '\
+            +str(max_sigma_region_all)\
+            +' min sigma = '+str(min_sigma_region_all)
     print(statstring)
     statbuffer.append(statstring)
-    #
+    
     currTime=time.time()
     stagedur = currTime-prevTime
     stepname = 'statistics'
@@ -1196,7 +1208,6 @@ mycwd = os.getcwd()
 myos = os.uname()
 mypath = os.environ.get('CASAPATH')
 
-#
 if myvers.__contains__('#'):
     mybuild = string.split(list.pop(myvers.split('#')),')')[0]
     buildstring = '.r'+str(mybuild)
@@ -1214,12 +1225,6 @@ else:
 outfile='out.'+scriptprefix+'.'+datestring+buildstring+'.log'
 mylogfile = open(outfile,'w')
 
-def lprint(msg, lfile):
-    """
-    Prints msg to both stdout and lfile.
-    """
-    print(msg)
-    print >>mylogfile, msg
     
 lprint(mytext, mylogfile)
 lprint('Running '+myvers+' on host '+myhost, mylogfile)
