@@ -1,4 +1,5 @@
-#
+# Original script from STM, modified by AYQH
+
 import copy
 import time
 import os

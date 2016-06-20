@@ -1,17 +1,5 @@
 # Revised by AYQH for VLA-GW151226 data
 
-# STM 2016-05-31 CASA 4.6.0 run imaging for all subtiles
-# Versions:
-# STM 2016-06-01 full version, updated scheme with timing
-# STM 2016-06-03 use_spws and use_pointing added
-# STM 2016-06-07 automatic column, use_target_intents & fields
-# STM 2016-06-13 version for MS produced by CASA Integrated Pipeline (CIPL)
-# --- substantial refactoring ---
-# STM 2016-06-14 includes tile/subtile setup, runs new QuickLook imaging script
-# STM 2016-06-14 more control parameters
-# STM 2016-06-14 for stripe82, allow use_restorescript for CalOnly MS
-# STM 2016-06-15 a few more comments
-
 import time
 import copy
 
@@ -90,8 +78,12 @@ tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 # L_subtile_arcsec should be equal to or a bit bigger than subtile_delta_arcsec
 #
 # For 1deg x 1deg subtiles:
-L_subtile_arcsec = 3600.0 # this is size of final subimage
-subtile_delta_arcsec = 3600.0 # this is distance between subtile centers
+# L_subtile_arcsec = 3600.0 # this is size of final subimage
+# subtile_delta_arcsec = 3600.0 # this is distance between subtile centers
+# Just for testing?
+L_subtile_arcsec = 60.0
+subtile_delta_arcsec = 60.0
+
 # For all 30deg x 1.23deg of tile
 # Num_subtile_ra = 29 
 # Num_subtile_dec = 2
@@ -149,10 +141,10 @@ use_threshold = '0.000180Jy' # VLASS depth x1.5, same as GW follow up
 use_restore = '8.0arcsec' # for the LIGO follow up
 
 # These you tune for quality of imaging
-use_fld_cycleniter = 7000
+use_fld_cycleniter = 10000
 # use_fld_niter = 5000         # max number of clean iter
-use_fld_cycleniter = 750
-#use_fld_cycleniter = 1000    # max number of iter per major cycle
+#use_fld_cycleniter = 750
+use_fld_cycleniter = 1000    # max number of iter per major cycle
 
 #------------------------------------------------------------------------------------
 # Done setting stuff manually, now run the thing.
