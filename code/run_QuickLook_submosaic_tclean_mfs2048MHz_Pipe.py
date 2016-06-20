@@ -650,14 +650,15 @@ if doimaging:
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
             iterdone=imresult['iterdone']
-            logstring = "Imaging for cycle "+str(itercycle)+" completed with "+str(iterdone)+" iterations"
+            logstring = "Imaging for cycle %s completed with %s iterations" \
+                    %(str(itercycle), str(iterdone))
         else:
             iterdone+=1
-            logstring = "Imaging for cycle "+str(itercycle)+" completed"
+            logstring = "Imaging for cycle %s completed" %str(itercycle)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         oldRMS=imRMS
         imageimstat=imstat(imagename=clnresidual[0])
         immax=imageimstat['max'][0]
@@ -666,19 +667,19 @@ if doimaging:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         RMSratio=((oldRMS-imRMS)/(oldRMS))
         logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         pksnr=immax/imRMS
         logstring = 'Peak/rms = '+str(pksnr)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         currTime=time.time()
         stagedur = currTime-prevTime
         stepname = 'tclean'
@@ -692,15 +693,15 @@ if doimaging:
         stagename.append(stagestr)
         print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
-        #
+        
         if pksnr>peaksnrlimit and iterdone>0:
             doboxed=True
         else:
             doboxed=False
-        #
+        
         # ==========
         # now iterate
-        #
+        # ==========
         while doboxed:
             if pksnr>peaksnrlimit and iterdone>0 and imRMS>fld_thresholdJy:
                 logstring = "RMS ratio too high: more cleaning required ..."
@@ -710,37 +711,43 @@ if doimaging:
                 maskname=clnim+'.cycle'+str(itercycle)
                 os.system('cp -rf '+clnim+'.mask '+maskname+'_oldmask')
                 thresh2=immax*threshfraction
-                logstring = ' Cycle '+str(itercycle)+' new initial threshold = '+str(thresh2)
+                logstring = 'Cycle %s new initial threshold = %s' \
+                        %(str(itercycle), str(thresh2))
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                immath(imagename=clnresidual[0],mode='evalexpr',
-                       expr='iif(IM0>'+str(thresh2)+',1.0,0.0)',
-                       outfile=maskname+'_mask',stokes='I')
-                imsmooth(imagename=maskname+'_mask',kernel='gauss',major=fwhm1str,minor=fwhm1str,
-                         pa='0deg',outfile=maskname+'_sm_mask')
+                immath(
+                        imagename=clnresidual[0],mode='evalexpr',
+                        expr='iif(IM0>'+str(thresh2)+',1.0,0.0)',
+                        outfile=maskname+'_mask',stokes='I')
+                imsmooth(
+                        imagename=maskname+'_mask',kernel='gauss',
+                        major=fwhm1str,minor=fwhm1str,
+                        pa='0deg',outfile=maskname+'_sm_mask')
                 tmpimstat=imstat(imagename=maskname+'_sm_mask')
                 maskpk=tmpimstat['max'][0]
-                immath(imagename=maskname+'_sm_mask',mode='evalexpr',
-                       expr='iif(IM0>'+str(maskpk/2.0)+',1.0,0.0)',
-                       outfile=maskname+'_sm_thresh_mask',stokes='I')
+                immath(
+                        imagename=maskname+'_sm_mask',mode='evalexpr',
+                        expr='iif(IM0>'+str(maskpk/2.0)+',1.0,0.0)',
+                        outfile=maskname+'_sm_thresh_mask',stokes='I')
                 threshmask = maskname+'_sm_sum_mask'
                 immath(imagename=[maskname+'_sm_thresh_mask',
                                   maskname+'_oldmask'],mode='evalexpr',
                        expr='max(IM0,IM1)',outfile=threshmask,
                        stokes='I')
-                #
+                
                 logstring = 'Created smoothed thresholded summed mask image '+threshmask
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                #
+                
                 maskstat=imstat(threshmask)
-                logstring = 'Mask image contains '+str(int(maskstat['sum'][0]))+' active pixels'
+                logstring = 'Mask image contains %s active pixels' \
+                        %str(int(maskstat['sum'][0]))
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                #
+                
                 currTime=time.time()
                 stagedur = currTime-prevTime
                 stepname = 'masking'
@@ -754,17 +761,19 @@ if doimaging:
                 stagename.append(stagestr)
                 print(stagestr+' took '+str(stagedur)+' sec')
                 prevTime = currTime
-                #
+                
                 box_threshold=3.0*imRMS
                 if box_threshold<fld_thresholdJy:
                        box_threshold = fld_thresholdJy
-                logstring = 'Cleaning submosaic with mask image '+threshmask+' to '+str(box_threshold)+'Jy'
+                logstring = 'Cleaning submosaic with mask image %s to %s Jy' \
+                        %(threshmask, str(box_threshold))
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
+
                 # for 4.5.1 have to copy this mask to .mask
                 os.system('cp -rf '+threshmask+' '+clnim+'.mask ')
-                #
+                
                 # call tclean with interactive=0 to return iterations
                 imresult=tclean(visname,
                                 imagename=clnim,
@@ -777,25 +786,16 @@ if doimaging:
                                 startmodel='',
                                 specmode=fld_specmode,
                                 reffreq=fld_reffreq,
-                                # nchan=fld_nchan,
-                                # start=spw_center,
-                                # width=spw_width,
-                                # interpolation=fld_interp,
-                                # restfreq=[fld_reffreq],
                                 gridder=fld_gridder,
                                 pblimit=fld_pblimit,
                                 normtype=fld_normtype,
-                                # wprojplanes=fld_wprojplanes,
-                                # facets=fld_facets,
                                 deconvolver=fld_deconvolver,
-                                # scales=fld_multiscale,
                                 restoringbeam=myrestore,
                                 niter=box_niter,
                                 threshold=box_threshold,
                                 cycleniter=box_cycleniter,
                                 cyclefactor=box_cyclefactor,
                                 usemask='user',
-                                # mask=threshmask,
                                 mask='',
                                 interactive=0,
                                 weighting=myweight,
@@ -804,7 +804,6 @@ if doimaging:
                                 makeimages='choose',
                                 calcres=False,
                                 calcpsf=False,
-                                # overwrite=True,
                                 savemodel=dosavemodel)
                 itercycle+=1
                 os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
