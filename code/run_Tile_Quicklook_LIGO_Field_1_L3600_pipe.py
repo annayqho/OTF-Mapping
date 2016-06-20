@@ -85,7 +85,7 @@ subtile_pixelsize = 1.0 # arcsec
 
 subtile_padding_arcsec = subtile_padding("S") 
 
-subtile_dirname = 'Imaging_'+mydataset
+imaging_dirname = 'Imaging_'+mydataset
 subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 
 # Selection string list for spws for imaging

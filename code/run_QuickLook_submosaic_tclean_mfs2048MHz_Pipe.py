@@ -76,20 +76,15 @@ logbuffer.append(logstring)
 # Setup stuff not dataset specific
 #================================================================================
 
-# subtile_prefix was set in run_Tile #
+# location for writing out images
+# subtile_prefix was set in run_Tile 
+# imaging_dirname was set in run_Tile
 postfix ='_'+ subtile_prefix
 tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
 scriptprefix=mydataset+postfix+tiling
-
-if 'subtile_dirname' in locals() or 'subtile_dirname' in globals():
-    imaging_dirname = subtile_dirname
-else:
-    imaging_dirname = 'Imaging'
-
-# Where to output the images
 imaging_dir = imaging_dirname+postfix+tiling
 
-# 
+ 
 if 'use_script_dir' in locals() or 'use_script_dir' in globals():
     script_dir = use_script_dir
 else:
