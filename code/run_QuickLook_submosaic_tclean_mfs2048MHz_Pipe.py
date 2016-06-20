@@ -57,7 +57,6 @@ logstring = 'Will use datacolumn '+splitdatacolumn
 print(logstring)
 logbuffer.append(logstring)
 
-
 # NOTE: this splitfile is assumed to contain only the target fields that you
 # want to image from, though in principle the getfieldirbox will pull them from
 # even the full pipeline calibrated MS (though you may pull in the setup fields
@@ -98,8 +97,8 @@ dosavemodel = 'modelcolumn'
 
 # imaging parms
 visname = imaging_dir+'/'+workfile
-clnname = imaging_dir+'/img.'+outname+postfix+'.clean'
-dirtyname = imaging_dir+'/img.'+outname+postfix+'.dirty'
+clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
+dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
 
 dostartmodel = True
 
@@ -182,7 +181,7 @@ params['version'] = myscriptvers
 # User set params
 params['user'] = {}
 params['user']['sdmfile'] = sdmfile
-params['user']['outname'] = outname
+params['user']['outname'] = mydataset
 # Tiling parameters
 params['user']['subtile_center'] = mycenter
 params['user']['L_subtile_arcsec'] = L_subtile_arcsec
@@ -590,7 +589,7 @@ if doimaging:
         
         maskstat=imstat(threshmask)
         npix = int(maskstat['sum'][0])
-        logstring = 'Mask image contains '+str(npix))+' active pixels'
+        logstring = 'Mask image contains %s active pixels' %str(npix)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
