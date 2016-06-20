@@ -2,10 +2,6 @@
 
 # Takes a rectangular tile and breaks it into rectangular subtiles
 # Tiles have boundaries along lines of RA & Dec
-# Tile inputs: 
-### tile_center_ra,tile_center_dec,
-### Num_subtile_ra,Num_subtile_dec,
-### L_subtile_arcsec
 # Generates locations of subtiles subtile_center_dir
 
 
