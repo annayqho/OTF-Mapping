@@ -899,19 +899,10 @@ if doimaging:
                         startmodel='',
                         specmode=fld_specmode,
                         reffreq=fld_reffreq,
-                        # nchan=fld_nchan,
-                        # start=spw_center,
-                        # width=spw_width,
-                        # interpolation=fld_interp,
-                        # restfreq=[fld_reffreq],
                         gridder=fld_gridder,
                         pblimit=fld_pblimit,
                         normtype=fld_normtype,
-                        # wbawp=fld_wbawp,
-                        # wprojplanes=fld_wprojplanes,
-                        # facets=fld_facets,
                         deconvolver=fld_deconvolver,
-                        # scales=fld_multiscale,
                         restoringbeam=myrestore,
                         niter=fld_niter,
                         threshold=fld_threshold_nobox,
@@ -924,11 +915,10 @@ if doimaging:
                         robust=myrobust,
                         uvtaper=myuvtaper,
                         makeimages='auto',
-                        # makeimages='choose',
                         calcres=True,
                         calcpsf=True,
                         savemodel=dosavemodel)
-        #
+        
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
