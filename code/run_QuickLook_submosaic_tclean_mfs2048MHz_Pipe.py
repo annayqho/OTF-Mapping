@@ -103,18 +103,11 @@ dirtyname = imaging_dir+'/img.'+outname+postfix+'.dirty'
 dostartmodel = True
 
 # Widefield parameters
-# fld_gridder='standard'
 fld_wprojplanes=1
-# fld_gridder='widefield'
-# fld_wprojplanes=128
-# fld_wprojplanes=8
 fld_facets=1
-
 fld_gridder='mosaic'
 fld_pblimit=0.2
 fld_normtype='flatnoise'
-
-# fld_gridder='awproject'
 fld_wbawp = True
 
 # Deconvolver and multiscale
