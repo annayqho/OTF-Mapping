@@ -118,12 +118,15 @@ fld_nterms = 1
 fld_multiscale=[0]
 
 # Imaging parameters (specific to this observation)
-use_threshold = '0.000180Jy' # survey depth x1.5
+fld_threshold = '0.000180Jy' # survey depth x1.5
+fld_threshold_nobox = fld_threshold
 use_restore = '8.0arcsec' # circular restoring beam size
 
 # These you tune for quality of imaging
-use_fld_cycleniter = 10000 # max number of clean iter
-use_fld_cycleniter = 1000    # max number of iter per major cycle
+# clean iterations w/o box
+fld_niter = 5000 # max number of clean iter
+fld_cyclefactor = 4.5 # max # minor cycle iterations
+fld_cycleniter = 1000 # max number of iter per major cycle
 
 #------------------------------------------------------------------------------------
 # Derive tile and subtile locations, and run imaging script

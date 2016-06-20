@@ -116,43 +116,13 @@ fld_deconvolver='hogbom'
 fld_specmode = 'mfs'
 fld_reffreq = '3.0GHz'
 
-if 'use_threshold' in locals() or 'use_threshold' in globals():
-    fld_threshold = use_threshold
-    fld_threshold_q = qa.quantity(fld_threshold)
-    fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
-    fld_thresholdJy = fld_threshold_qJy['value']
-    #
-    fld_threshold_nobox = use_threshold
-    fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
-    fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
-    fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
-else:
-    # Based on MFS sensitivity 120uJy 1500MHz bw
-    # 1.5sigma
-    # fld_thresholdJy = 0.000450 # for 120MHz bw
-    fld_thresholdJy = 0.000180 # for 1500MHz bw
-    fld_threshold = str(fld_thresholdJy)+'Jy'
-    # Without box
-    # fld_thresholdJy_nobox = 0.000450 # for 120MHz bw
-    fld_thresholdJy_nobox = 0.000180 # for 1500MHz bw
-    fld_threshold_nobox = str(fld_thresholdJy_nobox)+'Jy'
+fld_threshold_q = qa.quantity(fld_threshold)
+fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
+fld_thresholdJy = fld_threshold_qJy['value']
 
-# clean iterations w/o box
-if 'use_fld_niter' in locals() or 'use_fld_niter' in globals():
-    fld_niter = use_fld_niter
-else:
-    fld_niter = 5000
-if 'use_fld_cyclefactor' in locals() or 'use_fld_cyclefactor' in globals():
-    fld_cyclefactor = use_fld_cyclefactor
-else:
-    fld_cyclefactor = 4.5
-# Max number minor cycle iterations
-# Set this lower to compensate for changing PSF over submosaic
-if 'use_fld_cycleniter' in locals() or 'use_fld_cycleniter' in globals():
-    fld_cycleniter = use_fld_cycleniter
-else:
-    # fld_cycleniter = 750
-    fld_cycleniter = 1000
+fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
+fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
+fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
 
 # B-config 3 GHz (beam approx 2.5' robust 1)
 # for fieldcone = 0.25deg subim size 1deg = 3600"
