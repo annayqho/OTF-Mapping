@@ -1,4 +1,4 @@
-# Revised by AYQH for VLA-GW151226 data
+# Original script by STM, revised by AYQH for VLA-GW151226 data
 
 import time
 import copy
@@ -8,11 +8,15 @@ prevRunTime = startRunTime
 
 #================================================================================
 # Setup information for the tile and subtiles to be imaged
+# Takes a rectangular tile and breaks it into rectangular subtiles
 #================================================================================
 # Dataset inputs: mydataset, data_dir
 #
 # Version for rectangular tiles with boundaries along lines of RA, Dec
-# Tile inputs: tile_center_ra,tile_center_dec,Num_subtile_ra,Num_subtile_dec,L_subtile_arcsec
+# Tile inputs: 
+### tile_center_ra,tile_center_dec,
+### Num_subtile_ra,Num_subtile_dec,
+### L_subtile_arcsec
 # Generates locations of subtiles subtile_center_dir
 
 # Name of the dataset (for MS naming)
