@@ -1,9 +1,9 @@
 # Original script by STM, revised by AYQH for VLA-GW151226 data
 # 20 June 2016: Condensing
 
-# Takes a rectangular tile and breaks it into rectangular subtiles
-# Tiles have boundaries along lines of RA & Dec
-# Generates locations of subtiles subtile_center_dir
+# Takes a rectangular tile and breaks it into rectangular subtiles,
+# with boundaries along lines of RA & Dec.
+# Then runs the imaging script on these subtiles.
 
 import time
 import copy
