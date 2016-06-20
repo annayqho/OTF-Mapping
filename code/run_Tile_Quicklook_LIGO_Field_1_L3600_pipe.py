@@ -113,6 +113,8 @@ use_fld_cycleniter = 1000    # max number of iter per major cycle
 #------------------------------------------------------------------------------------
 
 # Derive tile and subtile info
+
+# Define a direction measure ('me' is a CASA function)
 tile_center_dir = me.direction(tile_center_epo,tile_center_ra,tile_center_dec)
 tile_center_ra_rad = tile_center_dir['m0']['value']
 tile_center_dec_rad = tile_center_dir['m1']['value']
