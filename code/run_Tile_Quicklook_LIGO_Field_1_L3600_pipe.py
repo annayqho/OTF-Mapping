@@ -1,10 +1,9 @@
 # Original script by STM, revised by AYQH for VLA-GW151226 data
+# 20 June 2016: Condensing
 
 # Takes a rectangular tile and breaks it into rectangular subtiles
 # Tiles have boundaries along lines of RA & Dec
 # Generates locations of subtiles subtile_center_dir
-
-
 
 import time
 import copy
@@ -59,16 +58,21 @@ if L_subtile_arcsec < subtile_delta_arcsec:
 Num_subtile_ra = 1 
 Num_subtile_dec = 1
 
-# Choose the pixel size in arcsec. Set this to be at maximum 1/2.5 of the PSF width (FWHM), 
-# ideally 1/4 or 1/5 even. For QuickLook PSF~2.5" so 1" here is pushing it.
+# Choose the pixel size in arcsec. 
+# Set this to be at maximum 1/2.5 of the PSF width (FWHM), 
+# ideally 1/4 or 1/5 even. 
+# For QuickLook PSF~2.5" so 1" here is pushing it.
 subtile_pixelsize = 1.0 # arcsec
 
 # Choose "padding" to add to L_subtile_arcsec to make the full image.
-# This should be 2 x 0.8 x PB(FWHM). For S-band at 2GHz (low-end of band)
-# PB(FWHM)~21' so 2 x 0.8 x 21' ~ 2000" so thats what I use here. Adjust for your band.
+# This should be 2 x 0.8 x PB(FWHM). 
+# For S-band at 2GHz (low-end of band)
+# PB(FWHM)~21' so 2 x 0.8 x 21' ~ 2000" 
+# Adjust for your band.
 # Can specify in pixels or arcsec, prefer arcsec:
-# subtile_padding = 2000 # in pixels, added to L_subtile_arcsec for the submosaic imaging
-subtile_padding_arcsec = 2000.0 # added to L_subtile_arcsec for the submosaic imaging
+# subtile_padding = 2000 # in pixels 
+subtile_padding_arcsec = 2000.0 
+# added to L_subtile_arcsec for the submosaic imaging
 
 subtile_dirname = 'Imaging_'+mydataset
 subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
