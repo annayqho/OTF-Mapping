@@ -11,6 +11,9 @@ import copy
 startRunTime=time.time()
 prevRunTime = startRunTime
 
+#================================================================================
+# Functions
+#================================================================================
 
 def subtile_padding(band):
     """ Padding to add to the subtile size for the full image
@@ -80,9 +83,6 @@ if L_subtile_arcsec < subtile_delta_arcsec:
 # For QuickLook PSF~2.5" so 1" here is pushing it.
 subtile_pixelsize = 1.0 # arcsec
 
-
-
-
 subtile_padding_arcsec = subtile_padding("S") 
 
 subtile_dirname = 'Imaging_'+mydataset
@@ -117,11 +117,7 @@ tile_center_ra_rad = tile_center_dir['m0']['value']
 tile_center_dec_rad = tile_center_dir['m1']['value']
 subtile_delta_rad = subtile_delta_arcsec/206264.806
 subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
-#
-# For this example pick subtiles manually:
-# for j_subtile in [0]:
-#     for i_subtile in [5]:
-#
+
 # Loop over subtiles, here we do all of them (serially)
 for j_subtile in range(Num_subtile_dec):
     for i_subtile in range(Num_subtile_ra):
