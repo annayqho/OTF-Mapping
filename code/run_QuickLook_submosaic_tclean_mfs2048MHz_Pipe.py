@@ -113,19 +113,6 @@ fld_wbawp = True
 # Deconvolver and multiscale
 fld_deconvolver='hogbom'
 
-# If multi-Taylor term
-# fld_deconvolver='mtmfs'
-# Number of Taylor terms for MFS
-if 'use_nterms' in locals() or 'use_nterms' in globals():
-    fld_nterms = use_nterms
-else:
-    fld_nterms = 1
-# Multiscale
-if 'use_multiscale' in locals() or 'use_multiscale' in globals():
-    fld_multiscale=copy.deepcopy(use_multiscale)
-else:
-    fld_multiscale=[0]
-
 fld_specmode = 'mfs'
 fld_reffreq = '3.0GHz'
 

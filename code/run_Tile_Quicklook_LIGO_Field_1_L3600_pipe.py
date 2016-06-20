@@ -111,6 +111,12 @@ if doccbox:
 douvtaper = False
 myuvtaper = ['7.0arcsec']
 
+# Number of Taylor terms for MFS
+fld_nterms = 1
+
+# Multiscale
+fld_multiscale=[0]
+
 # Imaging parameters (specific to this observation)
 use_threshold = '0.000180Jy' # survey depth x1.5
 use_restore = '8.0arcsec' # circular restoring beam size
