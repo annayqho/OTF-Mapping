@@ -40,26 +40,24 @@ use_script_dir = '/users/aho/VLA_GW_Followup/code/'
 scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
 
-# Either set these or use preset values 
+# Set tile center
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) = (54.70525568 deg, 37. deg)
 tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
 tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 
-#tile_center_ra = '21:00:00.00'
-#tile_center_dec = '00.00.00.0'
-
-# Set up the tiling and subtiles
+# Set up the subtiles
 # Choose Num_subtile_ra, Num_subtile_dec, subtile_delta_arcsec to cover the tile area
-# L_subtile_arcsec should be equal to or a bit bigger than subtile_delta_arcsec
-#
 # For 1deg x 1deg subtiles:
 # L_subtile_arcsec = 3600.0 # this is size of final subimage
 # subtile_delta_arcsec = 3600.0 # this is distance between subtile centers
 # Just for testing?
 L_subtile_arcsec = 60.0
 subtile_delta_arcsec = 60.0
+if L_subtile_arcsec < subtile_delta_arcsec:
+    print("Error: L_subtile_arcsec should be equal to \
+            or a bit bigger than subtile_delta_arcsec")
 
 # For all 30deg x 1.23deg of tile
 # Num_subtile_ra = 29 
