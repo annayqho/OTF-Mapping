@@ -18,15 +18,11 @@ print(logstring)
 logbuffer.append(logstring)
 
 #================================================================================
-# Setup information for the submosaic to be imaged
+# Set submosaic center
 #================================================================================
 
-if 'subtile_center' in locals() or 'subtile_center' in globals():
-    # use direction string
-    mycenter = subtile_center
-    mycenter_dir = me.direction(mycenter)
-elif 'subtile_center_dir' in locals() or 'subtile_center_dir' in globals():
-    # use direction measure
+# was created in the run_Tile script
+if 'subtile_center_dir' in locals():
     mycenter_dir = copy.deepcopy(subtile_center_dir)
     epo = mycenter_dir['refer']
     rapos = mycenter_dir['m0']
@@ -34,6 +30,8 @@ elif 'subtile_center_dir' in locals() or 'subtile_center_dir' in globals():
     ral = qa.angle(rapos,form=["tim"],prec=9)
     decl = qa.angle(decpos,prec=10)
     mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
+else:
+    print("Error: forgot to set subtile_center_dir")
 
 logstring = 'SubMosaic center = '+mycenter
 print(logstring)
@@ -42,15 +40,9 @@ logbuffer.append(logstring)
 #================================================================================
 # Other setup stuff specific to this dataset
 #================================================================================
-# mydataset = 'TSKY0001.sb30647879.eb30653507.57149.82925858797'
-# data_dir = '/lustre/aoc/projects/vlass/smyers/Run_TSKY0001.sb30647879.eb30653507.57149/'
-# mydataset = 'TSKY0001.sb32154065.eb32157201.57530.47058900463'
-# data_dir = '/lustre/aoc/projects/vlass/smyers/Run_TSKY0001.sb32154065.eb32157201.57530/Calibrate_Pipeline4.6.0/'
-
 dataname = mydataset
-# dataname = 'TSKY0001_M31_1_sb32154065_57530'
 
-if 'calibrated_ms' in locals() or 'calibrated_ms' in globals():
+if 'calibrated_ms' in globals():
     # already defined
     splitfile = calibrated_ms
     if os.access(splitfile,F_OK):
