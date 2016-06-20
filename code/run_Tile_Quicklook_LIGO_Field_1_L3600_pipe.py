@@ -1,5 +1,15 @@
 # Original script by STM, revised by AYQH for VLA-GW151226 data
 
+# Takes a rectangular tile and breaks it into rectangular subtiles
+# Tiles have boundaries along lines of RA & Dec
+# Tile inputs: 
+### tile_center_ra,tile_center_dec,
+### Num_subtile_ra,Num_subtile_dec,
+### L_subtile_arcsec
+# Generates locations of subtiles subtile_center_dir
+
+
+
 import time
 import copy
 
@@ -10,44 +20,28 @@ prevRunTime = startRunTime
 # Setup information for the tile and subtiles to be imaged
 #================================================================================
 
-# Dataset inputs: mydataset, data_dir
-
-# Takes a rectangular tile and breaks it into rectangular subtiles
-# Tiles have boundaries along lines of RA & Dec
-# Tile inputs: 
-### tile_center_ra,tile_center_dec,
-### Num_subtile_ra,Num_subtile_dec,
-### L_subtile_arcsec
-# Generates locations of subtiles subtile_center_dir
-
-# Name of the dataset (for MS naming)
+# Choose calibrated ms dataset file
 # 11 Feb dataset:
 # mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
 # 14 Feb dataset:
 mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
-
-# Location of the calibrated MS file 
-data_dir = '/lustre/aoc/observers/aho/'
-
-# Name of calibrated MS and which datacolumn the calibrated data is in
+data_dir = '/lustre/aoc/observers/aho/' 
 calibrated_ms = data_dir + mydataset + '.ms' 
 
 # 'auto' option: detect whether there is CORRECTED_DATA and split only this
 calibrated_ms_datacolumn = 'auto'
 
-# Use matching with regex in getfieldcone.py v20160607 or later if this is set
-use_target_fields = ['^0','^1','^2'] # picks out only OTFM fields which start with 0,1,2
+# Use matching with regex in getfieldcone.py 
+# Picks out only OTFM fields which start with 0,1,w
+use_target_fields = ['^0','^1','^2'] 
 
-# Location and Name of imaging script(s) to use
-# use_script_dir = './'
-# here we set to SMyers testing script area
-# use_script_dir = '/lustre/aoc/projects/vlass/smyers/Scripts/'
+# Choose imaging script(s)
 use_script_dir = '/users/aho/VLA_GW_Followup/code/'
-# The name of the imaging script. This uses the new one:
 scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
 
-# If you have only generated split/flag/calibration script, set pointer to that script here
+# If you have only generated split/flag/calibration script, 
+# set pointer to that script here
 # Note: you can generate this using make_restorefile.py
 # use_restorescript = data_dir + 'restore_'+ mydataset + '.py'
 
