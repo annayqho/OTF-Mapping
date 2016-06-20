@@ -100,12 +100,6 @@ visname = imaging_dir+'/'+workfile
 clnname = imaging_dir+'/img.'+outname+postfix+'.clean'
 dirtyname = imaging_dir+'/img.'+outname+postfix+'.dirty'
 
-# For autoboxing
-if 'use_ccbox' in locals() or 'use_ccbox' in globals():
-    doccbox = use_ccbox
-else:
-    doccbox = False
-    # doccbox = True
 # Autoboxing parameters if doccbox=True
 if 'use_box_niter' in locals() or 'use_box_niter' in globals():
     box_niter = use_box_niter

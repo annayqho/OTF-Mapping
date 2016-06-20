@@ -97,7 +97,7 @@ imaging_spwstr = ['1~14']
 clear_pointing = True
 
 # Enable autoboxing (or not)
-use_ccbox = True
+doccbox = True
 use_maxboxcycles = 3
 
 # Imaging parameters (depend on your observation)
