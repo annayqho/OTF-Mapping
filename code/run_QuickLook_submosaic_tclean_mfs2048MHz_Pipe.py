@@ -43,16 +43,13 @@ logbuffer.append(logstring)
 dataname = mydataset
 
 if 'calibrated_ms' in globals():
-    # already defined
     splitfile = calibrated_ms
     if os.access(splitfile,F_OK):
         logstring = 'Found calibrated ms '+splitfile
-        print(logstring)
-        logbuffer.append(logstring)
     else:
         logstring = 'ERROR: could not find '+splitfile
-        print(logstring)
-        logbuffer.append(logstring)
+    print(logstring)
+    logbuffer.append(logstring)
 else:
     # try some defaults
     splitfile = data_dir + dataname + '_calibrated_target.ms'
