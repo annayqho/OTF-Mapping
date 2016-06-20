@@ -66,23 +66,13 @@ logbuffer.append(logstring)
 # mstransform(vis=msfile,outputvis=splitfile,datacolumn='corrected',field=targetfields,intent=targetintent,correlation='RR,LL') # not doing polarization yet
 
 # Option to clear POINTING table before imaging
-if use_pointing:
-
-if 'use_pointing' in locals() or 'use_pointing' in globals():
-    # already defined
-    clear_pointing = not use_pointing
-else:
-    clear_pointing = True # by default clear the POINTING table
 if clear_pointing:
     logstring = 'Will clear MS POINTING table(s)'
-    print(logstring)
-    casalog.post(logstring)
-    logbuffer.append(logstring)
 else:
     logstring = 'MS POINTING table(s) will be used if they contain data'
-    print(logstring)
-    casalog.post(logstring)
-    logbuffer.append(logstring)
+print(logstring)
+casalog.post(logstring)
+logbuffer.append(logstring)
 
 #================================================================================
 # Setup stuff not dataset specific
