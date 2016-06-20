@@ -124,27 +124,13 @@ fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
 fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
 fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
 
-# B-config 3 GHz (beam approx 2.5' robust 1)
-# for fieldcone = 0.25deg subim size 1deg = 3600"
-# for fieldcone = 0.5deg subim size 1.5deg = 5400"
-# for fld_subim_size = 2000" want fieldcone = 2000" and fld_size = 4000
-# for fld_subim_size = 2400" want fieldcone = 2200" and fld_size = 4400
-# fld_size = 4000
-# cellsize = 1.0
 cellsize = subtile_pixelsize
 fld_cell = str(cellsize)+'arcsec'
-# fld_size = 4320
 L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
-if 'subtile_padding' in locals() or 'subtile_padding' in globals():
-    padding = subtile_padding
-    padding_arcsec = cellsize*padding
-else:
-    if 'subtile_padding_arcsec' in locals() or 'subtile_padding_arcsec' in globals():
-        padding_arcsec = subtile_padding_arcsec
-    else:
-        padding_arcsec = 2000.0
-    #
-    padding = int(padding_arcsec/cellsize)
+
+padding_arcsec = subtile_padding_arcsec
+padding = int(padding_arcsec/cellsize)
+
 #
 fld_size = L_subtile_pixels + padding
 logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
