@@ -35,10 +35,6 @@ calibrated_ms = data_dir + mydataset + '.ms'
 # 'auto' option: detect whether there is CORRECTED_DATA and split only this
 calibrated_ms_datacolumn = 'auto'
 
-# Check intents and field names
-# none for us
-# use_target_intent = '*TARGET*' # picks out scans with this intent only
-
 # Use matching with regex in getfieldcone.py v20160607 or later if this is set
 use_target_fields = ['^0','^1','^2'] # picks out only OTFM fields which start with 0,1,2
 
