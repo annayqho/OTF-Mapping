@@ -100,12 +100,6 @@ visname = imaging_dir+'/'+workfile
 clnname = imaging_dir+'/img.'+outname+postfix+'.clean'
 dirtyname = imaging_dir+'/img.'+outname+postfix+'.dirty'
 
-if 'use_uvtaper' in locals() or 'use_uvtaper' in globals():
-    myuvtaper = [use_uvtaper]
-    douvtaper = not use_uvtaper==''
-else:
-    douvtaper = False
-    myuvtaper = ['7.0arcsec']
 dostartmodel = True
 
 # Widefield parameters

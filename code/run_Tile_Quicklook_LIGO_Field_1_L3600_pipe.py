@@ -107,6 +107,10 @@ if doccbox:
     box_cycleniter = 500
     peaksnrlimit = 5.0
 
+# UV taper
+douvtaper = False
+myuvtaper = ['7.0arcsec']
+
 # Imaging parameters (specific to this observation)
 use_threshold = '0.000180Jy' # survey depth x1.5
 use_restore = '8.0arcsec' # circular restoring beam size
