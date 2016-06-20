@@ -121,35 +121,29 @@ subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
 # Loop over subtiles, here we do all of them (serially)
 for j_subtile in range(Num_subtile_dec):
     for i_subtile in range(Num_subtile_ra):
-        # This subtile (i,j) indexed to i=0,Num_ra-1 j=0,Num_dec-1
-        # The stuff that figures out where subtiles are:
+        # Figure out where subtiles are:
         d_subtile_ra_rad = (i_subtile - 0.5*(Num_subtile_ra-1.0))*subtile_delta_ra_rad
         d_subtile_dec_rad = (j_subtile - 0.5*(Num_subtile_dec-1.0))*subtile_delta_rad
-        #
+        
         ra_subtile_rad = tile_center_ra_rad + d_subtile_ra_rad
         if ra_subtile_rad>(pl.pi):
             ra_subtile_rad = 2.*pl.pi - ra_subtile_rad
         elif ra_subtile_rad<=(-pl.pi):
             ra_subtile_rad = -2.*pl.pi - ra_subtile_rad
-        #
+        
         dec_subtile_rad = tile_center_dec_rad + d_subtile_dec_rad
         if dec_subtile_rad>=(0.5*pl.pi):
             dec_subtile_rad = pl.pi - dec_subtile_rad
-        #
+        
         subtile_center_dir = copy.deepcopy(tile_center_dir)
         subtile_center_dir['m0']['value'] = ra_subtile_rad
         subtile_center_dir['m1']['value'] = dec_subtile_rad
-        #
+        
         # Run the script to image this subtile at location subtile_center_dir:
-        # Could also pass as string e.g. by setting
-        # subtile_center = 'J2000 00:42:44.30 41.16.09.0'
         execfile(scriptfile)
-#
-# Done
-#
+
 print('Subtile imaging complete')
-#
-# 
+
 endRunTime=time.time()
 TotalRunTime = (endRunTime - startRunTime)
 print('Total run time was: %10.3f seconds ' % (TotalRunTime))
