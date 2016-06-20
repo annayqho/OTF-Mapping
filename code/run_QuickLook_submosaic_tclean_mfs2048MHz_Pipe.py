@@ -130,22 +130,12 @@ L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
 
 padding_arcsec = subtile_padding_arcsec
 padding = int(padding_arcsec/cellsize)
-
-#
 fld_size = L_subtile_pixels + padding
 logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
 print(logstring)
 logbuffer.append(logstring)
 
 dosubim = True
-# for fieldcone = 0.25deg subim size 0.25deg = 900"
-#fld_subim_size=1800
-#fld_subim = '900,900,2699,2699'
-# for fieldcone = 0.5deg subim size 0.5deg = 1800"
-# for fld_subim_size = 2000" want fieldcone = 2000" and fld_size = 4000
-# for fld_subim_size = 2400" want fieldcone = 2200" and fld_size = 4400
-# fld_subim_size=2000
-# fld_subim_size=2320
 fld_subim_size=L_subtile_pixels
 ilow = fld_size/2 - (fld_subim_size/2)
 iup = fld_size/2 + (fld_subim_size/2) - 1
@@ -154,18 +144,11 @@ logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
 print(logstring)
 logbuffer.append(logstring)
 
-# Use common restoring beam?
-if 'use_restore' in locals() or 'use_restore' in globals():
-    fld_bmaj = use_restore
-    fld_bmin = use_restore
-    dorestore = not use_restore==''
-    fld_bpa = '0deg'
-else:
-    # S-band B-config
-    dorestore=True
-    fld_bmaj = '2.5arcsec'
-    fld_bmin = '2.5arcsec'
-    fld_bpa = '0deg'
+# Use common restoring beam
+fld_bmaj = use_restore
+fld_bmin = use_restore
+dorestore = True
+fld_bpa = '0deg'
 
 # B-config 3 GHz (tapered to 7.5')
 # douvtaper=True
