@@ -71,9 +71,9 @@ tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 # Set up the subtiles: number and separation
 Num_subtile_ra = 1 # single subtile
 Num_subtile_dec = 1
-L_subtile_arcsec = 60.0 # in arcseconds (so 3600.0 for a degree)
+L_subtile_arcsec = 100.0 # in arcseconds (so 3600.0 for a degree)
 # size of final subimage
-subtile_delta_arcsec = 60.0 # distance btwn subtile centers
+subtile_delta_arcsec = 100.0 # distance btwn subtile centers
 if L_subtile_arcsec < subtile_delta_arcsec:
     print("Error: L_subtile_arcsec should be equal to \
             or a bit bigger than subtile_delta_arcsec")
