@@ -53,14 +53,13 @@ if 'calibrated_ms' in globals():
 else:
     print("ERROR: calibrated_ms not set")
 
-if 'calibrated_ms_datacolumn' in locals() or 'calibrated_ms_datacolumn' in globals():
-    # already defined
+if 'calibrated_ms_datacolumn' in globals():
     splitdatacolumn = calibrated_ms_datacolumn
+    logstring = 'Will use datacolumn '+splitdatacolumn
+    print(logstring)
+    logbuffer.append(logstring)
 else:
-    splitdatacolumn = 'all' # if targets not split separately into data use 'corrected'
-logstring = 'Will use datacolumn '+splitdatacolumn
-print(logstring)
-logbuffer.append(logstring)
+    print("ERROR: must decided on calibrated_ms_datacolumn")
 
 # NOTE: this splitfile is assumed to contain only the target fields that you
 # want to image from, though in principle the getfieldirbox will pull them from
