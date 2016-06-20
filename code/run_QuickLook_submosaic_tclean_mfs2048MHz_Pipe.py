@@ -809,14 +809,15 @@ if doimaging:
                 os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
                 if imresult.has_key('iterdone'):
                     iterdone=imresult['iterdone']
-                    logstring = 'Imaging for cycle '+str(itercycle)+' completed with '+str(iterdone)+' iterations'
+                    logstring = 'Imaging for cycle %s completed with %s iterations' \
+                            %(str(itercycle), str(iterdone))
                 else:
                     iterdone+=1
                     logstring = 'Imaging for cycle '+str(itercycle)+' completed'
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                #
+                
                 oldRMS=imRMS
                 imageimstat=imstat(imagename=clnresidual[0])
                 immax=imageimstat['max'][0]
@@ -825,19 +826,19 @@ if doimaging:
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                #
+                
                 RMSratio=((oldRMS-imRMS)/(oldRMS))
                 logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                #
+                
                 pksnr=immax/imRMS
                 logstring = 'Peak/rms = '+str(pksnr)
                 print(logstring)
                 casalog.post(logstring)
                 logbuffer.append(logstring)
-                #
+                
                 currTime=time.time()
                 stagedur = currTime-prevTime
                 stepname = 'tclean'
@@ -851,7 +852,7 @@ if doimaging:
                 stagename.append(stagestr)
                 print(stagestr+' took '+str(stagedur)+' sec')
                 prevTime = currTime
-                #
+                
                 # Possibly terminate boxed cleaning
                 if itercycle>=maxboxcycles:
                     doboxed=False
@@ -865,7 +866,7 @@ if doimaging:
                 casalog.post(logstring)
                 logbuffer.append(logstring)
                 doboxed=False
-        #
+        
         # Save last mask
         os.system('cp -r '+clnim+'.mask '+clnim+'_lastmask_mask')
     else:
@@ -876,11 +877,10 @@ if doimaging:
     # ==========================================
     # END of (optional) autoboxing code
     # ==========================================
-    #
+    
     # ================================
     # Now final clean without box mask
     # ================================
-    #
     logstring = 'Final Cleaning submosaic without mask '
     print(logstring)
     casalog.post(logstring)
