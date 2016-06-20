@@ -16,21 +16,11 @@ logbuffer.append(logstring)
 logstring = myscriptvers
 print(logstring)
 logbuffer.append(logstring)
-print("no overwrite in tclean: Running this script")
 
 #================================================================================
 # Setup information for the submosaic to be imaged
 #================================================================================
-# Dataset: data_dir, mydataset
-# Script location (optional, for fieldcone): use_script_dir
-# Optional: subtile_prefix
-#
-# subtile_center_dir
-# L_subtile_arcsec = 2320.0
-# subtile_pixelsize = 1.0 # arcsec
-# subtile_padding_arcsec = 2000.0 # in arcsec
 
-# mycenter = 'J2000 00:42:44.30 41.16.09.0'
 if 'subtile_center' in locals() or 'subtile_center' in globals():
     # use direction string
     mycenter = subtile_center
