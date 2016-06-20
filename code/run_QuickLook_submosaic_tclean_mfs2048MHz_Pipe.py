@@ -51,26 +51,7 @@ if 'calibrated_ms' in globals():
     print(logstring)
     logbuffer.append(logstring)
 else:
-    # try some defaults
-    splitfile = data_dir + dataname + '_calibrated_target.ms'
-    if os.access(splitfile,F_OK):
-        logstring = 'Found calibrated ms '+splitfile
-        print(logstring)
-        logbuffer.append(logstring)
-    else:
-        logstring = 'WARNING: could not find '+splitfile
-        print(logstring)
-        logbuffer.append(logstring)
-        #
-        splitfile = data_dir + dataname + '.ms'
-        if os.access(splitfile,F_OK):
-            logstring = 'Found calibrated ms '+splitfile
-            print(logstring)
-            logbuffer.append(logstring)
-        else:
-            logstring = 'ERROR: could not find '+splitfile
-            print(logstring)
-            logbuffer.append(logstring)
+    print("ERROR: calibrated_ms not set")
 
 if 'calibrated_ms_datacolumn' in locals() or 'calibrated_ms_datacolumn' in globals():
     # already defined
