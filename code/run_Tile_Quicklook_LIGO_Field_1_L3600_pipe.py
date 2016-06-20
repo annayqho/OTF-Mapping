@@ -58,14 +58,34 @@ if L_subtile_arcsec < subtile_delta_arcsec:
 # For QuickLook PSF~2.5" so 1" here is pushing it.
 subtile_pixelsize = 1.0 # arcsec
 
-# Choose "padding" to add to L_subtile_arcsec to make the full image.
-# This should be 2 x 0.8 x PB(FWHM). 
+
+def subtile_padding(band):
+    """ Padding to add to the subtile size for the full image
+    This should be 2 x 0.8 x PB (FWHM)
+    
+    Parameters
+    ----------
+    band: string, the frequency band, e.g. S or L
+
+    Returns
+    -------
+    padding: float, the padding in arcsec
+    """
+
+    if band == "S":
+        PB = 21 # arcminutes
+    else:
+        print("you sure you don't want S-band?")
+    padding = 2 * 0.8 * 21 * 60 # convert to arcsec
+    return padding
+
+
 # For S-band at 2GHz (low-end of band)
 # PB(FWHM)~21' so 2 x 0.8 x 21' ~ 2000" 
 # Adjust for your band.
 # Can specify in pixels or arcsec, prefer arcsec:
 # subtile_padding = 2000 # in pixels 
-subtile_padding_arcsec = 2000.0 
+subtile_padding_arcsec = subtile_padding("S") 
 # added to L_subtile_arcsec for the submosaic imaging
 
 subtile_dirname = 'Imaging_'+mydataset
