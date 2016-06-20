@@ -91,7 +91,7 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
 # By eye, looked to be RFI in spw 0 and 15
-use_spws = ['1~14']
+imaging_spwstr = ['1~14']
 
 # There's no useful pointing table in SDM yet 
 clear_pointing = True

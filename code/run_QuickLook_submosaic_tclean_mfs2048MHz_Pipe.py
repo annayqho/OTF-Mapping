@@ -77,8 +77,7 @@ logbuffer.append(logstring)
 #================================================================================
 
 # location for writing out images
-# subtile_prefix was set in run_Tile 
-# imaging_dirname was set in run_Tile
+# subtile_prefix & imaging_dirname were set in run_Tile 
 postfix ='_'+ subtile_prefix
 tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
 scriptprefix=mydataset+postfix+tiling
@@ -88,30 +87,15 @@ imaging_dir = imaging_dirname+postfix+tiling
 execfile(use_script_dir+'getfieldcone.py')
 
 # Set up some parameters for processing
-# sdmdir = '/lustre/aoc/projects/vlass/smyers/'
-sdmdir = '/lustre/aoc/observers/aho/'
-sdmname = mydataset
-sdmfile = sdmdir + sdmname
-
-outname = mydataset
-workfile = outname + '_calibrated_target_working.ms'
-
+sdmfile = calibrated_ms.split('.ms')[0]
+workfile = mydataset + '_calibrated_target_working.ms'
 doimaging = True
 docleanup = False
 dousescratch = True
 dosavemodel = 'modelcolumn'
-
 dostats = True
 
 # imaging parms
-# Select spectral windows
-# e.g. imaging_spwstr = ['0~5,7~8,11~15']
-# imaging_spws = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] # not used
-if 'use_spws' in locals() or 'use_spws' in globals():
-    imaging_spwstr = use_spws
-else:
-    imaging_spwstr = ['']
-#
 visname = imaging_dir+'/'+workfile
 clnname = imaging_dir+'/img.'+outname+postfix+'.clean'
 dirtyname = imaging_dir+'/img.'+outname+postfix+'.dirty'
