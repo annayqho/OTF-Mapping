@@ -40,13 +40,7 @@ use_script_dir = '/users/aho/VLA_GW_Followup/code/'
 scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
 
-# If you have only generated split/flag/calibration script, 
-# set pointer to that script here
-# Note: you can generate this using make_restorefile.py
-# use_restorescript = data_dir + 'restore_'+ mydataset + '.py'
-
 # Either set these or use preset values 
-# Center of Stripe82 tile A at (315.0deg,0deg)
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) = (54.70525568 deg, 37. deg)
