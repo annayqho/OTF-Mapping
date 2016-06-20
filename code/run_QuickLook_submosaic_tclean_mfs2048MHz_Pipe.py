@@ -150,24 +150,8 @@ fld_bmin = use_restore
 dorestore = True
 fld_bpa = '0deg'
 
-# B-config 3 GHz (tapered to 7.5')
-# douvtaper=True
-# myuvtaper=['7.0arcsec']
-# fld_size = 1200
-# fld_cell = '2.5arcsec'
-# fld_niter = 400
-# fld_threshold = '0.0006Jy'
-# fld_cyclefactor = 3.5
-# fld_subim = '150,150,1050,1050'
-# fld_bmaj = '7.5arcsec'
-# fld_bmin = '7.5arcsec'
-# fld_bpa = '0deg'
-
-#myweight = 'natural'
-#myweight = 'uniform'
 myweight = 'briggs'
 myrmode='norm'
-#myrobust=0.5
 myrobust=1.0
 
 print('')
