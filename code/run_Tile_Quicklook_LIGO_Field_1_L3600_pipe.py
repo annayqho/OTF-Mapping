@@ -90,14 +90,11 @@ use_ccbox = True
 use_maxboxcycles = 3
 
 # Imaging parameters (depend on your observation)
-use_threshold = '0.000180Jy' # VLASS depth x1.5, same as GW follow up
-# use_restore = '2.5arcsec'    # circular restoring beam size if desired
-use_restore = '8.0arcsec' # for the LIGO follow up
+use_threshold = '0.000180Jy' # survey depth x1.5
+use_restore = '8.0arcsec' # circular restoring beam size
 
 # These you tune for quality of imaging
-use_fld_cycleniter = 10000
-# use_fld_niter = 5000         # max number of clean iter
-#use_fld_cycleniter = 750
+use_fld_cycleniter = 10000 # max number of clean iter
 use_fld_cycleniter = 1000    # max number of iter per major cycle
 
 #------------------------------------------------------------------------------------
