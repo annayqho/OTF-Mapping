@@ -169,7 +169,7 @@ mydistance=str(mydistance_arcsec)+'arcsec'
 print(mydistance)
  
 # since dobox = True...
-logstring = 'Selecting fields within the box of length '+L_subtile_arcsec
+logstring = 'Selecting fields within the box of length '+mydistance
 print(logstring)
 logbuffer.append(logstring)
 
@@ -191,7 +191,7 @@ params['user']['padding_arcsec'] = padding_arcsec
 if doimaging:
     params['user']['imaging_spwstr'] = imaging_spwstr
     params['user']['imaging_dir'] = imaging_dir
-    params['user']['mydistance'] = mydistance # only for docone?
+    params['user']['mydistance'] = mydistance # for dobox too?
     params['user']['fldnos'] = fldnos
     params['user']['fld_size'] = fld_size
     params['user']['fld_cell'] = fld_cell
@@ -282,10 +282,7 @@ else:
 if dobox:
     # Use bounding box distance rather than cone
     # Check if there are regex to match with
-    if 'use_target_fields' in locals() or 'use_target_fields' in globals():
-        mymatchregex = use_target_fields
-    else:
-        mymatchregex = ''
+    mymatchregex = use_target_fields
     if mymatchregex=='' or mymatchregex==[]:
         # no name match, backward compatible
         fldnos = getfieldirbox(splitfile,distance=mydistance,center_dir=mycenter_dir)
@@ -295,9 +292,11 @@ if dobox:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
-        fldnos = getfieldirbox(splitfile,distance=mydistance,center_dir=mycenter_dir,matchregex=mymatchregex)
-logstring = 'Will image a total of '+str(len(fldnos))+' fields'+' using specmode='+fld_specmode
+        fldnos = getfieldirbox(
+                splitfile,distance=mydistance,center_dir=mycenter_dir,
+                matchregex=mymatchregex)
+logstring = 'Will image a total of '+str(len(fldnos))+' fields'\
+        +' using specmode='+fld_specmode
 print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
@@ -305,7 +304,7 @@ logstring = 'Will image fields = '+str(fldnos)
 print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
-#
+
 # Construct field selection
 fldstrs = ''
 for field in fldnos:
