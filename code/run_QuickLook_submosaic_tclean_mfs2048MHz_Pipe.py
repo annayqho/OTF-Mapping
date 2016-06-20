@@ -4,26 +4,6 @@ import time
 import os
 from os import F_OK
 
-# Imaging Script for VLASS tests
-# STM 2015-06-09 for TSKY0001 M31 test
-# STM 2015-07-27 use tclean in CASA 4.5
-# STM 2016-02-17 CASA 4.5.1 and new projects directory
-# STM 2016-04-11 CASA 4.6.0 ready for MT MFS AW-projection testing
-# STM 2016-05-16 CASA 4.6.0 tclean position OFF2
-# STM 2016-05-20 CASA 4.6.0 tclean CC autoboxing
-# STM 2016-05-24 CASA 4.6.0 clearer setup at top of script
-# STM 2016-05-26 CASA 4.6.0 bug fix, doccbox option
-# STM 2016-05-26 CASA 4.6.0 run on pileline calibrated data
-# STM 2016-05-31 CASA 4.6.0 doccbox=False version
-# --- substantial refactoring ---
-# STM 2016-05-31 CASA 4.6.0 use preset tile and subtile info 
-# STM 2016-06-01 CASA 4.6.0 minor mods 
-# STM 2016-06-03 CASA 4.6.0 use_spws, use_pointing, use_script_dir
-# STM 2016-06-07 CASA 4.6.0 column detection, use_target_intent & fields
-# --- substantial refactoring ---
-# STM 2016-06-13 CASA 4.6.0 use submosaic center direction, no tiling info
-# STM 2016-06-14 CASA 4.6.0 expose more imaging parameters to level above
-# STM 2016-06-14 CASA 4.6.0 use_restorescript to split/flag/calibrate here
 #================================================================================
 logbuffer = []
 mytext = 'VLASS QuickLook submosaic TClean MFS TT0-only JointMosaic'
