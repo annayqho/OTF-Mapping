@@ -98,7 +98,15 @@ clear_pointing = True
 
 # Enable autoboxing (or not)
 doccbox = True
-use_maxboxcycles = 3
+
+# Autoboxing parameters if doccbox = True
+if doccbox:
+    maxboxcycles = 3
+    box_niter = 10000
+    box_cyclefactor = 4.5
+    box_cycleniter = 500
+    peaksnrlimit = 5.0
+
 
 # Imaging parameters (depend on your observation)
 use_threshold = '0.000180Jy' # survey depth x1.5

@@ -100,30 +100,6 @@ visname = imaging_dir+'/'+workfile
 clnname = imaging_dir+'/img.'+outname+postfix+'.clean'
 dirtyname = imaging_dir+'/img.'+outname+postfix+'.dirty'
 
-# Autoboxing parameters if doccbox=True
-if 'use_box_niter' in locals() or 'use_box_niter' in globals():
-    box_niter = use_box_niter
-else:
-    box_niter = 10000
-if 'use_box_cyclefactor' in locals() or 'use_box_cyclefactor' in globals():
-    box_cyclefactor = use_box_cyclefactor
-else:
-    box_cyclefactor = 4.5
-if 'use_box_cycleniter' in locals() or 'use_box_cycleniter' in globals():
-    box_cycleniter = use_box_cycleniter
-else:
-    box_cycleniter = 500
-if 'use_box_peaksnrlimit' in locals() or 'use_box_peaksnrlimit' in globals():
-    peaksnrlimit = use_box_peaksnrlimit
-else:
-    # peaksnrlimit = 3.0
-    peaksnrlimit = 5.0
-if 'use_maxboxcycles' in locals() or 'use_maxboxcycles' in globals():
-    maxboxcycles = use_maxboxcycles
-else:
-    maxboxcycles = 20
-print("max box cycles:" + str(maxboxcycles))
-
 if 'use_uvtaper' in locals() or 'use_uvtaper' in globals():
     myuvtaper = [use_uvtaper]
     douvtaper = not use_uvtaper==''
