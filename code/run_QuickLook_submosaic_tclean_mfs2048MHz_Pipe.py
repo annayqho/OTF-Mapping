@@ -333,22 +333,20 @@ if doimaging:
     
     # Make a listing
     listobs(visname,listfile=visname+'.listobs')
-    #
+    
     # If requested clear POINTING table in ms
     if clear_pointing:
         # Remove the POINTING tables
-        # for name in visnamelist:
         tb.open(visname+'/POINTING', nomodify = False)
         a = tb.rownumbers()
         tb.removerows(a)
         tb.close()
-        #
+        
         logstring = 'Cleared MS POINTING table(s) for '+visname
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
         
-    #
     # Extract info from SPECTRAL_WINDOW subtable
     tb.open(visname+"/SPECTRAL_WINDOW")
     nchanarr=tb.getcol("NUM_CHAN")
@@ -372,16 +370,16 @@ if doimaging:
         rfq=reffreqarr[isp]
         cfq=rfq+(0.5*float(nch-1)/float(nch))*bw
         spwlookup[isp]['centerfreq'] = cfq
-        #
+        
         bw_str = '%.3fMHz' % (bw/1.e6)
         cfq_str = '%.3fMHz' % (cfq/1.e6)
         spwlookup[isp]['centerfreq_str'] = cfq_str
         spwlookup[isp]['bandwidth_str'] = bw_str
     print('Extracted information for '+str(nspw)+' SpectralWindows')
-    #
+    
     currTime=time.time()
     stagedur = currTime-prevTime
-    # stepname = 'split'
+
     if steptimes.has_key(stepname):
         steptimes[stepname]+=stagedur
     else:
@@ -393,27 +391,23 @@ if doimaging:
     print(stagestr+' took '+str(stagedur)+' sec')
     prevTime = currTime
 
+
 # Make standard (untapered) image set
 startimagingTime = currTime
 if doimaging:
-    #
     spwstr = imaging_spwstr
     foundbox=False
-    #
+    
     # Joint MFS mosaic of all fields in split MS
     fldlist = range(len(fldnos))
     fieldstr = ''
     clnim = clnname
     dirtyim = dirtyname
-    #
-    # Frequency info
-    # spw_center = spwlookup[ispw]['centerfreq_str']
-    # spw_width = spwlookup[ispw]['bandwidth_str']
-    #
+
     # clean up previous images
     os.system('rm -rf '+clnim+'.*')
     os.system('rm -rf '+dirtyim+'.*')
-    #
+    
     if fld_nterms>1:
         clnrestored=[]
         clnresidual = []
@@ -439,20 +433,19 @@ if doimaging:
         clnpsf = [clnim+'.psf']
         clnpb = [clnim+'.pb']
         dirtyresidual = [dirtyim+'.residual']
-    #
+    
     if dorestore:
         myrestore=[fld_bmaj,fld_bmin,fld_bpa]
     else:
         myrestore=[]
     iterdone=0
     itercycle=0
+
     # ==========================================
     # The part that (optionally) does autoboxing
     # ==========================================
     if doccbox:
-        #
         # make a dirty image to begin with
-        #
         try:
             # this is where we create the primary beam .pb image
             tclean(visname,
@@ -466,19 +459,10 @@ if doimaging:
                    startmodel='',
                    specmode=fld_specmode,
                    reffreq=fld_reffreq,
-                   # nchan=fld_nchan,
-                   # start=spw_center,
-                   # width=spw_width,
-                   # interpolation=fld_interp,
-                   # resttfreq=[fld_reffreq],
                    gridder=fld_gridder,
                    pblimit=fld_pblimit,
                    normtype=fld_normtype,
-                   # wbawp=fld_wbawp,
-                   # wprojplanes=fld_wprojplanes,
-                   # facets=fld_facets,
                    deconvolver=fld_deconvolver,
-                   # scales=fld_multiscale,
                    restoringbeam=myrestore,
                    niter=0,
                    threshold=fld_threshold,
@@ -500,10 +484,10 @@ if doimaging:
             print(logstring)
             casalog.post(logstring)
             logbuffer.append(logstring)
-        #
+        
         # Save parameters from this run
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
-        #
+        
         currTime=time.time()
         stagedur = currTime-prevTime
         stepname = 'tclean'
@@ -517,11 +501,11 @@ if doimaging:
         stagename.append(stagestr)
         print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
-        #
+        
         # ===== Construct the mask for CCBox
         os.system('cp -r '+clnresidual[0]+' '+dirtyresidual[0])
-        #
-        # construct a PSF with the Gaussian core subtracted (new CJC 10May2016)
+        
+        # construct a PSF with the Gaussian core subtracted 
         psfresid = clnim+'.psf.subtracted'
         os.system('rm -rf '+psfresid)
         immath(imagename=clnpsf[0],mode='evalexpr',expr='1.0*IM0',outfile=psfresid)
@@ -537,12 +521,12 @@ if doimaging:
         ia.close()
         psfimstat2=imstat(imagename=psfresid)
         psfmin=max(abs(psfimstat2['min'][0]),psfimstat2['max'][0])
-        #
+        
         logstring = 'Using PSF sidelobe level for masking = '+str(psfmin)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         imageimstat=imstat(imagename=dirtyresidual[0])
         immax=imageimstat['max'][0]
         imRMS=imageimstat['rms'][0]
@@ -550,16 +534,15 @@ if doimaging:
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         pksnr=immax/imRMS
         logstring = 'Dirty image Peak/rms = '+str(pksnr)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
-        #
+        
         # threshold for initial mask is defined by immax*n*abs(psfmin) (n>=2),
         # unless abs(psfmin)>0.5, in which case do something different...
-        #
         if abs(psfmin)<0.5:
             threshfraction=psfmin*int(0.5/psfmin)
         else:
