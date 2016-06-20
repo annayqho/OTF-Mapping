@@ -42,21 +42,15 @@ tile_center_epo = 'J2000'
 tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
 tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 
-# Set up the subtiles
-# Choose Num_subtile_ra, Num_subtile_dec, subtile_delta_arcsec to cover the tile area
-# For 1deg x 1deg subtiles:
-# L_subtile_arcsec = 3600.0 # this is size of final subimage
-# subtile_delta_arcsec = 3600.0 # this is distance between subtile centers
-# Just for testing?
-L_subtile_arcsec = 60.0
-subtile_delta_arcsec = 60.0
+# Set up the subtiles: number and separation
+Num_subtile_ra = 1 # single subtile
+Num_subtile_dec = 1
+L_subtile_arcsec = 60.0 # in arcseconds (so 3600.0 for a degree)
+# size of final subimage
+subtile_delta_arcsec = 60.0 # distance btwn subtile centers
 if L_subtile_arcsec < subtile_delta_arcsec:
     print("Error: L_subtile_arcsec should be equal to \
             or a bit bigger than subtile_delta_arcsec")
-
-# For single central subtile
-Num_subtile_ra = 1 
-Num_subtile_dec = 1
 
 # Choose the pixel size in arcsec. 
 # Set this to be at maximum 1/2.5 of the PSF width (FWHM), 
