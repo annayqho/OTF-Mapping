@@ -89,11 +89,7 @@ execfile(use_script_dir+'getfieldcone.py')
 # Set up some parameters for processing
 sdmfile = calibrated_ms.split('.ms')[0]
 workfile = mydataset + '_calibrated_target_working.ms'
-doimaging = True
-docleanup = False
-dousescratch = True
 dosavemodel = 'modelcolumn'
-dostats = True
 
 # imaging parms
 visname = imaging_dir+'/'+workfile
@@ -282,6 +278,7 @@ else:
 if dobox:
     # Use bounding box distance rather than cone
     # Check if there are regex to match with
+    # use_target_fields defined in run_Tile
     mymatchregex = use_target_fields
     if mymatchregex=='' or mymatchregex==[]:
         # no name match, backward compatible
@@ -295,8 +292,8 @@ if dobox:
         fldnos = getfieldirbox(
                 splitfile,distance=mydistance,center_dir=mycenter_dir,
                 matchregex=mymatchregex)
-logstring = 'Will image a total of '+str(len(fldnos))+' fields'\
-        +' using specmode='+fld_specmode
+logstring = 'Will image a total of %s fields using specmode %s' \
+        %(str(len(fldnos), fld_specmode))
 print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
@@ -314,11 +311,9 @@ for field in fldnos:
         fldstrs = fldstrs + ',' + str(field)
 
 if doimaging:
-    #
     # Make a working copy of ms
     print('Splitting '+splitfile+' to '+visname)
     os.system('rm -rf '+visname+'*')
-    #os.system('cp -rf '+splitfile+' '+visname)
     if splitdatacolumn=='auto':
         # check if CORRECTED_DATA is there use that if so
         tb.open(splitfile)
@@ -330,13 +325,7 @@ if doimaging:
             mydatacolumn = 'data'
     else:
         mydatacolumn = splitdatacolumn
-    # 
-    # Check for specific intents
-    if 'use_target_intent' in locals() or 'use_target_intent' in globals():
-        myintentstr = use_target_intent
-    else:
-        myintentstr = ''
-    #
+     
     if 'use_restorescript' in locals() or 'use_restorescript' in globals():
         # If requested, run instead the restore/split script generated beforehand
         stepname = 'split/restore'

@@ -93,6 +93,9 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 # By eye, looked to be RFI in spw 0 and 15
 imaging_spwstr = ['1~14']
 
+# We don't want any specific intents
+myintentstr = ''
+
 # For selecting fields in the subtile
 dobox = True
 
@@ -130,6 +133,12 @@ use_restore = '8.0arcsec' # circular restoring beam size
 fld_niter = 5000 # max number of clean iter
 fld_cyclefactor = 4.5 # max # minor cycle iterations
 fld_cycleniter = 1000 # max number of iter per major cycle
+
+# Parameters for processing
+doimaging = True
+docleanup = False
+dousescratch = True
+dostats = True
 
 #------------------------------------------------------------------------------------
 # Derive tile and subtile locations, and run imaging script
