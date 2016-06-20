@@ -79,18 +79,13 @@ subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
 
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
-# Stripe82 A upper 3 windows bad but not flagged, reverse baseband order
-# use_spws = ['0~4,8~15']
+# By eye, looked to be RFI in spw 0 and 15
 use_spws = ['1~14']
-# We're commenting this out for the GW follow up, for now.
-# Looks like although spw 0 is bad, it's getting a lower weight.
 
-# Use the POINTING table in SDM->MS?
+# There's no useful pointing table in SDM yet 
 use_pointing = False
-# There's no useful pointing table yet
 
 # Enable autoboxing (or not)
-# use_ccbox = False
 use_ccbox = True
 use_maxboxcycles = 3
 
