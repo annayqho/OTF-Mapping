@@ -37,8 +37,6 @@ logbuffer.append(logstring)
 #================================================================================
 # Other setup stuff specific to this dataset
 #================================================================================
-dataname = mydataset
-
 # calibrated_ms was created in run_Tile
 splitfile = calibrated_ms
 if os.access(splitfile,F_OK):
@@ -77,17 +75,11 @@ logbuffer.append(logstring)
 #================================================================================
 # Setup stuff not dataset specific
 #================================================================================
-#
-# prefix='TSKY0001_M31_1_sb30647879_57149'
-# prefix=mydataset
-prefix=dataname
 
-if 'subtile_prefix' in locals() or 'subtile_prefix' in globals():
-    postfix ='_'+ subtile_prefix
-else:
-    postfix='_submos_tmfs2048MHz_TT0_Nobox_robust1'
+# subtile_prefix was set in run_Tile #
+postfix ='_'+ subtile_prefix
 tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
-scriptprefix=prefix+postfix+tiling
+scriptprefix=mydataset+postfix+tiling
 
 if 'subtile_dirname' in locals() or 'subtile_dirname' in globals():
     imaging_dirname = subtile_dirname
@@ -113,7 +105,7 @@ sdmdir = '/lustre/aoc/observers/aho/'
 sdmname = mydataset
 sdmfile = sdmdir + sdmname
 
-outname = prefix
+outname = mydataset
 workfile = outname + '_calibrated_target_working.ms'
 
 doimaging = True
