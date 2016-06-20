@@ -326,18 +326,11 @@ if doimaging:
     else:
         mydatacolumn = splitdatacolumn
      
-    if 'use_restorescript' in locals() or 'use_restorescript' in globals():
-        # If requested, run instead the restore/split script generated beforehand
-        stepname = 'split/restore'
-        targetfields = fldstrs
-        targetintent = myintentstr
-        usemsfile = splitfile
-        targetfile = visname
-        execfile(use_restorescript)
-    else:
-        stepname = 'split'
-        mstransform(splitfile,visname,field=fldstrs,intent=myintentstr,datacolumn=mydatacolumn)
-    #
+    stepname = 'split'
+    mstransform(
+            splitfile,visname,field=fldstrs,
+            intent=myintentstr,datacolumn=mydatacolumn)
+    
     # Make a listing
     listobs(visname,listfile=visname+'.listobs')
     #
