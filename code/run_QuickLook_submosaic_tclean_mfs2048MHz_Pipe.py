@@ -446,6 +446,51 @@ if doimaging:
         myrestore=[]
     iterdone=0
     itercycle=0
+    
+    # =============================================
+    # The part that (optionally) uses an input mask
+    # =============================================
+    if mask != '':
+        logstring = "Cleaning using input mask"
+        print(logstring)
+        casalog.post(logstring)
+        logbuffer.append(logstring)
+
+        try: 
+           tclean(visname,
+                  imagename=clnim,
+                  field=fieldstr,
+                  spw=spwstr,
+                  imsize=[fld_size,fld_size],
+                  cell=[fld_cell,fld_cell],
+                  phasecenter=mycenter,
+                  stokes='I',
+                  startmodel='',
+                  specmode=fld_specmode,
+                  reffreq=fld_reffreq,
+                  gridder=fld_gridder,
+                  pblimit=fld_pblimit,
+                  normtype=fld_normtype,
+                  deconvolver=fld_deconvolver,
+                  restoringbeam=myrestore,
+                  niter=fld_niter,
+                  threshold=fld_threshold_nobox,
+                  cycleniter=fld_cycleniter,
+                  cyclefactor=fld_cyclefactor,
+                  usemask='user',
+                  mask=mask,
+                  interactive=False,
+                  weighting=myweight,
+                  robust=myrobust,
+                  uvtaper=myuvtaper,
+                  makeimages='choose',
+                  calcres=True,
+                  calcpsf=True,
+                  writepb=True,
+                  savemodel=dosavemodel)
+              
+        except:
+            print("error trying to use input mask")
 
     # ==========================================
     # The part that (optionally) does autoboxing

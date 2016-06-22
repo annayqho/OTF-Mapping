@@ -46,7 +46,7 @@ def subtile_padding(band):
 # mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
 # 14 Feb dataset:
 # mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
-data_dir = '/lustre/aoc/observers/aho/' 
+data_dir = '/lustre/aoc/observers/aho/VLASS_Field/' 
 
 # sample VLASS field, for testing PyBDSM mask
 mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731_calibrated_target'
@@ -109,7 +109,7 @@ subtile_prefix = 'QuickLook_CCBox_L'+str(int(L_subtile_arcsec))
 # imaging_spwstr = ['1~14']
 
 # for Steve's VLASS box:
-use_spws = ['0~4,8~15']
+imaging_spwstr = ['0~4,8~15']
 
 # We don't want any specific intents
 myintentstr = ''
@@ -125,7 +125,7 @@ doccbox = False
 
 # Enable input mask (or not)
 # mask = ''
-mask = 'test.pybdsm.gaul.fits'
+mask = 'test.pybdsm_gaus_model.image'
 
 # Autoboxing parameters if doccbox = True
 if doccbox:
