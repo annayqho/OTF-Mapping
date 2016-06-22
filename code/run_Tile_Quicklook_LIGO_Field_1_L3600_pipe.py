@@ -45,12 +45,19 @@ def subtile_padding(band):
 # 11 Feb dataset:
 # mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
 # 14 Feb dataset:
-mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
+# mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
 data_dir = '/lustre/aoc/observers/aho/' 
+
+# sample VLASS field, for testing PyBDSM mask
+mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731_calibrated_target'
+
 calibrated_ms = data_dir + mydataset + '.ms' 
 
 # 'auto' option: detect whether there is CORRECTED_DATA and split only this
 calibrated_ms_datacolumn = 'auto'
+
+# for VLASS only:
+use_target_intent = '*TARGET*' # picks out scans with this intent only
 
 # Use matching with regex in getfieldcone.py 
 # Picks out only OTFM fields which start with 0,1,w
@@ -65,15 +72,19 @@ scriptfile = use_script_dir + scriptname
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) = (54.70525568 deg, 37. deg)
-tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
-tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
+# tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
+# tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
+
+# from Steve's VLASS script:
+tile_center_ra = '21:00:00.00'
+tile_center_dec = '00.00.00.0'
 
 # Set up the subtiles: number and separation
 Num_subtile_ra = 1 # single subtile
 Num_subtile_dec = 1
-L_subtile_arcsec = 100.0 # in arcseconds (so 3600.0 for a degree)
+L_subtile_arcsec = 3600.0 # in arcseconds (so 3600.0 for a degree)
 # size of final subimage
-subtile_delta_arcsec = 100.0 # distance btwn subtile centers
+subtile_delta_arcsec = 3600.0 # distance btwn subtile centers
 if L_subtile_arcsec < subtile_delta_arcsec:
     print("Error: L_subtile_arcsec should be equal to \
             or a bit bigger than subtile_delta_arcsec")
@@ -87,12 +98,18 @@ subtile_pixelsize = 1.0 # arcsec
 subtile_padding_arcsec = subtile_padding("S") 
 
 imaging_dirname = 'Imaging_'+mydataset
-subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
+#subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
+
+# for Steve's VLASS box:
+subtile_prefix = 'QuickLook_CCBox_L'+str(int(L_subtile_arcsec))
 
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
 # By eye, looked to be RFI in spw 0 and 15
-imaging_spwstr = ['1~14']
+# imaging_spwstr = ['1~14']
+
+# for Steve's VLASS box:
+use_spws = ['0~4,8~15']
 
 # We don't want any specific intents
 myintentstr = ''
@@ -104,7 +121,11 @@ dobox = True
 clear_pointing = True
 
 # Enable autoboxing (or not)
-doccbox = True
+doccbox = False
+
+# Enable input mask (or not)
+# mask = ''
+mask = 'test.pybdsm.gaul.fits'
 
 # Autoboxing parameters if doccbox = True
 if doccbox:
@@ -127,11 +148,14 @@ fld_multiscale=[0]
 # Imaging parameters (specific to this observation)
 fld_threshold = '0.000180Jy' # survey depth x1.5
 fld_threshold_nobox = fld_threshold
-use_restore = '8.0arcsec' # circular restoring beam size
+# use_restore = '8.0arcsec' # circular restoring beam size
+
+# for Steve's VLASS box:
+use_restore = '2.5arcsec'    # circular restoring beam size if desired
 
 # These you tune for quality of imaging
 # clean iterations w/o box
-fld_niter = 5000 # max number of clean iter
+fld_niter = 10000 # max number of clean iter
 fld_cyclefactor = 4.5 # max # minor cycle iterations
 fld_cycleniter = 1000 # max number of iter per major cycle
 

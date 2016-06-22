@@ -232,6 +232,8 @@ if doimaging:
     if myweight=='briggs':
         params['user']['myrmode'] = myrmode
         params['user']['myrobust'] = myrobust
+    # Masking parameters
+    params['user']['mask'] = mask
     # Autoboxing parameters
     params['user']['doccbox'] = doccbox
     if doccbox:
