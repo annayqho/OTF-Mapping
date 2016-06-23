@@ -133,7 +133,7 @@ qsub -I -l walltime=01:00:00,nodes=2:ppn=12,mem=60G -q batch
 # AYQH: cleanfld.py written by Kunal, calls CASA clean through the bash terminal, 
 don't need to go into CASA. --parallel 
 # AYQH: --clipmax: a lot of the time, there's still RFI remaining. clipmax does some intelligent clipping of the data. It finds a clean spectral window and defines an amplitude in Janskies where it needs to do the clipping. 
-/lustre/kmooley/pipeline/CASA/scripts/cleanfld.py --niter 500 --imsize 1500 --pixsize 2 --clipmax 0 --cyclefactor 4.5 --beam 8.0 --parallel /lustre/kmooley/projects/JAGWAR/GW151226/anna
+/lustre/kmooley/pipeline/CASA/scripts/cleanfld.py --niter 300 --multiscale [0,3,10] --imsize 1500 --pixsize 2 --clipmax 0 --cyclefactor 4.5 --beam 8.0 --selfcal 1000,20 --parallel /lustre/kmooley/projects/JAGWAR/GW151226/anna
 
 # Exit from the nodes
 exit

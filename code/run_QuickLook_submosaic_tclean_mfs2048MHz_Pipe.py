@@ -398,13 +398,16 @@ if doimaging:
     prevTime = currTime
 
 
+
 # Make standard (untapered) image set
 startimagingTime = currTime
 if doimaging:
     spwstr = imaging_spwstr
     foundbox=False
     
-    # Joint MFS mosaic of all fields in split MS
+    # =====================================================
+    # Make a joint MFS mosaic of all fields in the split MS
+    # =====================================================
     fldlist = range(len(fldnos))
     fieldstr = ''
     clnim = clnname
@@ -447,53 +450,8 @@ if doimaging:
     iterdone=0
     itercycle=0
     
-    # =============================================
-    # The part that (optionally) uses an input mask
-    # =============================================
-    if mask != '':
-        logstring = "Cleaning using input mask"
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-
-        try: 
-           tclean(visname,
-                  imagename=clnim,
-                  field=fieldstr,
-                  spw=spwstr,
-                  imsize=[fld_size,fld_size],
-                  cell=[fld_cell,fld_cell],
-                  phasecenter=mycenter,
-                  stokes='I',
-                  startmodel='',
-                  specmode=fld_specmode,
-                  reffreq=fld_reffreq,
-                  gridder=fld_gridder,
-                  pblimit=fld_pblimit,
-                  normtype=fld_normtype,
-                  deconvolver=fld_deconvolver,
-                  restoringbeam=myrestore,
-                  niter=fld_niter,
-                  threshold=fld_threshold_nobox,
-                  cycleniter=fld_cycleniter,
-                  cyclefactor=fld_cyclefactor,
-                  usemask='user',
-                  mask=mask,
-                  interactive=False,
-                  weighting=myweight,
-                  robust=myrobust,
-                  uvtaper=myuvtaper,
-                  makeimages='choose',
-                  calcres=True,
-                  calcpsf=True,
-                  writepb=True,
-                  savemodel=dosavemodel)
-              
-        except:
-            print("error trying to use input mask")
-
     # ==========================================
-    # The part that (optionally) does autoboxing
+    # (Optionally) do autoboxing
     # ==========================================
     if doccbox:
         # make a dirty image to begin with
@@ -932,7 +890,8 @@ if doimaging:
     # ================================
     # Now final clean without box mask
     # ================================
-    logstring = 'Final Cleaning submosaic without mask '
+    # logstring = 'Final Cleaning submosaic without mask '
+    logstring = 'Cleaning submosaic with mask %s' %mask
     print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)
@@ -960,7 +919,8 @@ if doimaging:
                         cycleniter=fld_cycleniter,
                         cyclefactor=fld_cyclefactor,
                         usemask='user',
-                        mask='',
+                        #mask='',
+                        mask = mask,
                         interactive=0,
                         weighting=myweight,
                         robust=myrobust,
