@@ -451,10 +451,10 @@ if doimaging:
     itercycle=0
 
 
-    # ==========================================
-    # (Optionally) do autoboxing
-    # ==========================================
-    if doccbox:
+    # ===============================================
+    # (Optionally) use an input mask, say from PyBDSM
+    # ===============================================
+    if mask != '':
         # make a dirty image to begin with
         try:
             # this is where we create the primary beam .pb image
@@ -512,87 +512,8 @@ if doimaging:
         print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
         
-        # ===== Construct the mask for CCBox
-        os.system('cp -r '+clnresidual[0]+' '+dirtyresidual[0])
-        
-        # construct a PSF with the Gaussian core subtracted 
-        psfresid = clnim+'.psf.subtracted'
-        os.system('rm -rf '+psfresid)
-        immath(imagename=clnpsf[0],mode='evalexpr',expr='1.0*IM0',outfile=psfresid)
-        ia.open(psfresid)
-        psfimstat1=ia.statistics()
-        # maxpos and minpos are the coordinates of the
-        # max and min pixel values respectively
-        blcx=psfimstat1['maxpos'][0]-20
-        trcx=psfimstat1['maxpos'][0]+20
-        blcy=psfimstat1['maxpos'][1]-20
-        trcy=psfimstat1['maxpos'][1]+20
-        blctrc=str(blcx)+','+str(blcy)+','+str(trcx)+','+str(trcy)
-        clrec=ia.fitcomponents(box=blctrc)
-        ia.modify(clrec['results'],subtract=True)
-        ia.close()
-        psfimstat2=imstat(imagename=psfresid)
-        psfmin=max(abs(psfimstat2['min'][0]),psfimstat2['max'][0])
-        
-        logstring = 'Using PSF sidelobe level for masking = '+str(psfmin)
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        
-        imageimstat=imstat(imagename=dirtyresidual[0])
-        immax=imageimstat['max'][0]
-        imRMS=imageimstat['rms'][0]
-        logstring = "Dirty image RMS = "+str(imRMS)
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        
-        pksnr=immax/imRMS
-        logstring = 'Dirty image Peak/rms = '+str(pksnr)
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        
-        # threshold for initial mask is defined by immax*n*abs(psfmin) (n>=2),
-        # unless abs(psfmin)>0.5, in which case do something different...
-        if abs(psfmin)<0.5:
-            threshfraction=psfmin*int(0.5/psfmin)
-        else:
-            threshfraction=1.05*psfmin
-        #
-        thresh1=immax*threshfraction
-        logstring = 'Cycle '+str(itercycle)+' initial threshold = '+str(thresh1)
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        
-        maskname=clnim+'.cycle'+str(itercycle)
-        immath(imagename=dirtyresidual[0],mode='evalexpr',
-               expr='iif(IM0>'+str(thresh1)+',1.0,0.0)',
-               outfile=maskname+'_mask',stokes='I')
-       
-        dist1 = psfimstat1['maxpos'][0]-psfimstat1['minpos'][0]
-        dist2 = psfimstat1['maxpos'][1]-psfimstat1['minpos'][1]
-        fwhm1 = cellsize * sqrt(dist1**2+dist2**2)
-        fwhm1str=str(fwhm1)+'arcsec'
-        logstring = 'Smoothing mask with FWHM='+fwhm1str
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        imsmooth(imagename=maskname+'_mask',kernel='gauss',major=fwhm1str,minor=fwhm1str,
-                 pa='0deg',outfile=maskname+'_sm_mask')
-
-        tmpimstat=imstat(imagename=maskname+'_sm_mask')
-        maskpk=tmpimstat['max'][0]
-        threshmask = maskname+'_sm_thresh_mask'
-        immath(imagename=maskname+'_sm_mask',mode='evalexpr',
-                  expr='iif(IM0>'+str(maskpk/2.0)+',1.0,0.0)',
-                  outfile=threshmask,stokes='I')
-        logstring = 'Created smoothed thresholded mask image '+threshmask
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        
+        # ===== Have a look at the provided mask
+        threshmask = mask
         maskstat=imstat(threshmask)
         npix = int(maskstat['sum'][0])
         logstring = 'Mask image contains %s active pixels' %str(npix)
@@ -880,7 +801,7 @@ if doimaging:
         # Save last mask
         os.system('cp -r '+clnim+'.mask '+clnim+'_lastmask_mask')
     else:
-        logstring = 'Will NOT do any autoboxing'
+        logstring = 'Will NOT use an input mask'
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
