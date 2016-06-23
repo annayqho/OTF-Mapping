@@ -1047,8 +1047,8 @@ if doimaging:
                         cycleniter=fld_cycleniter,
                         cyclefactor=fld_cyclefactor,
                         usemask='user',
-                        #mask='',
-                        mask = mask,
+                        mask='',
+                        #mask = mask,
                         interactive=0,
                         weighting=myweight,
                         robust=myrobust,
@@ -1056,7 +1056,8 @@ if doimaging:
                         makeimages='auto',
                         calcres=True,
                         calcpsf=True,
-                        savemodel=dosavemodel)
+                        savemodel=dosavemodel,
+                        parallel=True)
         
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
