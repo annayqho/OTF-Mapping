@@ -455,63 +455,6 @@ if doimaging:
     # (Optionally) use an input mask, say from PyBDSM
     # ===============================================
     if mask != '':
-        # make a dirty image to begin with
-        try:
-            # this is where we create the primary beam .pb image
-            tclean(visname,
-                   imagename=clnim,
-                   field=fieldstr,
-                   spw=spwstr,
-                   imsize=[fld_size,fld_size],
-                   cell=[fld_cell,fld_cell],
-                   phasecenter=mycenter,
-                   stokes='I',
-                   startmodel='',
-                   specmode=fld_specmode,
-                   reffreq=fld_reffreq,
-                   gridder=fld_gridder,
-                   pblimit=fld_pblimit,
-                   normtype=fld_normtype,
-                   deconvolver=fld_deconvolver,
-                   restoringbeam=myrestore,
-                   niter=0,
-                   threshold=fld_threshold,
-                   cycleniter=fld_cycleniter,
-                   cyclefactor=fld_cyclefactor,
-                   usemask='user',
-                   mask='',
-                   interactive=False,
-                   weighting=myweight,
-                   robust=myrobust,
-                   uvtaper=myuvtaper,
-                   makeimages='choose',
-                   calcres=True,
-                   calcpsf=True,
-                   writepb=True,
-                   savemodel=dosavemodel)
-        except:
-            logstring = 'WARNING: Failed creating dirty submosaic'
-            print(logstring)
-            casalog.post(logstring)
-            logbuffer.append(logstring)
-        
-        # Save parameters from this run
-        os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
-        
-        currTime=time.time()
-        stagedur = currTime-prevTime
-        stepname = 'tclean'
-        if steptimes.has_key(stepname):
-            steptimes[stepname]+=stagedur
-        else:
-            steplist.append(stepname)
-            steptimes[stepname]=stagedur
-        stagestr = stepname+' dirty cycle '+str(itercycle)
-        stagetime.append(stagedur)
-        stagename.append(stagestr)
-        print(stagestr+' took '+str(stagedur)+' sec')
-        prevTime = currTime
-        
         # ===== Have a look at the provided mask
         threshmask = mask
         maskstat=imstat(threshmask)
