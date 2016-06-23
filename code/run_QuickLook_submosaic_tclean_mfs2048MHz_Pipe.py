@@ -519,7 +519,8 @@ if doimaging:
                         makeimages='choose',
                         calcres=False,
                         calcpsf=False,
-                        savemodel=dosavemodel)
+                        savemodel=dosavemodel,
+                        parallel=True)
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
@@ -615,7 +616,8 @@ if doimaging:
                    calcres=True,
                    calcpsf=True,
                    writepb=True,
-                   savemodel=dosavemodel)
+                   savemodel=dosavemodel,
+                   parallel=True)
         except:
             logstring = 'WARNING: Failed creating dirty submosaic'
             print(logstring)
@@ -782,7 +784,8 @@ if doimaging:
                         makeimages='choose',
                         calcres=False,
                         calcpsf=False,
-                        savemodel=dosavemodel)
+                        savemodel=dosavemodel,
+                        parallel=True)
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
@@ -941,7 +944,8 @@ if doimaging:
                                 makeimages='choose',
                                 calcres=False,
                                 calcpsf=False,
-                                savemodel=dosavemodel)
+                                savemodel=dosavemodel,
+                                parallel=True)
                 itercycle+=1
                 os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
                 if imresult.has_key('iterdone'):

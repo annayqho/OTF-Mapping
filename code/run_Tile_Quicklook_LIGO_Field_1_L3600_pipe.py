@@ -124,8 +124,8 @@ clear_pointing = True
 doccbox = False
 
 # Enable input mask (or not)
-# mask = ''
-mask = 'test.pybdsm_gaus_model.image'
+mask = ''
+# mask = 'test.pybdsm_gaus_model.image'
 
 # Autoboxing parameters if doccbox = True
 if doccbox:
