@@ -481,9 +481,7 @@ if doimaging:
         # =============================
         # Do first real clean iteration
         # =============================
-        box_threshold = 3.0*imRMS
-        if box_threshold<fld_thresholdJy:
-            box_threshold = fld_thresholdJy
+        box_threshold = fld_threshold_nobox
         logstring = 'Cleaning submosaic with mask image %s to %s Jy' \
                 %(threshmask, str(box_threshold))
         print(logstring)
@@ -520,7 +518,7 @@ if doimaging:
                         calcres=False,
                         calcpsf=False,
                         savemodel=dosavemodel,
-                        parallel=True)
+                        parallel=parallel)
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
@@ -617,7 +615,7 @@ if doimaging:
                    calcpsf=True,
                    writepb=True,
                    savemodel=dosavemodel,
-                   parallel=True)
+                   parallel=parallel)
         except:
             logstring = 'WARNING: Failed creating dirty submosaic'
             print(logstring)
@@ -785,7 +783,7 @@ if doimaging:
                         calcres=False,
                         calcpsf=False,
                         savemodel=dosavemodel,
-                        parallel=True)
+                        parallel=parallel)
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
         if imresult.has_key('iterdone'):
@@ -945,7 +943,7 @@ if doimaging:
                                 calcres=False,
                                 calcpsf=False,
                                 savemodel=dosavemodel,
-                                parallel=True)
+                                parallel=parallel)
                 itercycle+=1
                 os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
                 if imresult.has_key('iterdone'):
@@ -1061,7 +1059,7 @@ if doimaging:
                         calcres=True,
                         calcpsf=True,
                         savemodel=dosavemodel,
-                        parallel=True)
+                        parallel=parallel)
         
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')

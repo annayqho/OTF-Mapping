@@ -124,7 +124,7 @@ clear_pointing = True
 doccbox = False
 
 # Enable input mask (or not)
-mask = ''
+mask = '/lustre/aoc/observers/aho/VLASS_Field/img.TSKY0001.sb32295801.eb32296475.57549.31722762731_QuickLook_CCBox_L3600.clean.mask'
 # mask = 'test.pybdsm_gaus_model.image'
 
 # Autoboxing parameters if doccbox = True
@@ -134,6 +134,15 @@ if doccbox:
     box_cyclefactor = 4.5
     box_cycleniter = 500
     peaksnrlimit = 5.0
+
+# Masking parameters if mask != ''
+if mask != '':
+    maxboxcycles = 3
+    box_niter = 10000
+    box_cyclefactor = 4.5
+    box_cycleniter = 500
+    peaksnrlimit = 5.0
+
 
 # UV taper
 douvtaper = False
@@ -164,6 +173,7 @@ doimaging = True
 docleanup = False
 dousescratch = True
 dostats = True
+parallel = False
 
 #------------------------------------------------------------------------------------
 # Derive tile and subtile locations, and run imaging script
