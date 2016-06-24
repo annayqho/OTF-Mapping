@@ -515,8 +515,8 @@ if doimaging:
                         robust=myrobust,
                         uvtaper=myuvtaper,
                         makeimages='choose',
-                        calcres=False,
-                        calcpsf=False,
+                        calcres=True,
+                        calcpsf=True,
                         savemodel=dosavemodel,
                         parallel=parallel)
         itercycle+=1
@@ -532,17 +532,10 @@ if doimaging:
         casalog.post(logstring)
         logbuffer.append(logstring)
         
-        oldRMS=imRMS
         imageimstat=imstat(imagename=clnresidual[0])
         immax=imageimstat['max'][0]
         imRMS=imageimstat['rms'][0]
         logstring = "Residual RMS = "+str(imRMS)
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        
-        RMSratio=((oldRMS-imRMS)/(oldRMS))
-        logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
@@ -567,12 +560,222 @@ if doimaging:
         print(stagestr+' took '+str(stagedur)+' sec')
         prevTime = currTime
         
-        doboxed = False # only do one round
+        if pksnr > peaksnrlimit and iterdone > 0:
+            doboxed = True
+        else:
+            doboxed = False
+
+        # Calculate threshfraction
+        # construct a PSF with the Gaussian core subtracted 
+        psfresid = clnim+'.psf.subtracted'
+        os.system('rm -rf '+psfresid)
+        immath(imagename=clnpsf[0],mode='evalexpr',expr='1.0*IM0',outfile=psfresid,stokes='I')
+        ia.open(psfresid)
+        psfimstat1=ia.statistics()
+        # maxpos and minpos are the coordinates of the
+        # max and min pixel values respectively
+        blcx=psfimstat1['maxpos'][0]-20
+        trcx=psfimstat1['maxpos'][0]+20
+        blcy=psfimstat1['maxpos'][1]-20
+        trcy=psfimstat1['maxpos'][1]+20
+        blctrc=str(blcx)+','+str(blcy)+','+str(trcx)+','+str(trcy)
+        clrec=ia.fitcomponents(box=blctrc)
+        ia.modify(clrec['results'],subtract=True)
+        ia.close()
+        psfimstat2=imstat(imagename=psfresid)
+        psfmin=max(abs(psfimstat2['min'][0]),psfimstat2['max'][0])
+        
+        logstring = 'Using PSF sidelobe level for masking = '+str(psfmin)
+        print(logstring)
+        casalog.post(logstring)
+        logbuffer.append(logstring)
+        
+        # threshold for initial mask is defined by immax*n*abs(psfmin) (n>=2),
+        # unless abs(psfmin)>0.5, in which case do something different...
+        if abs(psfmin)<0.5:
+            threshfraction=psfmin*int(0.5/psfmin)
+        else:
+            threshfraction=1.05*psfmin
+ 
+        
+        # ==========
+        # now iterate
+        # ==========
+        while doboxed:
+            if pksnr>peaksnrlimit and iterdone>0 and imRMS>fld_thresholdJy:
+                logstring = "RMS ratio too high: more cleaning required ..."
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                maskname=clnim+'.cycle'+str(itercycle)
+                os.system('cp -rf '+clnim+'.mask '+maskname+'_oldmask')
+                thresh2=immax*threshfraction
+                logstring = 'Cycle %s new initial threshold = %s' \
+                        %(str(itercycle), str(thresh2))
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                immath(
+                        imagename=clnresidual[0],mode='evalexpr',
+                        expr='iif(IM0>'+str(thresh2)+',1.0,0.0)',
+                        outfile=maskname+'_mask',stokes='I')
+                imsmooth(
+                        imagename=maskname+'_mask',kernel='gauss',
+                        major=fwhm1str,minor=fwhm1str,
+                        pa='0deg',outfile=maskname+'_sm_mask')
+                tmpimstat=imstat(imagename=maskname+'_sm_mask')
+                maskpk=tmpimstat['max'][0]
+                immath(
+                        imagename=maskname+'_sm_mask',mode='evalexpr',
+                        expr='iif(IM0>'+str(maskpk/2.0)+',1.0,0.0)',
+                        outfile=maskname+'_sm_thresh_mask',stokes='I')
+                threshmask = maskname+'_sm_sum_mask'
+                immath(imagename=[maskname+'_sm_thresh_mask',
+                                  maskname+'_oldmask'],mode='evalexpr',
+                       expr='max(IM0,IM1)',outfile=threshmask,
+                       stokes='I')
+                
+                logstring = 'Created smoothed thresholded summed mask image '+threshmask
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                
+                maskstat=imstat(threshmask)
+                logstring = 'Mask image contains %s active pixels' \
+                        %str(int(maskstat['sum'][0]))
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                
+                currTime=time.time()
+                stagedur = currTime-prevTime
+                stepname = 'masking'
+                if steptimes.has_key(stepname):
+                    steptimes[stepname]+=stagedur
+                else:
+                    steplist.append(stepname)
+                    steptimes[stepname]=stagedur
+                stagestr = stepname+' iter '+str(iterdone)
+                stagetime.append(stagedur)
+                stagename.append(stagestr)
+                print(stagestr+' took '+str(stagedur)+' sec')
+                prevTime = currTime
+                
+                box_threshold=3.0*imRMS
+                if box_threshold<fld_thresholdJy:
+                       box_threshold = fld_thresholdJy
+                logstring = 'Cleaning submosaic with mask image %s to %s Jy' \
+                        %(threshmask, str(box_threshold))
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+
+                # for 4.5.1 have to copy this mask to .mask
+                os.system('cp -rf '+threshmask+' '+clnim+'.mask ')
+                
+                # call tclean with interactive=0 to return iterations
+                imresult=tclean(visname,
+                                imagename=clnim,
+                                field=fieldstr,
+                                spw=spwstr,
+                                imsize=[fld_size,fld_size],
+                                cell=[fld_cell,fld_cell],
+                                phasecenter=mycenter,
+                                stokes='I',
+                                startmodel='',
+                                specmode=fld_specmode,
+                                reffreq=fld_reffreq,
+                                gridder=fld_gridder,
+                                pblimit=fld_pblimit,
+                                normtype=fld_normtype,
+                                deconvolver=fld_deconvolver,
+                                restoringbeam=myrestore,
+                                niter=box_niter,
+                                threshold=box_threshold,
+                                cycleniter=box_cycleniter,
+                                cyclefactor=box_cyclefactor,
+                                usemask='user',
+                                mask='',
+                                interactive=0,
+                                weighting=myweight,
+                                robust=myrobust,
+                                uvtaper=myuvtaper,
+                                makeimages='choose',
+                                calcres=False,
+                                calcpsf=False,
+                                savemodel=dosavemodel,
+                                parallel=parallel)
+                itercycle+=1
+                os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
+                if imresult.has_key('iterdone'):
+                    iterdone=imresult['iterdone']
+                    logstring = 'Imaging for cycle %s completed with %s iterations' \
+                            %(str(itercycle), str(iterdone))
+                else:
+                    iterdone+=1
+                    logstring = 'Imaging for cycle '+str(itercycle)+' completed'
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                
+                oldRMS=imRMS
+                imageimstat=imstat(imagename=clnresidual[0])
+                immax=imageimstat['max'][0]
+                imRMS=imageimstat['rms'][0]
+                logstring = "Residual RMS = "+str(imRMS)
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                
+                RMSratio=((oldRMS-imRMS)/(oldRMS))
+                logstring = "(OLD RMS - NEW RMS) / OLD RMS = "+str(RMSratio)
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                
+                pksnr=immax/imRMS
+                logstring = 'Peak/rms = '+str(pksnr)
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                
+                currTime=time.time()
+                stagedur = currTime-prevTime
+                stepname = 'tclean'
+                if steptimes.has_key(stepname):
+                    steptimes[stepname]+=stagedur
+                else:
+                    steplist.append(stepname)
+                    steptimes[stepname]=stagedur
+                stagestr = stepname+' boxed cycle '+str(itercycle)
+                stagetime.append(stagedur)
+                stagename.append(stagestr)
+                print(stagestr+' took '+str(stagedur)+' sec')
+                prevTime = currTime
+                
+                # Possibly terminate boxed cleaning
+                if itercycle>=maxboxcycles:
+                    doboxed=False
+                    logstring = "Reached max number of boxed cycles, terminating boxing"
+                    print(logstring)
+                    casalog.post(logstring)
+                    logbuffer.append(logstring)
+            else:
+                logstring = "No more boxed cleaning needed, finishing up"
+                print(logstring)
+                casalog.post(logstring)
+                logbuffer.append(logstring)
+                doboxed=False
+        
+        # Save last mask
+        os.system('cp -r '+clnim+'.mask '+clnim+'_lastmask_mask')
+
     else:
         logstring = 'Will NOT use an input mask'
         print(logstring)
         casalog.post(logstring)
         logbuffer.append(logstring)
+        
     # ==========================================
     # END of (optional) input mask code
     # ==========================================
@@ -645,7 +848,7 @@ if doimaging:
         # construct a PSF with the Gaussian core subtracted 
         psfresid = clnim+'.psf.subtracted'
         os.system('rm -rf '+psfresid)
-        immath(imagename=clnpsf[0],mode='evalexpr',expr='1.0*IM0',outfile=psfresid)
+        immath(imagename=clnpsf[0],mode='evalexpr',expr='1.0*IM0',outfile=psfresid,stokes='I')
         ia.open(psfresid)
         psfimstat1=ia.statistics()
         # maxpos and minpos are the coordinates of the
@@ -1020,8 +1223,8 @@ if doimaging:
     # ================================
     # Now final clean without box mask
     # ================================
-    # logstring = 'Final Cleaning submosaic without mask '
-    logstring = 'Cleaning submosaic with mask %s' %mask
+    logstring = 'Final Cleaning submosaic without mask '
+    # logstring = 'Cleaning submosaic with mask %s' %mask
     print(logstring)
     casalog.post(logstring)
     logbuffer.append(logstring)

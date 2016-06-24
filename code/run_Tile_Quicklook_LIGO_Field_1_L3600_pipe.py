@@ -173,7 +173,7 @@ doimaging = True
 docleanup = False
 dousescratch = True
 dostats = True
-parallel = False
+parallel = True
 
 #------------------------------------------------------------------------------------
 # Derive tile and subtile locations, and run imaging script
