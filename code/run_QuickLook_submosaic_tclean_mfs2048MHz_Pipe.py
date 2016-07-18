@@ -105,7 +105,8 @@ dostartmodel = True
 # Widefield parameters
 fld_wprojplanes=1
 fld_facets=1
-fld_gridder='mosaic'
+#fld_gridder='mosaic'
+fld_gridder='awproject'
 fld_pblimit=0.2
 fld_normtype='flatnoise'
 fld_wbawp = True
@@ -492,8 +493,8 @@ if doimaging:
                         imagename=clnim,
                         field=fieldstr,
                         spw=spwstr,
-                        imsize=[fld_size,fld_size],
-                        cell=[fld_cell,fld_cell],
+                        imsize=fld_size,
+                        cell=fld_cell,
                         phasecenter=mycenter,
                         stokes='I',
                         startmodel='',
@@ -512,12 +513,17 @@ if doimaging:
                         mask=threshmask,
                         interactive=0,
                         weighting=myweight,
+                        # this cfcache seems to help things:
+                        # (it's a place to store your gridding functions)
+                        cfcache = "cfcache_v1",
                         robust=myrobust,
                         uvtaper=myuvtaper,
-                        makeimages='choose',
+                        #makeimages='choose',
+                        #makeimages='auto',
                         calcres=True,
                         calcpsf=True,
-                        savemodel=dosavemodel,
+                        #savemodel=dosavemodel,
+                        savemodel='none',
                         parallel=parallel)
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')

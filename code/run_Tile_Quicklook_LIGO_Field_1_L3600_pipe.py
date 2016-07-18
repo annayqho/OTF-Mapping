@@ -49,7 +49,7 @@ def subtile_padding(band):
 data_dir = '/lustre/aoc/observers/aho/VLASS_Field/' 
 
 # sample VLASS field, for testing PyBDSM mask
-mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731_calibrated_target'
+mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
 
 calibrated_ms = data_dir + mydataset + '.ms' 
 
@@ -109,7 +109,8 @@ subtile_prefix = 'QuickLook_CCBox_L'+str(int(L_subtile_arcsec))
 # imaging_spwstr = ['1~14']
 
 # for Steve's VLASS box:
-imaging_spwstr = ['0~4,8~15']
+#imaging_spwstr = ['0~4,8~15']
+imaging_spwstr = ['8~10']
 
 # We don't want any specific intents
 myintentstr = ''
@@ -173,7 +174,7 @@ doimaging = True
 docleanup = False
 dousescratch = True
 dostats = True
-parallel = True
+parallel =  True
 
 #------------------------------------------------------------------------------------
 # Derive tile and subtile locations, and run imaging script
@@ -190,32 +191,33 @@ subtile_delta_rad = subtile_delta_arcsec/206264.806
 # Making the small angle approximation
 subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
 
-# Loop over subtiles
-for j_subtile in range(Num_subtile_dec):
-    for i_subtile in range(Num_subtile_ra):
-        # Shift to subtile center:
-        d_subtile_ra_rad = (i_subtile - 0.5*(Num_subtile_ra-1.0))*subtile_delta_ra_rad
-        d_subtile_dec_rad = (j_subtile - 0.5*(Num_subtile_dec-1.0))*subtile_delta_rad
-        
-        ra_subtile_rad = tile_center_ra_rad + d_subtile_ra_rad
-        if ra_subtile_rad>(pl.pi):
-            ra_subtile_rad = 2.*pl.pi - ra_subtile_rad
-        elif ra_subtile_rad<=(-pl.pi):
-            ra_subtile_rad = -2.*pl.pi - ra_subtile_rad
-        
-        dec_subtile_rad = tile_center_dec_rad + d_subtile_dec_rad
-        if dec_subtile_rad>=(0.5*pl.pi):
-            dec_subtile_rad = pl.pi - dec_subtile_rad
-        
-        subtile_center_dir = copy.deepcopy(tile_center_dir)
-        subtile_center_dir['m0']['value'] = ra_subtile_rad
-        subtile_center_dir['m1']['value'] = dec_subtile_rad
-        
-        # Run the script to image this subtile at location subtile_center_dir:
-        execfile(scriptfile)
+# there's only one subtile
+j_subtile = 0
+i_subtile = 0
 
-print('Subtile imaging complete')
+# Shift to subtile center:
+d_subtile_ra_rad = (i_subtile - 0.5*(Num_subtile_ra-1.0))*subtile_delta_ra_rad
+d_subtile_dec_rad = (j_subtile - 0.5*(Num_subtile_dec-1.0))*subtile_delta_rad
 
-endRunTime=time.time()
-TotalRunTime = (endRunTime - startRunTime)
-print('Total run time was: %10.3f seconds ' % (TotalRunTime))
+ra_subtile_rad = tile_center_ra_rad + d_subtile_ra_rad
+if ra_subtile_rad>(pl.pi):
+    ra_subtile_rad = 2.*pl.pi - ra_subtile_rad
+elif ra_subtile_rad<=(-pl.pi):
+    ra_subtile_rad = -2.*pl.pi - ra_subtile_rad
+
+dec_subtile_rad = tile_center_dec_rad + d_subtile_dec_rad
+if dec_subtile_rad>=(0.5*pl.pi):
+    dec_subtile_rad = pl.pi - dec_subtile_rad
+
+subtile_center_dir = copy.deepcopy(tile_center_dir)
+subtile_center_dir['m0']['value'] = ra_subtile_rad
+subtile_center_dir['m1']['value'] = dec_subtile_rad
+
+# Run the script to image this subtile at location subtile_center_dir:
+execfile(scriptfile)
+
+# print('Subtile imaging complete')
+
+# endRunTime=time.time()
+# TotalRunTime = (endRunTime - startRunTime)
+# print('Total run time was: %10.3f seconds ' % (TotalRunTime))
