@@ -518,8 +518,8 @@ if doimaging:
                         #makeimages='auto',
                         calcres=True,
                         calcpsf=True,
-                        #savemodel=dosavemodel,
-                        savemodel='none',
+                        savemodel=dosavemodel,
+                        #savemodel='none',
                         parallel=parallel)
         itercycle+=1
         os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')

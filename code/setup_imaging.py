@@ -65,7 +65,8 @@ use_target_fields = ['^0','^1','^2']
 
 # Choose imaging script(s)
 use_script_dir = '/users/aho/VLA_GW_Followup/code/'
-scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
+scriptname = 'image_tile.py'
+#scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
 
 # Set tile center
