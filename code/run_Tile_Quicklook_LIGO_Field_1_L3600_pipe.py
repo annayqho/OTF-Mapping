@@ -146,7 +146,12 @@ if mask != '':
 
 # UV taper
 douvtaper = False
-myuvtaper = ['7.0arcsec']
+if douvtaper == True:
+    myuvtaper = ['7.0arcsec']
+elif douvtaper == False:
+    myuvtaper = []
+else:
+    print("uvtaper set incorrectly?")
 
 # Number of Taylor terms for MFS
 fld_nterms = 1
