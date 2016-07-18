@@ -71,7 +71,10 @@ scriptfile = use_script_dir + scriptname
 # Set tile center
 tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
-# (RA, dec) = (54.70525568 deg, 37. deg)
+# (RA, dec) from Kunal = (54.70525568 deg, 37. deg)
+# corresponds to:
+# tile_center_ra = '03:38:49.26'
+# tile_center_Dec = '37:00:00.00'
 # tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
 # tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 
@@ -109,8 +112,8 @@ subtile_prefix = 'QuickLook_CCBox_L'+str(int(L_subtile_arcsec))
 # imaging_spwstr = ['1~14']
 
 # for Steve's VLASS box:
-#imaging_spwstr = ['0~4,8~15']
-imaging_spwstr = ['8~10']
+imaging_spwstr = ['0~4,8~15']
+#imaging_spwstr = ['11~12']
 
 # We don't want any specific intents
 myintentstr = ''

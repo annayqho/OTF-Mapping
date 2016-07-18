@@ -105,11 +105,10 @@ dostartmodel = True
 # Widefield parameters
 fld_wprojplanes=1
 fld_facets=1
-#fld_gridder='mosaic'
-fld_gridder='awproject'
+fld_gridder='mosaic'
 fld_pblimit=0.2
 fld_normtype='flatnoise'
-fld_wbawp = True
+# fld_wbawp = True
 
 # Deconvolver and multiscale
 fld_deconvolver='hogbom'
@@ -513,9 +512,6 @@ if doimaging:
                         mask=threshmask,
                         interactive=0,
                         weighting=myweight,
-                        # this cfcache seems to help things:
-                        # (it's a place to store your gridding functions)
-                        cfcache = "cfcache_v1",
                         robust=myrobust,
                         uvtaper=myuvtaper,
                         #makeimages='choose',
