@@ -10,7 +10,6 @@ def lprint(msg, lfile):
     print(msg)
     print >>mylogfile, msg
 
-#================================================================================
 
 def introduce_myself():
     """ Print a basic intro message """
@@ -24,6 +23,15 @@ def introduce_myself():
     logstring = myscriptvers
     print(logstring)
     logbuffer.append(logstring)
+
+
+def find_sources():
+    """ Use PyBDSM to identify point sources.
+    Ideally, would feed it a fits image, have it spit out
+    an image in CASA or .fits format.
+    bash script could call CASA that does some bit of cleaning.
+    Then run PyBDSM then run the rest of CASA. """
+    print("Coming soon...")
 
 #================================================================================
 # Set submosaic center
