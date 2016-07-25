@@ -147,6 +147,26 @@ if mask != '':
     peaksnrlimit = 5.0
 
 
+# Widefield parameters
+fld_wprojplanes=1
+fld_facets=1
+fld_gridder='mosaic'
+fld_pblimit=0.2
+fld_normtype='flatnoise'
+
+# More imaging stuff
+myweight = 'briggs'
+myrmode='norm'
+myrobust=1.0
+
+# Save model
+dosavemodel = 'modelcolumn'
+
+# Deconvolver and multiscale
+fld_deconvolver='hogbom'
+fld_specmode = 'mfs'
+fld_reffreq = '3.0GHz'
+
 # UV taper
 douvtaper = False
 if douvtaper == True:
