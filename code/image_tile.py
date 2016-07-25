@@ -11,16 +11,19 @@ def lprint(msg, lfile):
     print >>mylogfile, msg
 
 #================================================================================
-logbuffer = []
-mytext = 'VLASS QuickLook submosaic TClean MFS TT0-only JointMosaic'
-myscriptvers = '2016-06-14 STM (4.6.0)'
 
-logstring = mytext
-print(logstring)
-logbuffer.append(logstring)
-logstring = myscriptvers
-print(logstring)
-logbuffer.append(logstring)
+def introduce_myself():
+    """ Print a basic intro message """
+    logbuffer = []
+    mytext = 'VLA OTFM QuickLook submosaic TClean MFS TT0-only JointMosaic'
+    myscriptvers = '2016-07-25 AYQH'
+
+    logstring = mytext
+    print(logstring)
+    logbuffer.append(logstring)
+    logstring = myscriptvers
+    print(logstring)
+    logbuffer.append(logstring)
 
 #================================================================================
 # Set submosaic center
