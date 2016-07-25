@@ -15,10 +15,10 @@ def lprint(msg, lfile):
 def introduce_myself():
     """ Print a basic intro message """
     logbuffer = []
-    mytext = 'VLA OTFM QuickLook submosaic TClean MFS TT0-only JointMosaic'
+    myscript = 'VLA OTFM QuickLook submosaic TClean MFS TT0-only JointMosaic'
     myscriptvers = '2016-07-25 AYQH'
 
-    logstring = mytext
+    logstring = myscript
     print(logstring)
     logbuffer.append(logstring)
     logstring = myscriptvers
