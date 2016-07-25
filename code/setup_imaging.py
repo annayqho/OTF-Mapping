@@ -75,10 +75,10 @@ tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) from Kunal = (54.70525568 deg, 37. deg)
 # corresponds to:
-tile_center_ra = '03:38:49.26'
-tile_center_Dec = '37:00:00.00'
-# tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
-# tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
+# tile_center_ra = '03:38:49.26'
+# tile_center_Dec = '37:00:00.00'
+tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
+tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 
 # from Steve's VLASS script:
 # tile_center_ra = '21:00:00.00'
@@ -166,9 +166,16 @@ myrobust=1.0
 dosavemodel = 'modelcolumn'
 
 # Deconvolver and multiscale
-fld_deconvolver='hogbom'
+# fld_deconvolver='hogbom'
+# for Multi-Taylor:
+use_multiscale = True
+fld_deconvolver='mtmfs'
 fld_specmode = 'mfs'
 fld_reffreq = '3.0GHz'
+
+# Number of Taylor terms for MFS
+fld_nterms = 2
+use_nterms = 2
 
 # UV taper
 douvtaper = False
@@ -179,19 +186,20 @@ elif douvtaper == False:
 else:
     print("uvtaper set incorrectly?")
 
-# Number of Taylor terms for MFS
-fld_nterms = 1
-
 # Multiscale
-fld_multiscale=[0]
+# fld_multiscale = [0]
+fld_multiscale=[0,3,10]
+use_multiscale = [0,3,10]
+# what I did for Kunal...multiscale [0,3,10]
 
 # Imaging parameters (specific to this observation)
-fld_threshold = '0.000180Jy' # survey depth x1.5
+fld_threshold = '0.000180Jy' # survey depth x1.5, GW same as VLASS
 fld_threshold_nobox = fld_threshold
-# use_restore = '8.0arcsec' # circular restoring beam size
 
+# for LIGO
+use_restore = '8.0arcsec' # circular restoring beam size
 # for Steve's VLASS box:
-use_restore = '2.5arcsec'    # circular restoring beam size if desired
+# use_restore = '2.5arcsec'    # circular restoring beam size if desired
 
 # These you tune for quality of imaging
 # clean iterations w/o box
@@ -237,8 +245,8 @@ subtile_center_dir['m1']['value'] = tile_center_dec_rad
 # Run the script to image this subtile at location subtile_center_dir:
 execfile(scriptfile)
 
-# print('Subtile imaging complete')
+print('Subtile imaging complete')
 
-# endRunTime=time.time()
-# TotalRunTime = (endRunTime - startRunTime)
-# print('Total run time was: %10.3f seconds ' % (TotalRunTime))
+endRunTime=time.time()
+TotalRunTime = (endRunTime - startRunTime)
+print('Total run time was: %10.3f seconds ' % (TotalRunTime))
