@@ -169,7 +169,7 @@ if 'subtile_prefix' in locals() or 'subtile_prefix' in globals():
     postfix ='_'+ subtile_prefix
 else:
     postfix='_submos_tmfs2048MHz_TT0_Nobox_robust1'
-tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
+tiling='_subtile_%i_%i' % ("0","0")
 scriptprefix=prefix+postfix+tiling
 
 if 'subtile_dirname' in locals() or 'subtile_dirname' in globals():
