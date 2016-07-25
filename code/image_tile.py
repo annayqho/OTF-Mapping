@@ -33,22 +33,24 @@ def find_sources():
     Then run PyBDSM then run the rest of CASA. """
     print("Coming soon...")
 
-#================================================================================
-# Set submosaic center
-#================================================================================
 
-# subtile_center_dir #
-# was created in the run_Tile script
-mycenter_dir = copy.deepcopy(subtile_center_dir)
-epo = mycenter_dir['refer']
-rapos = mycenter_dir['m0']
-decpos = mycenter_dir['m1']
-ral = qa.angle(rapos,form=["tim"],prec=9)
-decl = qa.angle(decpos,prec=10)
-mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
-logstring = 'SubMosaic center = '+mycenter
-print(logstring)
-logbuffer.append(logstring)
+def set_center(subtile_center_dir):
+    """ Set submosaic center & record it
+    
+    Parameters
+    ----------
+    subtile_center_dir: direction of center
+    """
+    mycenter_dir = copy.deepcopy(subtile_center_dir)
+    epo = mycenter_dir['refer']
+    rapos = mycenter_dir['m0']
+    decpos = mycenter_dir['m1']
+    ral = qa.angle(rapos,form=["tim"],prec=9)
+    decl = qa.angle(decpos,prec=10)
+    mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
+    logstring = 'SubMosaic center = '+mycenter
+    print(logstring)
+    logbuffer.append(logstring)
 
 #================================================================================
 # Other setup stuff specific to this dataset

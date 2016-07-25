@@ -84,8 +84,6 @@ tile_center_ra = '21:00:00.00'
 tile_center_dec = '00.00.00.0'
 
 # Set up the subtiles: number and separation
-Num_subtile_ra = 1 # single subtile
-Num_subtile_dec = 1
 L_subtile_arcsec = 3600.0 # in arcseconds (so 3600.0 for a degree)
 # size of final subimage
 subtile_delta_arcsec = 3600.0 # distance btwn subtile centers
@@ -200,27 +198,17 @@ subtile_delta_rad = subtile_delta_arcsec/206264.806
 # Making the small angle approximation
 subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
 
-# there's only one subtile
-j_subtile = 0
-i_subtile = 0
+if tile_center_ra_rad>(pl.pi):
+    tile_center_ra_rad = 2.*pl.pi - tile_center_ra_rad
+elif tile_center_ra_rad <= (-pl.pi):
+    tile_center_ra_rad = -2.*pl.pi - tile_center_ra_rad 
 
-# Shift to subtile center:
-d_subtile_ra_rad = (i_subtile - 0.5*(Num_subtile_ra-1.0))*subtile_delta_ra_rad
-d_subtile_dec_rad = (j_subtile - 0.5*(Num_subtile_dec-1.0))*subtile_delta_rad
-
-ra_subtile_rad = tile_center_ra_rad + d_subtile_ra_rad
-if ra_subtile_rad>(pl.pi):
-    ra_subtile_rad = 2.*pl.pi - ra_subtile_rad
-elif ra_subtile_rad<=(-pl.pi):
-    ra_subtile_rad = -2.*pl.pi - ra_subtile_rad
-
-dec_subtile_rad = tile_center_dec_rad + d_subtile_dec_rad
-if dec_subtile_rad>=(0.5*pl.pi):
-    dec_subtile_rad = pl.pi - dec_subtile_rad
+if tile_center_dec_rad >= (0.5*pl.pi):
+    tile_center_dec_rad = pl.pi - tile_center_dec_rad 
 
 subtile_center_dir = copy.deepcopy(tile_center_dir)
-subtile_center_dir['m0']['value'] = ra_subtile_rad
-subtile_center_dir['m1']['value'] = dec_subtile_rad
+subtile_center_dir['m0']['value'] = tile_center_ra_rad
+subtile_center_dir['m1']['value'] = tile_center_dec_rad 
 
 # Run the script to image this subtile at location subtile_center_dir:
 execfile(scriptfile)
