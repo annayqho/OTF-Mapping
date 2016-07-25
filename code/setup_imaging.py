@@ -150,6 +150,26 @@ if mask != '':
     peaksnrlimit = 5.0
 
 
+# Widefield parameters
+fld_wprojplanes=1
+fld_facets=1
+fld_gridder='mosaic'
+fld_pblimit=0.2
+fld_normtype='flatnoise'
+
+# More imaging stuff
+myweight = 'briggs'
+myrmode='norm'
+myrobust=1.0
+
+# Save model
+dosavemodel = 'modelcolumn'
+
+# Deconvolver and multiscale
+fld_deconvolver='hogbom'
+fld_specmode = 'mfs'
+fld_reffreq = '3.0GHz'
+
 # UV taper
 douvtaper = False
 if douvtaper == True:
@@ -202,27 +222,17 @@ subtile_delta_rad = subtile_delta_arcsec/206264.806
 # Making the small angle approximation
 subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
 
-# there's only one subtile
-j_subtile = 0
-i_subtile = 0
+if tile_center_ra_rad>(pl.pi):
+    tile_center_ra_rad = 2.*pl.pi - tile_center_ra_rad
+elif tile_center_ra_rad <= (-pl.pi):
+    tile_center_ra_rad = -2.*pl.pi - tile_center_ra_rad 
 
-# Shift to subtile center:
-d_subtile_ra_rad = (i_subtile - 0.5*(Num_subtile_ra-1.0))*subtile_delta_ra_rad
-d_subtile_dec_rad = (j_subtile - 0.5*(Num_subtile_dec-1.0))*subtile_delta_rad
-
-ra_subtile_rad = tile_center_ra_rad + d_subtile_ra_rad
-if ra_subtile_rad>(pl.pi):
-    ra_subtile_rad = 2.*pl.pi - ra_subtile_rad
-elif ra_subtile_rad<=(-pl.pi):
-    ra_subtile_rad = -2.*pl.pi - ra_subtile_rad
-
-dec_subtile_rad = tile_center_dec_rad + d_subtile_dec_rad
-if dec_subtile_rad>=(0.5*pl.pi):
-    dec_subtile_rad = pl.pi - dec_subtile_rad
+if tile_center_dec_rad >= (0.5*pl.pi):
+    tile_center_dec_rad = pl.pi - tile_center_dec_rad 
 
 subtile_center_dir = copy.deepcopy(tile_center_dir)
-subtile_center_dir['m0']['value'] = ra_subtile_rad
-subtile_center_dir['m1']['value'] = dec_subtile_rad
+subtile_center_dir['m0']['value'] = tile_center_ra_rad
+subtile_center_dir['m1']['value'] = tile_center_dec_rad 
 
 # Run the script to image this subtile at location subtile_center_dir:
 execfile(scriptfile)

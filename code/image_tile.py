@@ -10,152 +10,142 @@ def lprint(msg, lfile):
     print(msg)
     print >>mylogfile, msg
 
-#================================================================================
-logbuffer = []
-mytext = 'VLASS QuickLook submosaic TClean MFS TT0-only JointMosaic'
-myscriptvers = '2016-06-14 STM (4.6.0)'
 
-logstring = mytext
-print(logstring)
-logbuffer.append(logstring)
-logstring = myscriptvers
-print(logstring)
-logbuffer.append(logstring)
+def introduce_myself():
+    """ Print a basic intro message """
+    logbuffer = []
+    myscript = 'VLA OTFM QuickLook submosaic TClean MFS TT0-only JointMosaic'
+    myscriptvers = '2016-07-25 AYQH'
 
-#================================================================================
-# Set submosaic center
-#================================================================================
+    logstring = myscript
+    print(logstring)
+    logbuffer.append(logstring)
+    logstring = myscriptvers
+    print(logstring)
+    logbuffer.append(logstring)
 
-# subtile_center_dir #
-# was created in the run_Tile script
-mycenter_dir = copy.deepcopy(subtile_center_dir)
-epo = mycenter_dir['refer']
-rapos = mycenter_dir['m0']
-decpos = mycenter_dir['m1']
-ral = qa.angle(rapos,form=["tim"],prec=9)
-decl = qa.angle(decpos,prec=10)
-mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
-logstring = 'SubMosaic center = '+mycenter
-print(logstring)
-logbuffer.append(logstring)
 
-#================================================================================
-# Other setup stuff specific to this dataset
-#================================================================================
-# calibrated_ms was created in run_Tile
-splitfile = calibrated_ms
-if os.access(splitfile,F_OK):
-    logstring = 'Found calibrated ms '+splitfile
-else:
-    logstring = 'ERROR: could not find '+splitfile
-print(logstring)
-logbuffer.append(logstring)
+def find_sources():
+    """ Use PyBDSM to identify point sources.
+    Ideally, would feed it a fits image, have it spit out
+    an image in CASA or .fits format.
+    bash script could call CASA that does some bit of cleaning.
+    Then run PyBDSM then run the rest of CASA. """
+    print("Coming soon...")
 
-# calibrated_ms_datacolumn was created in run_Tile
-splitdatacolumn = calibrated_ms_datacolumn
-logstring = 'Will use datacolumn '+splitdatacolumn
-print(logstring)
-logbuffer.append(logstring)
 
-# NOTE: this splitfile is assumed to contain only the target fields that you
-# want to image from, though in principle the getfieldirbox will pull them from
-# even the full pipeline calibrated MS (though you may pull in the setup fields
-# near those corners. What I do is run:
-# msfile = mydataset+'.ms'
-# splitfile = mydataset+'_calibrated_target.ms'
-# targetfields = '0*' # picks out only OTFM fields which for me happen to start with 0*
-# targetintent = '*TARGET*'
-# mstransform(vis=msfile,outputvis=splitfile,datacolumn='corrected',field=targetfields,intent=targetintent,correlation='RR,LL') # not doing polarization yet
+def set_center(subtile_center_dir):
+    """ Set submosaic center & record it
+    
+    Parameters
+    ----------
+    subtile_center_dir: direction of center
+    """
+    mycenter_dir = copy.deepcopy(subtile_center_dir)
+    epo = mycenter_dir['refer']
+    rapos = mycenter_dir['m0']
+    decpos = mycenter_dir['m1']
+    ral = qa.angle(rapos,form=["tim"],prec=9)
+    decl = qa.angle(decpos,prec=10)
+    mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
+    logstring = 'SubMosaic center = '+mycenter
+    print(logstring)
+    logbuffer.append(logstring)
 
-# Option to clear POINTING table before imaging
-if clear_pointing:
-    logstring = 'Will clear MS POINTING table(s)'
-else:
-    logstring = 'MS POINTING table(s) will be used if they contain data'
-print(logstring)
-casalog.post(logstring)
-logbuffer.append(logstring)
 
-#================================================================================
-# Setup stuff not dataset specific
-#================================================================================
+def setup_dataset(calibrated_ms, calibrated_ms_datacolumn, clear_pointing):
+    """ Set up dataset 
+    
+    Parameters
+    ---------
+    calibrated_ms: filename of calibrated ms file
+    calibrated_ms_datacolumn: name of data column to use for imaging
+    clear_pointing: whether to clear POINTING table before imaging
+    """
+    splitfile = calibrated_ms
+    # Make sure it's present
+    if os.access(splitfile,F_OK):
+        logstring = 'Found calibrated ms '+splitfile
+    else:
+        logstring = 'ERROR: could not find '+splitfile
+    print(logstring)
+    logbuffer.append(logstring)
 
-# location for writing out images
-# subtile_prefix & imaging_dirname were set in run_Tile 
-postfix ='_'+ subtile_prefix
-tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
-scriptprefix=mydataset+postfix+tiling
-imaging_dir = imaging_dirname+postfix+tiling
+    # calibrated_ms_datacolumn was created in run_Tile
+    splitdatacolumn = calibrated_ms_datacolumn
+    logstring = 'Will use datacolumn ' + splitdatacolumn
+    print(logstring)
+    logbuffer.append(logstring)
 
-# use_script_dir is set 
-execfile(use_script_dir+'getfieldcone.py')
+    # Option to clear POINTING table before imaging
+    if clear_pointing:
+        logstring = 'Will clear MS POINTING table(s)'
+    else:
+        logstring = 'MS POINTING table(s) will be used if they contain data'
+    print(logstring)
+    casalog.post(logstring)
+    logbuffer.append(logstring)
 
-# Set up some parameters for processing
-sdmfile = calibrated_ms.split('.ms')[0]
-workfile = mydataset + '_calibrated_target_working.ms'
-dosavemodel = 'modelcolumn'
 
-# imaging parms
-visname = imaging_dir+'/'+workfile
-clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
-dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
+def setup_general():
+    """ Setup stuff not dataset-specific """
+    # location for writing out images
+    # subtile_prefix & imaging_dirname were set in run_Tile 
+    postfix ='_'+ subtile_prefix
+    tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
+    scriptprefix=mydataset+postfix+tiling
+    imaging_dir = imaging_dirname+postfix+tiling
 
-dostartmodel = True
+    # use_script_dir is set 
+    execfile(use_script_dir+'getfieldcone.py')
 
-# Widefield parameters
-fld_wprojplanes=1
-fld_facets=1
-fld_gridder='mosaic'
-fld_pblimit=0.2
-fld_normtype='flatnoise'
-# fld_wbawp = True
+    # Set up some parameters for processing
+    sdmfile = calibrated_ms.split('.ms')[0]
+    workfile = mydataset + '_calibrated_target_working.ms'
 
-# Deconvolver and multiscale
-fld_deconvolver='hogbom'
+    # imaging parms
+    visname = imaging_dir+'/'+workfile
+    clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
+    dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
 
-fld_specmode = 'mfs'
-fld_reffreq = '3.0GHz'
+    dostartmodel = True
 
-fld_threshold_q = qa.quantity(fld_threshold)
-fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
-fld_thresholdJy = fld_threshold_qJy['value']
+    fld_threshold_q = qa.quantity(fld_threshold)
+    fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
+    fld_thresholdJy = fld_threshold_qJy['value']
 
-fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
-fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
-fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
+    fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
+    fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
+    fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
 
-cellsize = subtile_pixelsize
-fld_cell = str(cellsize)+'arcsec'
-L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
+    cellsize = subtile_pixelsize
+    fld_cell = str(cellsize)+'arcsec'
+    L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
 
-padding_arcsec = subtile_padding_arcsec
-padding = int(padding_arcsec/cellsize)
-fld_size = L_subtile_pixels + padding
-logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
-print(logstring)
-logbuffer.append(logstring)
+    padding_arcsec = subtile_padding_arcsec
+    padding = int(padding_arcsec/cellsize)
+    fld_size = L_subtile_pixels + padding
+    logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
+    print(logstring)
+    logbuffer.append(logstring)
 
-dosubim = True
-fld_subim_size=L_subtile_pixels
-ilow = fld_size/2 - (fld_subim_size/2)
-iup = fld_size/2 + (fld_subim_size/2) - 1
-fld_subim = str(ilow)+','+str(ilow)+','+str(iup)+','+str(iup)
-logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
-print(logstring)
-logbuffer.append(logstring)
+    dosubim = True
+    fld_subim_size=L_subtile_pixels
+    ilow = fld_size/2 - (fld_subim_size/2)
+    iup = fld_size/2 + (fld_subim_size/2) - 1
+    fld_subim = str(ilow)+','+str(ilow)+','+str(iup)+','+str(iup)
+    logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
+    print(logstring)
+    logbuffer.append(logstring)
 
-# Use common restoring beam
-fld_bmaj = use_restore
-fld_bmin = use_restore
-dorestore = True
-fld_bpa = '0deg'
+    # Use common restoring beam
+    fld_bmaj = use_restore
+    fld_bmin = use_restore
+    dorestore = True
+    fld_bpa = '0deg'
 
-myweight = 'briggs'
-myrmode='norm'
-myrobust=1.0
-
-print('')
-logbuffer.append(' ')
+    print('')
+    logbuffer.append(' ')
 
 #====================================================================
 # list of fields to be cleaned
