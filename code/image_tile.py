@@ -787,6 +787,7 @@ if doimaging:
     # ==========================================
     if doccbox:
         # make a dirty image to begin with
+        print("Trying to make a dirty image")
         try:
             # this is where we create the primary beam .pb image
             tclean(visname,

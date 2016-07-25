@@ -45,11 +45,12 @@ def subtile_padding(band):
 # 11 Feb dataset:
 # mydataset = '16A-237.sb31782759.eb31845879.57429.90817564815'
 # 14 Feb dataset:
-# mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
-data_dir = '/lustre/aoc/observers/aho/VLASS_Field/' 
+mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
+# data_dir = '/lustre/aoc/observers/aho/VLASS_Field/' 
+data_dir = '/lustre/aoc/observers/aho/Run_16A-237.sb31782757.eb31851884.57432.83502763889'
 
 # sample VLASS field, for testing PyBDSM mask
-mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
+# mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
 
 calibrated_ms = data_dir + mydataset + '.ms' 
 
@@ -57,7 +58,7 @@ calibrated_ms = data_dir + mydataset + '.ms'
 calibrated_ms_datacolumn = 'auto'
 
 # for VLASS only:
-use_target_intent = '*TARGET*' # picks out scans with this intent only
+# use_target_intent = '*TARGET*' # picks out scans with this intent only
 
 # Use matching with regex in getfieldcone.py 
 # Picks out only OTFM fields which start with 0,1,w
@@ -65,8 +66,8 @@ use_target_fields = ['^0','^1','^2']
 
 # Choose imaging script(s)
 use_script_dir = '/users/aho/VLA_GW_Followup/code/'
-scriptname = 'image_tile.py'
-#scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
+#scriptname = 'image_tile.py'
+scriptname = 'run_QuickLook_submosaic_tclean_mfs2048MHz_Pipe.py'
 scriptfile = use_script_dir + scriptname
 
 # Set tile center
@@ -74,18 +75,16 @@ tile_center_epo = 'J2000'
 # generated using my script make_tiles.py
 # (RA, dec) from Kunal = (54.70525568 deg, 37. deg)
 # corresponds to:
-# tile_center_ra = '03:38:49.26'
-# tile_center_Dec = '37:00:00.00'
+tile_center_ra = '03:38:49.26'
+tile_center_Dec = '37:00:00.00'
 # tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
 # tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
 
 # from Steve's VLASS script:
-tile_center_ra = '21:00:00.00'
-tile_center_dec = '00.00.00.0'
+# tile_center_ra = '21:00:00.00'
+# tile_center_dec = '00.00.00.0'
 
 # Set up the subtiles: number and separation
-Num_subtile_ra = 1 # single subtile
-Num_subtile_dec = 1
 L_subtile_arcsec = 3600.0 # in arcseconds (so 3600.0 for a degree)
 # size of final subimage
 subtile_delta_arcsec = 3600.0 # distance btwn subtile centers
@@ -110,10 +109,10 @@ subtile_prefix = 'QuickLook_CCBox_L'+str(int(L_subtile_arcsec))
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
 # By eye, looked to be RFI in spw 0 and 15
-# imaging_spwstr = ['1~14']
+imaging_spwstr = ['1~14']
 
 # for Steve's VLASS box:
-imaging_spwstr = ['0~4,8~15']
+# imaging_spwstr = ['0~4,8~15']
 #imaging_spwstr = ['11~12']
 
 # We don't want any specific intents
@@ -126,11 +125,13 @@ dobox = True
 clear_pointing = True
 
 # Enable autoboxing (or not)
-doccbox = False
+# doccbox = False
+doccbox = True
 
 # Enable input mask (or not)
-mask = '/lustre/aoc/observers/aho/VLASS_Field/img.TSKY0001.sb32295801.eb32296475.57549.31722762731_QuickLook_CCBox_L3600.clean.mask'
+# mask = '/lustre/aoc/observers/aho/VLASS_Field/img.TSKY0001.sb32295801.eb32296475.57549.31722762731_QuickLook_CCBox_L3600.clean.mask'
 # mask = 'test.pybdsm_gaus_model.image'
+mask = ''
 
 # Autoboxing parameters if doccbox = True
 if doccbox:
@@ -183,7 +184,8 @@ doimaging = True
 docleanup = False
 dousescratch = True
 dostats = True
-parallel =  True
+# parallel =  True
+parallel = False
 
 #------------------------------------------------------------------------------------
 # Derive tile and subtile locations, and run imaging script
