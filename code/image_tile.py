@@ -21,17 +21,16 @@ class Image(object):
             fld_nterms, uv_taper, fld_multiscale, fld_threshold, use_restore,
             fld_niter, fld_cyclefaactor, fld_cycleniter, doimaging, docleanup,
             dousescratch, dostats, parallel):
+        self.logbuffer = []
         intro = 'VLA OTFM Imaging Script, 2016-07-26 AYQH'
-        print(intro)
-        self.logbuffer = [intro]
+        add_logstring(intro)
         self.ms_file = ms_file
         self.ms_datacolumn = ms_datacolumn
         self.target_intent = target_intent
         self.target_fields = target_fields
         self.script_file = script_file
-        self.tile_center, logstring = set_center(
+        self.tile_center = set_center(
                 tile_center_epo, tile_center_ra, tile_center_dec)
-        self.logbuffer.append(logstring)
         self.tile_pixelsize = tile_pixelsize
         self.tile_padding_arcsec = tile_padding_arcsec
         self.image_dirname = image_dirname
@@ -74,6 +73,17 @@ class Image(object):
         self.parallel = parallel
 
 
+    def add_logstring(logstring):
+        """ Append to the logbuffer
+        
+        Parameters
+        ----------
+        logstring (str): string to append
+        """
+        print(logstring)
+        self.logbuffer.append(logstring)
+
+
     def lprint(msg, lfile):
         """ Prints msg to both stdout and lfile. """
         print(msg)
@@ -100,42 +110,35 @@ class Image(object):
         """
         tile_center = me.direction(epo, ra, dec)
         logstring = 'Tile Center: % (RA, Dec) = (%s, %s)' %(epo, ra, dec)
+        add_logtring(logstring)
+        return tile_center
+
+
+    def set_ms_file(filename):
+        """ Check that file exists, add to log """
+        splitfile = calibrated_ms
+        # Make sure it's present
+        if os.access(splitfile,F_OK):
+            logstring = 'Found calibrated ms '+splitfile
+        else:
+            logstring = 'ERROR: could not find '+splitfile
         print(logstring)
-        return tile_center, logstring
+        logbuffer.append(logstring)
 
+        # calibrated_ms_datacolumn was created in run_Tile
+        splitdatacolumn = calibrated_ms_datacolumn
+        logstring = 'Will use datacolumn ' + splitdatacolumn
+        print(logstring)
+        logbuffer.append(logstring)
 
-def setup_dataset(calibrated_ms, calibrated_ms_datacolumn, clear_pointing):
-    """ Set up dataset 
-    
-    Parameters
-    ---------
-    calibrated_ms: filename of calibrated ms file
-    calibrated_ms_datacolumn: name of data column to use for imaging
-    clear_pointing: whether to clear POINTING table before imaging
-    """
-    splitfile = calibrated_ms
-    # Make sure it's present
-    if os.access(splitfile,F_OK):
-        logstring = 'Found calibrated ms '+splitfile
-    else:
-        logstring = 'ERROR: could not find '+splitfile
-    print(logstring)
-    logbuffer.append(logstring)
-
-    # calibrated_ms_datacolumn was created in run_Tile
-    splitdatacolumn = calibrated_ms_datacolumn
-    logstring = 'Will use datacolumn ' + splitdatacolumn
-    print(logstring)
-    logbuffer.append(logstring)
-
-    # Option to clear POINTING table before imaging
-    if clear_pointing:
-        logstring = 'Will clear MS POINTING table(s)'
-    else:
-        logstring = 'MS POINTING table(s) will be used if they contain data'
-    print(logstring)
-    casalog.post(logstring)
-    logbuffer.append(logstring)
+        # Option to clear POINTING table before imaging
+        if clear_pointing:
+            logstring = 'Will clear MS POINTING table(s)'
+        else:
+            logstring = 'MS POINTING table(s) will be used if they contain data'
+        print(logstring)
+        casalog.post(logstring)
+        logbuffer.append(logstring)
 
 
 def setup_general():
