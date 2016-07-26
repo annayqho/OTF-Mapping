@@ -206,7 +206,8 @@ def getfieldircone(msfile=None,distance='0deg',center_dir=None):
 
 def getfieldirbox(msfile=None,distance='0deg',center_dir=None,matchregex=''):
     # Created STM 2016-May-16 use center direction measure
-    # Returns list of fields from msfile within a rectangular box of size distance
+    # Returns list of fields from msfile within a 
+    # rectangular box of size distance
     # Version STM 2016-Jun-07 add matchregex parameter for name
     import re
     #

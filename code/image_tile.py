@@ -4,6 +4,7 @@ import copy
 import time
 import os
 from os import F_OK
+from getfieldcone import *
 
 
 class Image(object):
@@ -150,9 +151,6 @@ class Image(object):
 
 
     def setup_general():
-
-        # use_script_dir is set 
-        execfile(use_script_dir+'getfieldcone.py')
 
         # Set up some parameters for processing
         sdmfile = calibrated_ms.split('.ms')[0]
