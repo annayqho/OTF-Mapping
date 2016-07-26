@@ -153,14 +153,6 @@ class Image(object):
     def setup_general():
 
         # Set up some parameters for processing
-        sdmfile = calibrated_ms.split('.ms')[0]
-        workfile = mydataset + '_calibrated_target_working.ms'
-
-        # imaging parms
-        visname = imaging_dir+'/'+workfile
-        clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
-        dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
-
         dostartmodel = True
 
         fld_threshold_q = qa.quantity(fld_threshold)
@@ -178,7 +170,8 @@ class Image(object):
         padding_arcsec = subtile_padding_arcsec
         padding = int(padding_arcsec/cellsize)
         fld_size = L_subtile_pixels + padding
-        logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
+        logstring = 'Using field image size %i with cell size %s ' % (
+                fld_size,fld_cell)
         print(logstring)
         logbuffer.append(logstring)
 
@@ -290,6 +283,9 @@ for field in fldnos:
 
 if doimaging:
     # Make a working copy of ms
+    sdmfile = calibrated_ms.split('.ms')[0]
+    workfile = mydataset + '_calibrated_target_working.ms'
+    visname = imaging_dir+'/'+workfile
     print('Splitting '+splitfile+' to '+visname)
     os.system('rm -rf '+visname+'*')
     if splitdatacolumn=='auto':
@@ -382,7 +378,9 @@ if doimaging:
     # =====================================================
     fldlist = range(len(fldnos))
     fieldstr = ''
+    clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
     clnim = clnname
+    dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
     dirtyim = dirtyname
 
     # clean up previous images
