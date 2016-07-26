@@ -25,7 +25,11 @@ class Image(object):
         intro = 'VLA OTFM Imaging Script, 2016-07-26 AYQH'
         add_logstring(intro)
         self.ms_file = ms_file
+        set_ms_file(self.ms_file)
         self.ms_datacolumn = ms_datacolumn
+        set_ms_datacolumn(self.ms_datacolumn)
+        self.clear_pointing = clear_pointing
+        set_pointing_table(clear_pointing)
         self.target_intent = target_intent
         self.target_fields = target_fields
         self.script_file = script_file
@@ -37,7 +41,6 @@ class Image(object):
         self.image_prefix = image_prefix
         self.spwstr = spwstr
         self.dobox = dobox 
-        self.clear_pointing = clear_pointing
         self.doccbox = doccbox
         self.mask = mask
         self.maxboxcycles = maxboxcycles
@@ -74,13 +77,14 @@ class Image(object):
 
 
     def add_logstring(logstring):
-        """ Append to the logbuffer
+        """ Print, add to casalog, append to the logbuffer 
         
         Parameters
         ----------
         logstring (str): string to append
         """
         print(logstring)
+        casalog.post(logstring)
         self.logbuffer.append(logstring)
 
 
@@ -116,29 +120,28 @@ class Image(object):
 
     def set_ms_file(filename):
         """ Check that file exists, add to log """
-        splitfile = calibrated_ms
-        # Make sure it's present
-        if os.access(splitfile,F_OK):
+        if os.access(filename, F_OK):
             logstring = 'Found calibrated ms '+splitfile
         else:
             logstring = 'ERROR: could not find '+splitfile
-        print(logstring)
-        logbuffer.append(logstring)
+        add_logstring(logstring)
 
-        # calibrated_ms_datacolumn was created in run_Tile
-        splitdatacolumn = calibrated_ms_datacolumn
-        logstring = 'Will use datacolumn ' + splitdatacolumn
-        print(logstring)
-        logbuffer.append(logstring)
 
+    def set_ms_datacolumn(datacolumn):
+        """ Data column in logstring """
+        logstring = 'Using datacolumn ' + datacolumn
+        add_logstring(logstring)
+
+
+    def set_pointing_table(clear_pointing):
+        """ Pointing table in logstring """
         # Option to clear POINTING table before imaging
         if clear_pointing:
             logstring = 'Will clear MS POINTING table(s)'
         else:
-            logstring = 'MS POINTING table(s) will be used if they contain data'
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
+            logstring = 'MS POINTING table(s) will be used if contain data'
+        add_logstring(logstring)
+
 
 
 def setup_general():
