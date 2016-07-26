@@ -1,19 +1,11 @@
-# Original script by STM, revised by AYQH for VLA-GW151226 data
-# 20 June 2016: Condensing
-
-# Takes a rectangular tile and breaks it into rectangular subtiles,
-# with boundaries along lines of RA & Dec.
-# Then runs the imaging script on these subtiles.
+""" Set parameters to image a tile """
 
 import time
 import copy
+from astropy.coordinates import SkyCoord
 
 startRunTime=time.time()
 prevRunTime = startRunTime
-
-#================================================================================
-# Functions
-#================================================================================
 
 def subtile_padding(band):
     """ Padding to add to the subtile size for the full image
@@ -37,9 +29,25 @@ def subtile_padding(band):
         print("you sure you don't want S-band?")
 
 
-#================================================================================
-# Setup information for the tile and subtiles to be imaged
-#================================================================================
+def convert_to_radians(tile_center_ra, tile_center_dec):
+    """ Convert tile center coordinates to radians """
+    # Convert to radians, make corrections
+    c = SkyCoord(tile_center_ra, tile_center_dec, frame='icrs')
+    tile_center_ra_rad = c.ra.radian
+    tile_center_dec_rad = c.dec.radian
+    subtile_delta_rad = subtile_delta_arcsec/206264.806
+    # Making the small angle approximation...
+    subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
+
+    if tile_center_ra_rad>(pl.pi):
+        tile_center_ra_rad = 2.*pl.pi - tile_center_ra_rad
+    elif tile_center_ra_rad <= (-pl.pi):
+        tile_center_ra_rad = -2.*pl.pi - tile_center_ra_rad 
+    if tile_center_dec_rad >= (0.5*pl.pi):
+        tile_center_dec_rad = pl.pi - tile_center_dec_rad 
+
+    return tile_center_ra_rad, tile_center_dec_rad
+
 
 # Choose calibrated ms dataset file
 # 11 Feb dataset:
@@ -48,10 +56,8 @@ def subtile_padding(band):
 mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
 # data_dir = '/lustre/aoc/observers/aho/VLASS_Field/' 
 data_dir = '/lustre/aoc/observers/aho/Run_16A-237.sb31782757.eb31851884.57432.83502763889'
-
 # sample VLASS field, for testing PyBDSM mask
 # mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
-
 calibrated_ms = data_dir + mydataset + '.ms' 
 
 # 'auto' option: detect whether there is CORRECTED_DATA and split only this
@@ -61,7 +67,7 @@ calibrated_ms_datacolumn = 'auto'
 # use_target_intent = '*TARGET*' # picks out scans with this intent only
 
 # Use matching with regex in getfieldcone.py 
-# Picks out only OTFM fields which start with 0,1,w
+# Picks out only OTFM fields which start with 0,1,2
 use_target_fields = ['^0','^1','^2'] 
 
 # Choose imaging script(s)
@@ -77,8 +83,8 @@ tile_center_epo = 'J2000'
 # corresponds to:
 # tile_center_ra = '03:38:49.26'
 # tile_center_Dec = '37:00:00.00'
-tile_center_ra = '04:08:00.00' # in hh:mm:ss I assume?
-tile_center_dec = '43.00.00.0' # in dd:mm:ss I assume?
+tile_center_ra = '04h08m00s' 
+tile_center_dec = '43d00m00s' 
 
 # from Steve's VLASS script:
 # tile_center_ra = '21:00:00.00'
@@ -91,6 +97,9 @@ subtile_delta_arcsec = 3600.0 # distance btwn subtile centers
 if L_subtile_arcsec < subtile_delta_arcsec:
     print("Error: L_subtile_arcsec should be equal to \
             or a bit bigger than subtile_delta_arcsec")
+
+tile_center_ra_rad, tile_center_dec_rad = convert_to_radians(
+        tile_center_ra, tile_center_dec)
 
 # Choose the pixel size in arcsec. 
 # Set this to be at maximum 1/2.5 of the PSF width (FWHM), 
@@ -113,7 +122,6 @@ imaging_spwstr = ['1~14']
 
 # for Steve's VLASS box:
 # imaging_spwstr = ['0~4,8~15']
-#imaging_spwstr = ['11~12']
 
 # We don't want any specific intents
 myintentstr = ''
@@ -125,7 +133,6 @@ dobox = True
 clear_pointing = True
 
 # Enable autoboxing (or not)
-# doccbox = False
 doccbox = True
 
 # Enable input mask (or not)
@@ -215,34 +222,6 @@ dostats = True
 # parallel =  True
 parallel = False
 
-#------------------------------------------------------------------------------------
-# Derive tile and subtile locations, and run imaging script
-#------------------------------------------------------------------------------------
-
-# Derive tile and subtile info
-
-# Convert RA, Dec, subtile spacing to radians
-# (Requires CASA)
-tile_center_dir = me.direction(tile_center_epo,tile_center_ra,tile_center_dec)
-tile_center_ra_rad = tile_center_dir['m0']['value']
-tile_center_dec_rad = tile_center_dir['m1']['value']
-subtile_delta_rad = subtile_delta_arcsec/206264.806
-# Making the small angle approximation
-subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
-
-if tile_center_ra_rad>(pl.pi):
-    tile_center_ra_rad = 2.*pl.pi - tile_center_ra_rad
-elif tile_center_ra_rad <= (-pl.pi):
-    tile_center_ra_rad = -2.*pl.pi - tile_center_ra_rad 
-
-if tile_center_dec_rad >= (0.5*pl.pi):
-    tile_center_dec_rad = pl.pi - tile_center_dec_rad 
-
-subtile_center_dir = copy.deepcopy(tile_center_dir)
-subtile_center_dir['m0']['value'] = tile_center_ra_rad
-subtile_center_dir['m1']['value'] = tile_center_dec_rad 
-
-# Run the script to image this subtile at location subtile_center_dir:
 execfile(scriptfile)
 
 print('Subtile imaging complete')
