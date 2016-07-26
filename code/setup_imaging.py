@@ -7,8 +7,8 @@ from astropy.coordinates import SkyCoord
 startRunTime=time.time()
 prevRunTime = startRunTime
 
-def subtile_padding(band):
-    """ Padding to add to the subtile size for the full image
+def tile_padding(band):
+    """ Padding to add to the tile size for the full image
     This should be 2 x 0.8 x PB (FWHM)
     
     Parameters
@@ -52,7 +52,8 @@ def convert_to_radians(tile_center_ra, tile_center_dec):
 # 14 Feb dataset:
 mydataset = '16A-237.sb31782757.eb31851884.57432.83502763889'
 # data_dir = '/lustre/aoc/observers/aho/VLASS_Field/' 
-data_dir = '/lustre/aoc/observers/aho/Run_16A-237.sb31782757.eb31851884.57432.83502763889'
+data_dir = '/lustre/aoc/observers/aho/ \
+            Run_16A-237.sb31782757.eb31851884.57432.83502763889'
 # sample VLASS field, for testing PyBDSM mask
 # mydataset = 'TSKY0001.sb32295801.eb32296475.57549.31722762731'
 calibrated_ms = data_dir + mydataset + '.ms' 
@@ -87,13 +88,8 @@ tile_center_dec = '43d00m00s'
 # tile_center_ra = '21:00:00.00'
 # tile_center_dec = '00.00.00.0'
 
-# Set up the subtiles: number and separation
-L_subtile_arcsec = 3600.0 # in arcseconds (so 3600.0 for a degree)
-# size of final subimage
-subtile_delta_arcsec = 3600.0 # distance btwn subtile centers
-if L_subtile_arcsec < subtile_delta_arcsec:
-    print("Error: L_subtile_arcsec should be equal to \
-            or a bit bigger than subtile_delta_arcsec")
+# Size of tile
+L_tile_arcsec = 3600.0 # in arcseconds (so 3600.0 for a degree)
 
 tile_center_ra_rad, tile_center_dec_rad = convert_to_radians(
         tile_center_ra, tile_center_dec)
@@ -102,15 +98,15 @@ tile_center_ra_rad, tile_center_dec_rad = convert_to_radians(
 # Set this to be at maximum 1/2.5 of the PSF width (FWHM), 
 # ideally 1/4 or 1/5 even. 
 # For QuickLook PSF~2.5" so 1" here is pushing it.
-subtile_pixelsize = 1.0 # arcsec
+tile_pixelsize = 1.0 # arcsec
 
-subtile_padding_arcsec = subtile_padding("S") 
+tile_padding_arcsec = tile_padding("S") 
 
 imaging_dirname = 'Imaging_'+mydataset
-#subtile_prefix = 'QuickLook_L'+str(int(L_subtile_arcsec))
+#tile_prefix = 'QuickLook_L'+str(int(L_tile_arcsec))
 
 # for Steve's VLASS box:
-subtile_prefix = 'QuickLook_CCBox_L'+str(int(L_subtile_arcsec))
+tile_prefix = 'QuickLook_CCBox_L'+str(int(L_tile_arcsec))
 
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
@@ -123,7 +119,7 @@ imaging_spwstr = ['1~14']
 # We don't want any specific intents
 myintentstr = ''
 
-# For selecting fields in the subtile
+# For selecting fields in the tile
 dobox = True
 
 # There's no useful pointing table in SDM yet 
@@ -133,7 +129,8 @@ clear_pointing = True
 doccbox = True
 
 # Enable input mask (or not)
-# mask = '/lustre/aoc/observers/aho/VLASS_Field/img.TSKY0001.sb32295801.eb32296475.57549.31722762731_QuickLook_CCBox_L3600.clean.mask'
+# mask = '/lustre/aoc/observers/aho/VLASS_Field/ \
+        #img.TSKY0001.sb32295801.eb32296475.57549.31722762731_QuickLook_CCBox_L3600.clean.mask'
 # mask = 'test.pybdsm_gaus_model.image'
 mask = ''
 

@@ -5,6 +5,12 @@ import time
 import os
 from os import F_OK
 
+
+class Image(object):
+    """ A class to image a tile of VLA data """
+
+    def __init__(self, ms_file, ms_datacolumn, target_intent, 
+
 def lprint(msg, lfile):
     """ Prints msg to both stdout and lfile. """
     print(msg)
