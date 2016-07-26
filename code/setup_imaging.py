@@ -35,9 +35,6 @@ def convert_to_radians(tile_center_ra, tile_center_dec):
     c = SkyCoord(tile_center_ra, tile_center_dec, frame='icrs')
     tile_center_ra_rad = c.ra.radian
     tile_center_dec_rad = c.dec.radian
-    subtile_delta_rad = subtile_delta_arcsec/206264.806
-    # Making the small angle approximation...
-    subtile_delta_ra_rad = subtile_delta_rad/pl.cos(tile_center_dec_rad)
 
     if tile_center_ra_rad>(pl.pi):
         tile_center_ra_rad = 2.*pl.pi - tile_center_ra_rad
