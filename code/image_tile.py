@@ -7,56 +7,101 @@ from os import F_OK
 
 
 class Image(object):
-    """ A class to image a tile of VLA data """
-
-    def __init__(self, ms_file, ms_datacolumn, target_intent, 
-
-def lprint(msg, lfile):
-    """ Prints msg to both stdout and lfile. """
-    print(msg)
-    print >>mylogfile, msg
+    """ Image a tile of VLA data """
 
 
-def introduce_myself():
-    """ Print a basic intro message """
-    logbuffer = []
-    myscript = 'VLA OTFM QuickLook submosaic TClean MFS TT0-only JointMosaic'
-    myscriptvers = '2016-07-25 AYQH'
+    def __init__(self, ms_file, ms_datacolumn, target_intent, target_fields,
+            script_file, tile_center_epo, tile_center_ra, tile_center_dec, 
+            tile_pixelsize, tile_padding_arcsec, image_dirname, image_prefix,
+            spwstr, dobox, clear_pointing, doccbox, mask, maxboxcycles,
+            box_niter, box_cyclefactor, box_cycleniter, peaksnrlimit, 
+            fld_wprojplanes, fld_facets, fld_gridder, fld_pblimit,
+            fld_normtype, myweight, myrmode, myrobust, dosavemodel,
+            use_multiscale, fld_deconvolver, fld_specmode, fld_reffreq,
+            fld_nterms, uv_taper, fld_multiscale, fld_threshold, use_restore,
+            fld_niter, fld_cyclefaactor, fld_cycleniter, doimaging, docleanup,
+            dousescratch, dostats, parallel):
+        intro = 'VLA OTFM Imaging Script, 2016-07-26 AYQH'
+        print(intro)
+        self.logbuffer = [intro]
+        self.ms_file = ms_file
+        self.ms_datacolumn = ms_datacolumn
+        self.target_intent = target_intent
+        self.target_fields = target_fields
+        self.script_file = script_file
+        self.tile_center, logstring = set_center(
+                tile_center_epo, tile_center_ra, tile_center_dec)
+        self.logbuffer.append(logstring)
+        self.tile_pixelsize = tile_pixelsize
+        self.tile_padding_arcsec = tile_padding_arcsec
+        self.image_dirname = image_dirname
+        self.image_prefix = image_prefix
+        self.spwstr = spwstr
+        self.dobox = dobox 
+        self.clear_pointing = clear_pointing
+        self.doccbox = doccbox
+        self.mask = mask
+        self.maxboxcycles = maxboxcycles
+        self.box_niter = box_niter
+        self.box_cyclefactor = box_cyclefactor
+        self.box_cycleniter = box_cycleniter
+        self.peaksnrlimit = peaksnrlimit, 
+        self.fld_wprojplanes = fld_wprojplanes
+        self.fld_facets = fld_facets
+        self.fld_gridder = fld_gridder
+        self.fld_pblimit = fld_pblimit
+        self.fld_normtype = fld_normtype
+        self.myweight = myweight
+        self.myrmode = myrmode
+        self.myrobust = myrobust
+        self.dosavemodel = dosavemodel
+        self.use_multiscale = use_multiscale
+        self.fld_deconvolver = fld_deconvolver
+        self.fld_specmode = fld_specmode
+        self.fld_reffreq = fld_reffreq
+        self.fld_nterms = fld_nterms
+        self.uv_taper = uv_taper
+        self.fld_multiscale = fld_multiscale
+        self.fld_threshold = fld_threshold
+        self.use_restore = use_restore
+        self.fld_niter = fld_niter
+        self.fld_cyclefaactor = fld_cyclefactor
+        self.fld_cycleniter = fld_cycleniter
+        self.doimaging = doimaging
+        self.docleanup = docleanup
+        self.dousescratch = dousescratch
+        self.dostats = dostats
+        self.parallel = parallel
 
-    logstring = myscript
-    print(logstring)
-    logbuffer.append(logstring)
-    logstring = myscriptvers
-    print(logstring)
-    logbuffer.append(logstring)
+
+    def lprint(msg, lfile):
+        """ Prints msg to both stdout and lfile. """
+        print(msg)
+        print >>mylogfile, msg
 
 
-def find_sources():
-    """ Use PyBDSM to identify point sources.
-    Ideally, would feed it a fits image, have it spit out
-    an image in CASA or .fits format.
-    bash script could call CASA that does some bit of cleaning.
-    Then run PyBDSM then run the rest of CASA. """
-    print("Coming soon...")
+    def find_sources():
+        """ Use PyBDSM to identify point sources.
+        Ideally, would feed it a fits image, have it spit out
+        an image in CASA or .fits format.
+        bash script could call CASA that does some bit of cleaning.
+        Then run PyBDSM then run the rest of CASA. """
+        print("Coming soon...")
 
 
-def set_center(subtile_center_dir):
-    """ Set submosaic center & record it
-    
-    Parameters
-    ----------
-    subtile_center_dir: direction of center
-    """
-    mycenter_dir = copy.deepcopy(subtile_center_dir)
-    epo = mycenter_dir['refer']
-    rapos = mycenter_dir['m0']
-    decpos = mycenter_dir['m1']
-    ral = qa.angle(rapos,form=["tim"],prec=9)
-    decl = qa.angle(decpos,prec=10)
-    mycenter = epo + ' ' + ral[0] + ' ' + decl[0]
-    logstring = 'SubMosaic center = '+mycenter
-    print(logstring)
-    logbuffer.append(logstring)
+    def set_center(epo, ra, dec):
+        """ Set submosaic center & record it
+        
+        Parameters
+        ----------
+        epo: (str) the epoch, e.g. J2000
+        ra: (str) the tile center RA, format 'XXhXXmXXs'
+        dec: (str) the tile center Dec, format 'XXdXXmXXs'
+        """
+        tile_center = me.direction(epo, ra, dec)
+        logstring = 'Tile Center: % (RA, Dec) = (%s, %s)' %(epo, ra, dec)
+        print(logstring)
+        return tile_center, logstring
 
 
 def setup_dataset(calibrated_ms, calibrated_ms_datacolumn, clear_pointing):

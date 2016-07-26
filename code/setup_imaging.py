@@ -106,7 +106,7 @@ imaging_dirname = 'Imaging_'+mydataset
 #tile_prefix = 'QuickLook_L'+str(int(L_tile_arcsec))
 
 # for Steve's VLASS box:
-tile_prefix = 'QuickLook_CCBox_L'+str(int(L_tile_arcsec))
+image_prefix = 'QuickLook_CCBox_L'+str(int(L_tile_arcsec))
 
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)
@@ -130,7 +130,8 @@ doccbox = True
 
 # Enable input mask (or not)
 # mask = '/lustre/aoc/observers/aho/VLASS_Field/ \
-        #img.TSKY0001.sb32295801.eb32296475.57549.31722762731_QuickLook_CCBox_L3600.clean.mask'
+        #img.TSKY0001.sb32295801.eb32296475.57549.31722762731_ \
+        #QuickLook_CCBox_L3600.clean.mask'
 # mask = 'test.pybdsm_gaus_model.image'
 mask = ''
 
