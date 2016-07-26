@@ -153,7 +153,6 @@ class Image(object):
     def setup_general():
 
         # Set up some parameters for processing
-        dostartmodel = True
 
         fld_threshold_q = qa.quantity(fld_threshold)
         fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
