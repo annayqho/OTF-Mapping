@@ -12,7 +12,7 @@ class Image(object):
 
     def __init__(self, ms_file, ms_datacolumn, target_intent, target_fields,
             script_file, tile_center_epo, tile_center_ra, tile_center_dec, 
-            tile_pixelsize, tile_padding_arcsec, image_dirname, image_prefix,
+            tile_pixelsize, tile_padding_arcsec, image_name,
             spwstr, dobox, clear_pointing, doccbox, mask, maxboxcycles,
             box_niter, box_cyclefactor, box_cycleniter, peaksnrlimit, 
             fld_wprojplanes, fld_facets, fld_gridder, fld_pblimit,
@@ -37,8 +37,8 @@ class Image(object):
                 tile_center_epo, tile_center_ra, tile_center_dec)
         self.tile_pixelsize = tile_pixelsize
         self.tile_padding_arcsec = tile_padding_arcsec
-        self.image_dirname = image_dirname
-        self.image_prefix = image_prefix
+        self.image_name = image_name
+        set_image_name(image_name)
         self.spwstr = spwstr
         self.dobox = dobox 
         self.doccbox = doccbox
@@ -143,66 +143,64 @@ class Image(object):
         add_logstring(logstring)
 
 
+    def set_image_name(image_name):
+        """ Set up the name of the output image file """
+        logstring = "Output image name %s" image_name
+        add_logstring(logstring)
 
-def setup_general():
-    """ Setup stuff not dataset-specific """
-    # location for writing out images
-    # subtile_prefix & imaging_dirname were set in run_Tile 
-    postfix ='_'+ subtile_prefix
-    tiling='_subtile_%i_%i' % (i_subtile,j_subtile)
-    scriptprefix=mydataset+postfix+tiling
-    imaging_dir = imaging_dirname+postfix+tiling
 
-    # use_script_dir is set 
-    execfile(use_script_dir+'getfieldcone.py')
+    def setup_general():
 
-    # Set up some parameters for processing
-    sdmfile = calibrated_ms.split('.ms')[0]
-    workfile = mydataset + '_calibrated_target_working.ms'
+        # use_script_dir is set 
+        execfile(use_script_dir+'getfieldcone.py')
 
-    # imaging parms
-    visname = imaging_dir+'/'+workfile
-    clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
-    dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
+        # Set up some parameters for processing
+        sdmfile = calibrated_ms.split('.ms')[0]
+        workfile = mydataset + '_calibrated_target_working.ms'
 
-    dostartmodel = True
+        # imaging parms
+        visname = imaging_dir+'/'+workfile
+        clnname = imaging_dir+'/img.'+mydataset+postfix+'.clean'
+        dirtyname = imaging_dir+'/img.'+mydataset+postfix+'.dirty'
 
-    fld_threshold_q = qa.quantity(fld_threshold)
-    fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
-    fld_thresholdJy = fld_threshold_qJy['value']
+        dostartmodel = True
 
-    fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
-    fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
-    fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
+        fld_threshold_q = qa.quantity(fld_threshold)
+        fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
+        fld_thresholdJy = fld_threshold_qJy['value']
 
-    cellsize = subtile_pixelsize
-    fld_cell = str(cellsize)+'arcsec'
-    L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
+        fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
+        fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
+        fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
 
-    padding_arcsec = subtile_padding_arcsec
-    padding = int(padding_arcsec/cellsize)
-    fld_size = L_subtile_pixels + padding
-    logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
-    print(logstring)
-    logbuffer.append(logstring)
+        cellsize = subtile_pixelsize
+        fld_cell = str(cellsize)+'arcsec'
+        L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
 
-    dosubim = True
-    fld_subim_size=L_subtile_pixels
-    ilow = fld_size/2 - (fld_subim_size/2)
-    iup = fld_size/2 + (fld_subim_size/2) - 1
-    fld_subim = str(ilow)+','+str(ilow)+','+str(iup)+','+str(iup)
-    logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
-    print(logstring)
-    logbuffer.append(logstring)
+        padding_arcsec = subtile_padding_arcsec
+        padding = int(padding_arcsec/cellsize)
+        fld_size = L_subtile_pixels + padding
+        logstring = 'Using field image size %i with cell size %s ' % (fld_size,fld_cell)
+        print(logstring)
+        logbuffer.append(logstring)
 
-    # Use common restoring beam
-    fld_bmaj = use_restore
-    fld_bmin = use_restore
-    dorestore = True
-    fld_bpa = '0deg'
+        dosubim = True
+        fld_subim_size=L_subtile_pixels
+        ilow = fld_size/2 - (fld_subim_size/2)
+        iup = fld_size/2 + (fld_subim_size/2) - 1
+        fld_subim = str(ilow)+','+str(ilow)+','+str(iup)+','+str(iup)
+        logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
+        print(logstring)
+        logbuffer.append(logstring)
 
-    print('')
-    logbuffer.append(' ')
+        # Use common restoring beam
+        fld_bmaj = use_restore
+        fld_bmin = use_restore
+        dorestore = True
+        fld_bpa = '0deg'
+
+        print('')
+        logbuffer.append(' ')
 
 #====================================================================
 # list of fields to be cleaned
