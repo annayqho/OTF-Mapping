@@ -13,7 +13,7 @@ class Image(object):
 
     def __init__(self, ms_file, ms_datacolumn, target_intent, target_fields,
             script_file, tile_center_epo, tile_center_ra, tile_center_dec, 
-            tile_pixelsize, tile_padding_arcsec, image_name,
+            L_tile_arcsec, tile_pixelsize, tile_padding_arcsec, image_name,
             spwstr, dobox, clear_pointing, doccbox, mask, maxboxcycles,
             box_niter, box_cyclefactor, box_cycleniter, peaksnrlimit, 
             fld_wprojplanes, fld_facets, fld_gridder, fld_pblimit,
@@ -36,8 +36,8 @@ class Image(object):
         self.script_file = script_file
         self.tile_center = set_center(
                 tile_center_epo, tile_center_ra, tile_center_dec)
-        self.tile_pixelsize = tile_pixelsize
-        self.tile_padding_arcsec = tile_padding_arcsec
+        self.fld_size = set_fld_size(
+                tile_pixelsize, L_tile_arcsec, tile_padding_arcsec)
         self.image_name = image_name
         set_image_name(image_name)
         self.spwstr = spwstr
