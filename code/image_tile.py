@@ -66,7 +66,7 @@ class Image(object):
         self.uv_taper = uv_taper
         self.fld_multiscale = fld_multiscale
         self.fld_threshold = fld_threshold
-        self.use_restore = use_restore
+        self.myrestore = set_myrestore(userestore)
         self.fld_niter = fld_niter
         self.fld_cyclefaactor = fld_cyclefactor
         self.fld_cycleniter = fld_cycleniter
@@ -172,6 +172,7 @@ class Image(object):
 
         Returns
         -------
+        fld_size: length of the field, tile + padding
         """
         L_subtile_pixels = int(L_tile_arcsec/tile_pixelsize)
         padding = int(padding_arcsec/tile_pixelsize)
@@ -182,14 +183,28 @@ class Image(object):
         logbuffer.append(logstring)
         return fld_size
 
-        # Use common restoring beam
-        fld_bmaj = use_restore
-        fld_bmin = use_restore
-        dorestore = True
-        fld_bpa = '0deg'
 
-        print('')
-        logbuffer.append(' ')
+    def set_myrestore(userestore):
+        """ Set parameters for restoring beam 
+
+        Parameters
+        ----------
+        fld_bmaj: 
+        fld_bmin:
+        fld_bpa:
+
+        Returns
+        -------
+        myrestore (list): beam parameters
+        """
+        if use_restore == '':
+            myrestore = []
+        else:
+            fld_bmaj = use_restore
+            fld_bmin = use_restore
+            fld_bpa = '0deg'
+            myrestore = [fld_bmaj, fld_bmin, fld_bpa]
+        return myrestore
 
 #====================================================================
 # list of fields to be cleaned
@@ -411,10 +426,6 @@ if doimaging:
         clnpb = [clnim+'.pb']
         dirtyresidual = [dirtyim+'.residual']
     
-    if dorestore:
-        myrestore=[fld_bmaj,fld_bmin,fld_bpa]
-    else:
-        myrestore=[]
     iterdone=0
     itercycle=0
 

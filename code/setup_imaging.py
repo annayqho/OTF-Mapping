@@ -195,6 +195,8 @@ fld_threshold_nobox = fld_threshold
 
 # for LIGO
 use_restore = '8.0arcsec' # circular restoring beam size
+# if you want no restore
+use_restore = ''
 # for Steve's VLASS box:
 # use_restore = '2.5arcsec'    # circular restoring beam size if desired
 
