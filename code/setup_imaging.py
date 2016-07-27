@@ -19,7 +19,6 @@ def tile_padding(band):
     -------
     padding: float, the padding in arcsec
     """
-
     if band == "S":
         PB = 21 # arcminutes
         padding = 2 * 0.8 * 21 * 60 # convert to arcsec

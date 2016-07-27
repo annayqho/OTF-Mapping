@@ -150,38 +150,37 @@ class Image(object):
         add_logstring(logstring)
 
 
-    def setup_general():
-
-        # Set up some parameters for processing
-
-        fld_threshold_q = qa.quantity(fld_threshold)
+    def set_thresholds(self):
+        """ Set thresholds for processing """
+        fld_threshold_q = qa.quantity(self.fld_threshold)
         fld_threshold_qJy = qa.convert(fld_threshold_q,'Jy')
         fld_thresholdJy = fld_threshold_qJy['value']
 
-        fld_threshold_nobox_q = qa.quantity(fld_threshold_nobox)
+        fld_threshold_nobox_q = qa.quantity(self.fld_threshold_nobox)
         fld_threshold_nobox_qJy = qa.convert(fld_threshold_nobox_q,'Jy')
         fld_thresholdJy_nobox = fld_threshold_nobox_qJy['value']
 
-        cellsize = subtile_pixelsize
-        fld_cell = str(cellsize)+'arcsec'
-        L_subtile_pixels = int(L_subtile_arcsec/subtile_pixelsize)
 
-        padding_arcsec = subtile_padding_arcsec
-        padding = int(padding_arcsec/cellsize)
+    def set_fld_size(tile_pixelsize, L_tile_arcsec, padding_arcsec):
+        """ Set the size of the field, including padding
+
+        Parameters
+        ----------
+        tile_pixelsize: size of a pixel in arcsecs
+        L_tile_arcsec: length of tile in arcsec
+        tile_padding_arcsec: amount of padding in arcsec
+
+        Returns
+        -------
+        """
+        L_subtile_pixels = int(L_tile_arcsec/tile_pixelsize)
+        padding = int(padding_arcsec/tile_pixelsize)
         fld_size = L_subtile_pixels + padding
-        logstring = 'Using field image size %i with cell size %s ' % (
-                fld_size,fld_cell)
-        print(logstring)
+        logstring = 'Using field image size %i with cell size %s arcsec' % (
+                fld_size,tile_pixelsize)
+        add_logstring(logstring)
         logbuffer.append(logstring)
-
-        dosubim = True
-        fld_subim_size=L_subtile_pixels
-        ilow = fld_size/2 - (fld_subim_size/2)
-        iup = fld_size/2 + (fld_subim_size/2) - 1
-        fld_subim = str(ilow)+','+str(ilow)+','+str(iup)+','+str(iup)
-        logstring = 'Using field subimage blc,trc of (%i,%i) ' % (ilow,iup)
-        print(logstring)
-        logbuffer.append(logstring)
+        return fld_size
 
         # Use common restoring beam
         fld_bmaj = use_restore
