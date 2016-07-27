@@ -37,14 +37,14 @@ class Image(object):
         self.clear_pointing = clear_pointing
         set_pointing_table(clear_pointing)
         self.target_intent = target_intent
-        self.target_fields = target_fields
         self.script_file = script_file
-        self.tile_center = set_center(
-                tile_center_epo, tile_center_ra, tile_center_dec)
         self.fld_size = set_fld_size(
                 tile_pixelsize, L_tile_arcsec, tile_padding_arcsec)
-        self.image_name = image_name
-        set_image_name(image_name)
+        tile_center = set_center(
+                tile_center_epo, tile_center_ra, tile_center_dec)
+        self.fldnos = get_fields(L_tile_arcsec, ms_file, tile_center, 
+                                 target_fields, fld_specmode)
+        self.image_name = set_image_name(image_name)
         self.spwstr = spwstr
         self.dobox = dobox 
         self.doccbox = doccbox
@@ -153,6 +153,7 @@ class Image(object):
         """ Set up the name of the output image file """
         logstring = "Output image name %s" image_name
         add_logstring(logstring)
+        return image_name
 
 
     def set_thresholds(self):
@@ -212,41 +213,46 @@ class Image(object):
         return myrestore
 
 
-    def get_fields(self):
-        """ Generate a list of fields to be cleaned """
+    def get_fields(L_tile_arcsec, ms_file, tile_center, tgt_fields, specmode):
+        """ Generate a list of fields to be cleaned 
+
+        Parameters
+        ----------
+        L_tile_arcsec
+        ms_file
+        tile_center
+        tgt_fields: target fields
+        specmode: fld_specmode
+        
+        Returns
+        -------
+        fldnos (list): fields to be cleaned
+        
+        """
         fldnos = []
 
         if dobox:
-            # Use field box
             beamsearchradius_arcsec = 1000.0
-            mydist = 0.5 * self.L_tile_arcsec + beamsearchradius_arcsec
-            logstring = 'Selecting fields within box of length %s arcsec ' %mydist
+            mydist = 0.5 * L_tile_arcsec + beamsearchradius_arcsec
+            logstring = 'Selecting fields w/in box of length %s arcsec' %mydist
             add_logstring(logstring)
 
-            mymatchregex = self.target_fields
-            if mymatchregex=='' or mymatchregex==[]:
-                # no name match, backward compatible
+            if target_fields==[]:
+                logstring = 'No target field preference provided'
                 fldnos = getfieldirbox(
-                        self.ms_file, distance=mydist, center_dir=self.tile_center)
+                        ms_file, distance=mydist, center_dir=tile_center)
             else:
-                # use regex match, needs getfieldcone.py v20160607 or later
-                logstring = 'Matching field names using regex string(s) : '+str(mymatchregex)
-                add_logstring(logstring)
+                logstring = 'Matching field names using regex string(s): %s' \
+                        %(str(target_fields))
                 fldnos = getfieldirbox(
-                        splitfile,distance=mydist,center_dir=self.tile_center,
-                        matchregex=mymatchregex)
+                        ms_file, distance=mydist, center_dir=tile_center, 
+                        matchregex=target_fields)
+            add_logstring(logstring)
             logstring = 'Will image a total of %s fields using specmode %s' \
                     %(str(len(fldnos)), str(fld_specmode))
             add_logstring(logstring)
-            logstring = 'Will image fields = '+str(fldnos)
+            logstring = 'Will image fields = %s' %str(fldnos)
             add_logstring(logstring)
-
-            fldstrs = ''
-            for field in fldnos:
-                if fldstrs=='':
-                    fldstrs = str(field)
-                else:
-                    fldstrs = fldstrs + ',' + str(field)
         return fldnos
 
 #====================================================================
@@ -298,6 +304,7 @@ if doimaging:
         mydatacolumn = splitdatacolumn
      
     stepname = 'split'
+    fldstrs = ', '.join(self.fldnos)
     mstransform(
             splitfile,visname,field=fldstrs,
             intent=myintentstr,datacolumn=mydatacolumn)

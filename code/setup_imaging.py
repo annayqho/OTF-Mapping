@@ -66,6 +66,7 @@ calibrated_ms_datacolumn = 'auto'
 # Use matching with regex in getfieldcone.py 
 # Picks out only OTFM fields which start with 0,1,2
 use_target_fields = ['^0','^1','^2'] 
+# for no target fields, will be []
 
 # Choose imaging script(s)
 use_script_dir = '/users/aho/VLA_GW_Followup/code/'
