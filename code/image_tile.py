@@ -23,6 +23,11 @@ class Image(object):
             fld_niter, fld_cyclefaactor, fld_cycleniter, doimaging, docleanup,
             dousescratch, dostats, parallel):
         self.logbuffer = []
+        self.stagename = []
+        self.stagetime = []
+        self.steplist = []
+        self.steptimes = {}
+        self.statbuffer = []
         intro = 'VLA OTFM Imaging Script, 2016-07-26 AYQH'
         add_logstring(intro)
         self.ms_file = ms_file
@@ -206,30 +211,43 @@ class Image(object):
             myrestore = [fld_bmaj, fld_bmin, fld_bpa]
         return myrestore
 
-#====================================================================
-# list of fields to be cleaned
-fldnos = []
 
-# Use field (box/cone)
-beamsearchradius_arcsec = 1000.0
-# I don't understand what this^ is
-mydistance_arcsec = 0.5*L_subtile_arcsec + beamsearchradius_arcsec
-mydistance=str(mydistance_arcsec)+'arcsec'
-print(mydistance)
- 
-# since dobox = True...
-logstring = 'Selecting fields within the box of length '+mydistance
-print(logstring)
-logbuffer.append(logstring)
+    def get_fields(self):
+        """ Generate a list of fields to be cleaned """
+        fldnos = []
 
-stagename = []
-stagetime = []
-steplist = []
-steptimes = {}
+        if dobox:
+            # Use field box
+            beamsearchradius_arcsec = 1000.0
+            mydist = 0.5 * self.L_tile_arcsec + beamsearchradius_arcsec
+            logstring = 'Selecting fields within box of length %s arcsec ' %mydist
+            add_logstring(logstring)
 
-logbuffer = []
-if dostats:
-    statbuffer = []
+            mymatchregex = self.target_fields
+            if mymatchregex=='' or mymatchregex==[]:
+                # no name match, backward compatible
+                fldnos = getfieldirbox(
+                        self.ms_file, distance=mydist, center_dir=self.tile_center)
+            else:
+                # use regex match, needs getfieldcone.py v20160607 or later
+                logstring = 'Matching field names using regex string(s) : '+str(mymatchregex)
+                add_logstring(logstring)
+                fldnos = getfieldirbox(
+                        splitfile,distance=mydist,center_dir=self.tile_center,
+                        matchregex=mymatchregex)
+            logstring = 'Will image a total of %s fields using specmode %s' \
+                    %(str(len(fldnos)), str(fld_specmode))
+            add_logstring(logstring)
+            logstring = 'Will image fields = '+str(fldnos)
+            add_logstring(logstring)
+
+            fldstrs = ''
+            for field in fldnos:
+                if fldstrs=='':
+                    fldstrs = str(field)
+                else:
+                    fldstrs = fldstrs + ',' + str(field)
+        return fldnos
 
 #====================================================================
 # Start actual processing
@@ -259,40 +277,6 @@ else:
     print('Creating directory '+imaging_dir)
     os.makedirs(imaging_dir)
 
-if dobox:
-    # Use bounding box distance rather than cone
-    # Check if there are regex to match with
-    # use_target_fields defined in run_Tile
-    mymatchregex = use_target_fields
-    if mymatchregex=='' or mymatchregex==[]:
-        # no name match, backward compatible
-        fldnos = getfieldirbox(splitfile,distance=mydistance,center_dir=mycenter_dir)
-    else:
-        # use regex match, needs getfieldcone.py v20160607 or later
-        logstring = 'Matching field names using regex string(s) : '+str(mymatchregex)
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
-        fldnos = getfieldirbox(
-                splitfile,distance=mydistance,center_dir=mycenter_dir,
-                matchregex=mymatchregex)
-logstring = 'Will image a total of %s fields using specmode %s' \
-        %(str(len(fldnos)), str(fld_specmode))
-print(logstring)
-casalog.post(logstring)
-logbuffer.append(logstring)
-logstring = 'Will image fields = '+str(fldnos)
-print(logstring)
-casalog.post(logstring)
-logbuffer.append(logstring)
-
-# Construct field selection
-fldstrs = ''
-for field in fldnos:
-    if fldstrs=='':
-        fldstrs = str(field)
-    else:
-        fldstrs = fldstrs + ',' + str(field)
 
 if doimaging:
     # Make a working copy of ms
