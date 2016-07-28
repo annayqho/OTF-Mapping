@@ -27,8 +27,6 @@ class Image(object):
         self.logbuffer = []
         self.stagename = []
         self.stagetime = []
-        self.steplist = []
-        self.steptimes = {}
         self.statbuffer = []
         intro = 'VLA OTFM Imaging Script, 2016-07-26 AYQH'
         add_logstring(intro)
@@ -295,19 +293,12 @@ class Image(object):
             self.start_clock
             total_wall_time = self.wall_time - wall_time
             total_cpu_time = self.cpu_time - cpu_time
-            if self.steptimes.has_key(stepname):
-                steptimes[stepname] += total_wall_time
-            else:
-                steplist.append(stepname)
-                steptimes[stepname] = total_wall_time
-            stagetime.append(total_wall_time)
+            self.stagename.append(stagename)
+            self.stagetime.append(total_wall_time)
             self.current_stage = None
             logstring = "Ending stage %s. Total wall time was %s, Total CPU \
                     time was %s." %(stage_name, total_wall_time, total_cpu_time)
             add_logstring(logstring)
-
-    print(stagestr+' took '+str(stagedur)+' sec')
-    prevTime = currTime
 
 
     def start_clock(self):
