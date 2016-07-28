@@ -278,8 +278,11 @@ class Image(object):
         add_logstring(logstring)
 
 
-    def create_ms_copy(self):
-        """ Create a working copy of the ms """
+    def create_ms_working_copy(self):
+        """
+        Create a working copy of the ms & make a listing
+        """
+        print("Creating a working copy of the MS...")
         sdmfile = self.ms_file.split('.ms')[0]
         workfile = sdmfile + '_working_copy.ms'
         visname = self.imaging_dir + '/' + workfile
@@ -296,30 +299,25 @@ class Image(object):
                 mydatacolumn = 'data'
         else:
             mydatacolumn = splitdatacolumn
+        stepname = 'split'
+        fldstrs = ', '.join(self.fldnos)
+        mstransform(
+                self.ms_file, visname, field=fldstrs,
+                intent=self.target_intent, datacolumn=mydatacolumn)
+        # make a listing
+        listobs(visname,listfile=visname+'.listobs')
+        print("Working copy of MS created")
 
-if doimaging:
-     
-    stepname = 'split'
-    fldstrs = ', '.join(self.fldnos)
-    mstransform(
-            splitfile,visname,field=fldstrs,
-            intent=myintentstr,datacolumn=mydatacolumn)
-    
-    # Make a listing
-    listobs(visname,listfile=visname+'.listobs')
-    
-    # If requested clear POINTING table in ms
-    if clear_pointing:
-        # Remove the POINTING tables
-        tb.open(visname+'/POINTING', nomodify = False)
+
+    def clear_pointing(ms_file):
+        """ Clear POINTING table in ms file """
+        tb.open(ms_file + '/POINTING', nomodify = False)
         a = tb.rownumbers()
         tb.removerows(a)
         tb.close()
         
-        logstring = 'Cleared MS POINTING table(s) for '+visname
-        print(logstring)
-        casalog.post(logstring)
-        logbuffer.append(logstring)
+        logstring = 'Cleared MS POINTING table(s) for '+ ms_file
+        add_logstring(logstring)
         
     # Extract info from SPECTRAL_WINDOW subtable
     tb.open(visname+"/SPECTRAL_WINDOW")
