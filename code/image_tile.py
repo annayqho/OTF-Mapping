@@ -359,14 +359,16 @@ class Image(object):
 
     def make_dirty_image(self):
         """ Make a dirty image, including the primary beam .pb image """
+        clnim = self.imaging_dir + "/img.clean"
+        fldstrs = ', '.join(self.fldnos)
         try:
             # this is where we create the primary beam .pb image
-            tclean(visname,
+            tclean(self.working_ms,
                    imagename=clnim,
-                   field=fieldstr,
-                   spw=spwstr,
-                   imsize=[fld_size,fld_size],
-                   cell=[fld_cell,fld_cell],
+                   field=fldstrs,
+                   spw=self.spwstr,
+                   imsize=self.fld_size,
+                   cell=self.tile_pixelsize + "arcsec",
                    phasecenter=mycenter,
                    stokes='I',
                    startmodel='',
