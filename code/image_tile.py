@@ -19,7 +19,7 @@ class Image(object):
             fld_normtype, myweight, myrmode, myrobust, dosavemodel,
             use_multiscale, fld_deconvolver, fld_specmode, fld_reffreq,
             fld_nterms, uv_taper, fld_multiscale, fld_threshold, use_restore,
-            fld_niter, fld_cyclefaactor, fld_cycleniter, doimaging, docleanup,
+            fld_niter, fld_cyclefactor, fld_cycleniter, doimaging, docleanup,
             dousescratch, dostats, parallel):
         self.wall_time = None
         self.cpu_time = None
@@ -74,7 +74,7 @@ class Image(object):
         self.fld_threshold = fld_threshold
         self.myrestore = set_myrestore(userestore)
         self.fld_niter = fld_niter
-        self.fld_cyclefaactor = fld_cyclefactor
+        self.fld_cyclefactor = fld_cyclefactor
         self.fld_cycleniter = fld_cycleniter
         self.doimaging = doimaging
         self.docleanup = docleanup
@@ -378,30 +378,30 @@ class Image(object):
                    pblimit=self.fld_pblimit,
                    normtype=self.fld_normtype,
                    deconvolver=self.fld_deconvolver,
-                   restoringbeam=myrestore,
+                   restoringbeam=self.myrestore,
                    niter=0,
-                   threshold=fld_threshold,
-                   cycleniter=fld_cycleniter,
-                   cyclefactor=fld_cyclefactor,
+                   threshold=self.fld_threshold,
+                   cycleniter=self.fld_cycleniter,
+                   cyclefactor=self.fld_cyclefactor,
                    usemask='user',
                    mask='',
                    interactive=False,
-                   weighting=myweight,
-                   robust=myrobust,
-                   uvtaper=myuvtaper,
+                   weighting=self.myweight,
+                   robust=self.myrobust,
+                   uvtaper=uv_taper,
                    makeimages='choose',
                    calcres=True,
                    calcpsf=True,
                    writepb=True,
-                   savemodel=dosavemodel,
-                   parallel=parallel)
+                   savemodel=self.dosavemodel,
+                   parallel=self.parallel)
             logstring = "Created dirty mosaic"
         except:
-            logstring = 'WARNING: Failed creating dirty mosaic'
+            logstring = 'WARNING: Failed to create dirty mosaic'
         add_logstring(logstring)
         
         # Save parameters from this run
-        os.system('cp tclean.last '+clnim+'_tclean_'+str(itercycle)+'.last')
+        os.system('cp tclean.last '+ 'dirty_im_tclean.last')
         
 # Make standard (untapered) image set
 startimagingTime = currTime
