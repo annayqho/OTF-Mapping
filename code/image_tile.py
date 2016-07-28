@@ -290,7 +290,7 @@ class Image(object):
         else:
             wall_time = self.wall_time
             cpu_time = self.cpu_time
-            self.start_clock
+            self.check_clock
             total_wall_time = self.wall_time - wall_time
             total_cpu_time = self.cpu_time - cpu_time
             self.stagename.append(stagename)
@@ -301,8 +301,8 @@ class Image(object):
             add_logstring(logstring)
 
 
-    def start_clock(self):
-        """ Start the clock """
+    def check_clock(self):
+        """ Check the clock """
         self.wall_time = time.time()
         self.cpu_time = time.clock() 
 
