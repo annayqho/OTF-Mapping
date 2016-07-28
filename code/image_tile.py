@@ -21,6 +21,9 @@ class Image(object):
             fld_nterms, uv_taper, fld_multiscale, fld_threshold, use_restore,
             fld_niter, fld_cyclefaactor, fld_cycleniter, doimaging, docleanup,
             dousescratch, dostats, parallel):
+        self.wall_time = None
+        self.cpu_time = None
+        self.current_stage = None
         self.logbuffer = []
         self.stagename = []
         self.stagetime = []
@@ -265,6 +268,48 @@ class Image(object):
         return fldnos
 
 
+    def initialize_stage(self, stage_name):
+        """ 
+        Initialize a stage of the process 
+        Start the clock, print a message
+        """
+        if self.current_stage != None:
+            print("There is another stage already running!")
+        else:
+            self.current_stage = stage_name
+            logstring = "Initializing stage %s" %stage_name
+            add_logstring(logstring)
+            self.start_clock()
+
+
+    def end_stage(self, stage_name):
+        """
+        End a stage of the process
+        End the clock, measure length of time
+        """
+        if self.current_stage == None:
+            print("There is no stage being run!")
+        else:
+            wall_time = self.wall_time
+            cpu_time = self.cpu_time
+            self.start_clock
+            total_wall_time = self.wall_time - wall_time
+            total_cpu_time = self.cpu_time - cpu_time
+            if self.steptimes.has_key(stepname):
+                steptimes[stepname] += total_wall_time
+            else:
+                steplist.append(stepname)
+                steptimes[stepname] = total_wall_time
+            stagetime.append(total_wall_time)
+            self.current_stage = None
+            logstring = "Ending stage %s. Total wall time was %s, Total CPU \
+                    time was %s." %(stage_name, total_wall_time, total_cpu_time)
+            add_logstring(logstring)
+
+    print(stagestr+' took '+str(stagedur)+' sec')
+    prevTime = currTime
+
+
     def start_clock(self):
         """ Start the clock """
         self.wall_time = time.time()
@@ -315,23 +360,9 @@ class Image(object):
         a = tb.rownumbers()
         tb.removerows(a)
         tb.close()
-        
         logstring = 'Cleared MS POINTING table(s) for '+ ms_file
         add_logstring(logstring)
         
-    currTime=time.time()
-    stagedur = currTime-prevTime
-
-    if steptimes.has_key(stepname):
-        steptimes[stepname]+=stagedur
-    else:
-        steplist.append(stepname)
-        steptimes[stepname]=stagedur
-    stagestr = stepname
-    stagetime.append(stagedur)
-    stagename.append(stagestr)
-    print(stagestr+' took '+str(stagedur)+' sec')
-    prevTime = currTime
 
 
 # ====================================================
