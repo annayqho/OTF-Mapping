@@ -32,6 +32,7 @@ class Image(object):
         add_logstring(intro)
         self.ms_file = ms_file
         set_ms_file(self.ms_file)
+        self.working_ms = ms_file
         self.ms_datacolumn = ms_datacolumn
         set_ms_datacolumn(self.ms_datacolumn)
         self.clear_pointing = clear_pointing
@@ -343,6 +344,7 @@ class Image(object):
         # make a listing
         listobs(visname,listfile=visname+'.listobs')
         print("Working copy of MS created")
+        self.working_ms = visname
 
 
     def clear_pointing(ms_file):
