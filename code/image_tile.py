@@ -403,10 +403,6 @@ class Image(object):
         # Save parameters from this run
         os.system('cp tclean.last '+ 'dirty_im_tclean.last')
         
-# Make standard (untapered) image set
-startimagingTime = currTime
-if doimaging:
-    spwstr = imaging_spwstr
     foundbox=False
     
     # =====================================================
