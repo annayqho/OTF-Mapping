@@ -102,7 +102,7 @@ tile_pixelsize = 1.0 # arcsec
 
 tile_padding_arcsec = tile_padding("S") 
 
-image_name = "Image_" + mydataset + "L" + str(int(L_tile_arcsec))
+imaging_dir = "Image_" + mydataset + "L" + str(int(L_tile_arcsec))
 
 # Selection string list for spws for imaging
 # This in the dataset after split but before imaging (spw renumbered to 0~15)

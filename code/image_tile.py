@@ -12,7 +12,7 @@ class Image(object):
 
     def __init__(self, ms_file, ms_datacolumn, target_intent, target_fields,
             script_file, tile_center_epo, tile_center_ra, tile_center_dec, 
-            L_tile_arcsec, tile_pixelsize, tile_padding_arcsec, image_name,
+            L_tile_arcsec, tile_pixelsize, tile_padding_arcsec, imaging_dir,
             spwstr, dobox, clear_pointing, doccbox, mask, maxboxcycles,
             box_niter, box_cyclefactor, box_cycleniter, peaksnrlimit, 
             fld_wprojplanes, fld_facets, fld_gridder, fld_pblimit,
@@ -43,7 +43,7 @@ class Image(object):
                 tile_center_epo, tile_center_ra, tile_center_dec)
         self.fldnos = get_fields(L_tile_arcsec, ms_file, tile_center, 
                                  target_fields, fld_specmode)
-        self.image_name = set_image_name(image_name)
+        self.imaging_dir = set_imaging_dir(imaging_dir)
         self.spwstr = spwstr
         self.dobox = dobox 
         self.doccbox = doccbox
@@ -153,7 +153,7 @@ class Image(object):
         add_logstring(logstring)
 
 
-    def set_image_name(imaging_dir):
+    def set_imaging_dir(imaging_dir):
         """ Set up the name of the output image directory """
         logstring = "Output images go in dir %s" %imaging_dir
         add_logstring(logstring)
@@ -271,35 +271,33 @@ class Image(object):
         self.cpu_time = time.clock() 
 
 
-#====================================================================
-# Start actual processing
-#====================================================================
-logstring = 'Starting imaging of '+splitfile+' using script '+myscriptvers
-print(logstring)
-casalog.post(logstring)
-logbuffer.append(logstring)
+    def initialize_imaging(self):
+        """ Initialize imaging """
+        logstring = 'Starting imaging of %s using %s' %(
+                self.ms_file, self.script_file)
+        add_logstring(logstring)
 
 
-
+    def create_ms_copy(self):
+        """ Create a working copy of the ms """
+        sdmfile = self.ms_file.split('.ms')[0]
+        workfile = sdmfile + '_working_copy.ms'
+        visname = self.imaging_dir + '/' + workfile
+        print('Splitting ' + self.ms_file + ' to ' + visname)
+        os.system('rm -rf ' + visname + '*')
+        if splitdatacolumn=='auto':
+            # detect whether there is CORRECTED_DATA & split only this
+            tb.open(self.ms_file)
+            split_colnames = tb.colnames()
+            tb.close()
+            if 'CORRECTED_DATA' in split_colnames:
+                mydatacolumn = 'corrected'
+            else:
+                mydatacolumn = 'data'
+        else:
+            mydatacolumn = splitdatacolumn
 
 if doimaging:
-    # Make a working copy of ms
-    sdmfile = calibrated_ms.split('.ms')[0]
-    workfile = mydataset + '_calibrated_target_working.ms'
-    visname = imaging_dir+'/'+workfile
-    print('Splitting '+splitfile+' to '+visname)
-    os.system('rm -rf '+visname+'*')
-    if splitdatacolumn=='auto':
-        # check if CORRECTED_DATA is there use that if so
-        tb.open(splitfile)
-        split_colnames = tb.colnames()
-        tb.close()
-        if 'CORRECTED_DATA' in split_colnames:
-            mydatacolumn = 'corrected'
-        else:
-            mydatacolumn = 'data'
-    else:
-        mydatacolumn = splitdatacolumn
      
     stepname = 'split'
     fldstrs = ', '.join(self.fldnos)
@@ -368,6 +366,9 @@ if doimaging:
     prevTime = currTime
 
 
+# ====================================================
+# ====================================================
+# ====================================================
 
 # Make standard (untapered) image set
 startimagingTime = currTime
