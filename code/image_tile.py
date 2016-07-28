@@ -41,7 +41,7 @@ class Image(object):
         self.script_file = script_file
         self.fld_size = set_fld_size(
                 tile_pixelsize, L_tile_arcsec, tile_padding_arcsec)
-        tile_center = set_center(
+        self.tile_center = set_center(
                 tile_center_epo, tile_center_ra, tile_center_dec)
         self.fldnos = get_fields(L_tile_arcsec, ms_file, tile_center, 
                                  target_fields, fld_specmode)
