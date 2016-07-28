@@ -319,36 +319,6 @@ class Image(object):
         logstring = 'Cleared MS POINTING table(s) for '+ ms_file
         add_logstring(logstring)
         
-    # Extract info from SPECTRAL_WINDOW subtable
-    tb.open(visname+"/SPECTRAL_WINDOW")
-    nchanarr=tb.getcol("NUM_CHAN")
-    spwnamearr=tb.getcol("NAME")
-    reffreqarr=tb.getcol("REF_FREQUENCY")
-    bwarr=tb.getcol("TOTAL_BANDWIDTH")
-    chanfreqarr=tb.getcol("CHAN_FREQ")
-    chanwidtharr=tb.getcol("CHAN_WIDTH")
-    tb.close()
-    nspw = len(nchanarr)
-    print('Found '+str(nspw)+' spw in SPECTRAL_WINDOW table')
-    spwlookup = {}
-    for isp in range(nspw):
-        spwlookup[isp] = {}
-        spwlookup[isp]['nchan'] = nchanarr[isp]
-        spwlookup[isp]['name'] = str( spwnamearr[isp] )
-        spwlookup[isp]['reffreq'] = reffreqarr[isp]
-        spwlookup[isp]['bandwidth'] = bwarr[isp]
-        nch=nchanarr[isp]
-        bw=bwarr[isp]
-        rfq=reffreqarr[isp]
-        cfq=rfq+(0.5*float(nch-1)/float(nch))*bw
-        spwlookup[isp]['centerfreq'] = cfq
-        
-        bw_str = '%.3fMHz' % (bw/1.e6)
-        cfq_str = '%.3fMHz' % (cfq/1.e6)
-        spwlookup[isp]['centerfreq_str'] = cfq_str
-        spwlookup[isp]['bandwidth_str'] = bw_str
-    print('Extracted information for '+str(nspw)+' SpectralWindows')
-    
     currTime=time.time()
     stagedur = currTime-prevTime
 
