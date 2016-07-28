@@ -225,7 +225,6 @@ class Image(object):
         Returns
         -------
         fldnos (list): fields to be cleaned
-        
         """
         fldnos = []
 
@@ -253,13 +252,16 @@ class Image(object):
             add_logstring(logstring)
         return fldnos
 
+
+    def start_clock(self):
+        """ Start the clock """
+        self.wall_time = time.time()
+        self.cpu_time = time.clock() 
+
+
 #====================================================================
 # Start actual processing
 #====================================================================
-startTime=time.time()
-startProc=time.clock()
-prevTime = startTime
-
 logstring = 'Starting imaging of '+splitfile+' using script '+myscriptvers
 print(logstring)
 casalog.post(logstring)
