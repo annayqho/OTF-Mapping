@@ -1,0 +1,118 @@
+% Simple article, but with some useful ApJ things included
+% Created by AYQH, 18 June 2016
+\documentclass[12pt, letterpaper, preprint]{aastex}
+\bibliographystyle{apj}
+\usepackage{float, bm, graphicx, subfigure, amsmath, morefloats}
+\usepackage{color}
+\usepackage{tabularx}
+
+% useful macros
+\newcommand{\angstrom}{\mbox{\AA}}
+
+\begin{document}
+
+\title{VLASS Report}
+
+\section{Basic Info \& Timeline}
+
+VLASS has three epochs, 2017, 2019\dots
+corresponding to 32-month cadence.
+32 month cadence is important because that
+lets the sky refresh totally.
+The coverage is the entire sky above Socorro,
+including the Galactic plane (which was missing
+from previous surveys). 
+It has wide bandwidth (S band, 2-4 GHz) enabling the
+measurement of spectra.
+The angular resolution (2.5 arcseconds) will be the highest
+for some time to come, and enable precise localization.
+
+2015: CNSS (VLASS pathfinder), 5 epochs
+Summer 2016: pilot survey in the B configuration
+Sept 2017: start observing.
+In 2017 will do the first half of the sky,
+probably concentrated in the northern sky, 17000 sq deg.
+16 months later will do the other half,
+then 16 months later will do the second epoch of the first half
+So you get a snapshot of half the sky, separated by 16 months.
+Pilot survey is 2 epochs (6 \& 7). real survey gets
+an additional 3 epochs. 
+
+Seven years, six VLA configuration cycles, total
+time requirement is 5400 hours, 900 per configuration cycle
+
+\section{Pilot survey}
+
+S-band, OTF mosaicing, scanning in RA and constant Dec
+Some areas will be covered with three passes to provide 
+a similar sensitivity as that expected from three epochs 
+of the full VLASS (70 microJy/beam) 
+while others will be observed with a single pass (120 microJy/beam) 
+to maximize sky coverage. 
+The pilot will cover key galactic and extragalactic fields 
+that have good multi-wavelength ancillary data, 
+as well as covering areas of sky with good prior 
+radio observations for technical validation of the OTF 
+mosaicking observing mode. 
+The total area to be covered will be ~2500 deg2, and will include
+(for the fields with 3 passes, $70 \mu$Jy):
+
+\begin{enumerate}
+  \item Galactic plane fields: Galactic Center, Cygnus, Cepheus
+  \item Extragalactic fields: Cosmological Evolution Survey, Sloane Digital Sky Survey (SDSS) Stripe 82, Chandra Deep Field South
+\end{enumerate}
+
+For the fields with 1 pass (120 $\mu$Jy):
+
+\begin{enumerate}
+  \item SDSS South Galactic Cap / FIRST southern sky for declination > 0 deg
+  \item SDSS North Galactic Cap fields: Great Observatories Origins Deep Survey – North, Elais-N1, Lockman Hole, H-ATLAS North, Bootes
+\end{enumerate}
+
+\section{Key technological capabilities}
+
+Rapid (near real-time data reduction)
+Source extraction, transient identification pipelines
+Follow-up
+Systematic characterization of radio transient phase space
+What to do with three epochs of a field 
+
+
+\section{Brainstorming for the VLA Proposal}
+
+\subsection{Why the VLA}
+
+It will be complementary to the VLASS pilot.
+We'll look at semi-random spots, have a snapshot not
+locked in with the sky survey.
+Fill in between sky survey epochs, few month
+cadence picture. 
+That said, the few month cadence is what we did for
+Stripe-82\dots we'll do that sort of thing now for
+a different area.
+
+\begin{figure}[!p]
+  \centering
+  \includegraphics[scale=0.8]{../code/vla_proposal/coverage.png}
+  \caption{The fields}
+  \label{fig:coverage}
+\end{figure}
+
+\subsection{Why us}
+
+We have all the infrastructure, 
+data reduction pipeline (we’re also in charge of the VLASS)
+We have the follow up capabilities
+Our group has developed custom pipelines to remove RFI, 
+calibrate data, image data, 
+produce mosaics and extract source catalogs for ongoing 
+VLA surveys for radio transients in the SDSS Stripe 82 
+equatorial strip and the VLASS.
+Extending these pipelines to LIGO follow up is
+relatively straightforward, and actually we already
+did it for O1 (ref Mooley et al. 2016). 
+
+
+\end{document}
+
+
