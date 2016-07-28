@@ -153,11 +153,17 @@ class Image(object):
         add_logstring(logstring)
 
 
-    def set_image_name(image_name):
-        """ Set up the name of the output image file """
-        logstring = "Output image name %s" image_name
+    def set_image_name(imaging_dir):
+        """ Set up the name of the output image directory """
+        logstring = "Output images go in dir %s" %imaging_dir
         add_logstring(logstring)
-        return image_name
+        if os.path.exists(imaging_dir):
+            logstring = 'Using existing image output directory: ' + imaging_dir
+        else:
+            logstring = 'Creating directory ' + imaging_dir
+            os.makedirs(imaging_dir)
+        add_logstring(logstring)
+        return imaging_dir
 
 
     def set_thresholds(self):
@@ -274,11 +280,6 @@ casalog.post(logstring)
 logbuffer.append(logstring)
 
 
-if os.path.exists(imaging_dir):
-    print('Using existing image output directory '+imaging_dir)
-else:
-    print('Creating directory '+imaging_dir)
-    os.makedirs(imaging_dir)
 
 
 if doimaging:
