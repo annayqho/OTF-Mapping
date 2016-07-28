@@ -1,6 +1,7 @@
 import copy
 import time
 import os
+import subprocess
 from os import F_OK
 from getfieldcone import *
 
@@ -126,6 +127,11 @@ class Image(object):
         """ Check that file exists, add to log """
         if os.access(filename, F_OK):
             logstring = 'Found calibrated ms '+splitfile
+            # get dataset sizes in MB (1024x1024 bytes!)
+            fstr = subprocess.check_output(["du", "-ms", filename])
+            datasize_ms = fstr.split("\t")[0]
+            logstring = 'The size of the ms file is %s MB' %datasize_ms
+            add_logstring(logstring)
         else:
             logstring = 'ERROR: could not find '+splitfile
         add_logstring(logstring)
@@ -267,15 +273,6 @@ print(logstring)
 casalog.post(logstring)
 logbuffer.append(logstring)
 
-# get dataset sizes in MB (1024x1024 bytes!)
-f = os.popen('du -ms '+splitfile)
-fstr = f.readline()
-f.close()
-datasize_ms = float( fstr.split("\t")[0] )
-logstring = 'MS is '+str(datasize_ms)+' MB'
-print(logstring)
-casalog.post(logstring)
-logbuffer.append(logstring)
 
 if os.path.exists(imaging_dir):
     print('Using existing image output directory '+imaging_dir)
