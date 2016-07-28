@@ -369,7 +369,7 @@ class Image(object):
                    spw=self.spwstr,
                    imsize=self.fld_size,
                    cell=self.tile_pixelsize + "arcsec",
-                   phasecenter=mycenter,
+                   phasecenter=self.tile_center,
                    stokes='I',
                    startmodel='',
                    specmode=fld_specmode,
