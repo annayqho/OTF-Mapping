@@ -403,8 +403,6 @@ class Image(object):
         # Save parameters from this run
         os.system('cp tclean.last '+ 'dirty_im_tclean.last')
         
-    foundbox=False
-    
     # =====================================================
     # Make a joint MFS mosaic of all fields in the split MS
     # =====================================================
